@@ -59,6 +59,12 @@ This document is lookup material — consult when you hit a specific name, idiom
 - **後輩** → "junior" (peer/referent form).
 - Hybrid keeps CJK.
 
+### 阿克 (歐陽峰 addressing 歐陽克) — Whisper homophone cluster
+- Chi is canonical **阿克**. Yue ASR produces **阿赫** (`haak1`) and **阿黑** (`haak1`) — both Whisper-cluster homophones.
+- Rule B territory: chi wins by default; hybrid always 阿克. See `STYLE.md` §2.
+- Confirmed Ep29 (subs 324, 331, 398), Ep30 throughout.
+- Same pattern-class as the Ep28 歐陽克 → 歐陽黑/歐陽客/歐陽鹿 cluster (克/黑/客 all `haak1`). Flag if the yue form ever appears uncorrected in hybrid — it shouldn't.
+
 ---
 
 ## 2. Difficult Idiom Decisions
@@ -153,6 +159,17 @@ This document is lookup material — consult when you hit a specific name, idiom
 
 ### 黃藥師 couplet about 蓉兒 (Ep23 sub 263)
 - **邪中有三分正, 正中帶七分邪** — see §2. Genuine admiration in the form of a taunt.
+
+### 周伯通 voice (Ep29–30)
+Register: **childlike comedy masking genuine martial-world status**. He IS being childlike — that's the point. Don't flatten him to dignified.
+
+- **Sworn-brotherhood scene (Ep29 subs 96–119)** — mock-ceremony, 老天爺 oath, whiplash from "I'll hack you to death" (sub 76) to "I want us to become sworn brothers" (sub 98). Over-the-top earnest.
+- **"Just call me Little Brother" lament (Ep29 sub 186)** — self-mocking after losing to 黃藥師 again. Not false modesty; he means it in the moment. Comedy cousin to 洪七公's gruff-affection-as-self-interest.
+- **左右互搏 lament (Ep29 subs 191–192)** — *"Of course I'll lose — I haven't perfected 左右互搏 yet, otherwise I'd beat him for sure."* Stubborn-pride, not bitter. Keep the "otherwise I'd beat him" construction.
+- **"With me around, how could you ever have hardship?" (Ep29 sub 112)** — undercuts his own 有福同享 / 有難同當 oath immediately. Self-contradiction IS the character; don't tone down.
+- **Slap-Memorise-九陰真經 (Ep29 subs 298–311; Ep30 subs 391–415)** — coerces 郭靖 to memorise the manual by pretending it's a game, then refusing to "play" unless 郭靖 reads. Playful-but-serious. Key line Ep29 sub 307: *"你要不讀, 我不再和你玩了"* — dead serious about it.
+- **Fake-suicide prank (Ep30 subs 58–98)** — tells 黃藥師 that 郭靖 and 蓉兒 hanged themselves in the cave to lure him back. Bombastic unreliable-narrator register: "their intestines are all hanging out — covered in blood — can't survive." Every line is a performed lie he's enjoying too much. Don't flatten to ordinary reportage.
+- **Test-rigging (Ep30 subs 335–338)** — covertly helps 郭靖 during the 梅花樁 fight, then gets caught. Shameless.
 
 ---
 

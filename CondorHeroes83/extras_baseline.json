@@ -1,9 +1,11 @@
 {
-  "__comment__": "v10 baseline extras — romanisation mappings shared across all episodes. Loaded by build_extras.py and merged with an episode-specific overlay (ep{N}_extras_add.json) to produce ep{N}_extra.json for build.py.  To promote a term from an episode's overlay into this baseline, add it here and remove it from the episode overlays. To change a term globally, edit here. Keep jy and yl in sync.",
+  "__comment__": "v11 baseline extras — romanisation mappings shared across all episodes. Loaded by shared_extras.py and merged with an episode-specific overlay (ep{N}_extras_add.json) to produce ep{N}_extra.json for build.py. To promote a term from an episode's overlay into this baseline, add it here and remove it from the episode overlays. To change a term globally, edit here. Keep jy and yl in sync.",
   "jy": {
     "歐陽": "Au-Joeng", "郭": "Gwok", "陸": "Luk",
     "老頑童": "Overgrown Child", "老毒物": "Old Venom",
     "週大哥": "週-daai-go", "周大哥": "週-daai-go", "大哥": "Big Brother",
+    "叔叔": "Uncle", "武功": "martial arts",
+    "走火入魔": "go into the fiery madness",
     "我爹": "my father", "你爹": "your father",
     "賴蛤蟆": "the Old Toad",
     "傻小子": "that silly boy",
@@ -78,6 +80,8 @@
     "歐陽": "Au-Yeung", "郭": "Gwok", "陸": "Luk",
     "老頑童": "Overgrown Child", "老毒物": "Old Venom",
     "週大哥": "週-daaih-go", "周大哥": "週-daaih-go", "大哥": "Big Brother",
+    "叔叔": "Uncle", "武功": "martial arts",
+    "走火入魔": "go into the fiery madness",
     "我爹": "my father", "你爹": "your father",
     "賴蛤蟆": "the Old Toad",
     "傻小子": "that silly boy",

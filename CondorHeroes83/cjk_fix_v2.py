@@ -128,6 +128,20 @@ fixes = {
     "穆": "Muk", "完顏": "Jyun-Ngaan",
 }
 
+# Shared concat-trap post-build fixes (applied to BOTH romanised variants after
+# the variant-specific passes below). Promoted to cjk_fix_v2 under v11:
+#   - Luksenior   (陸前輩, Ep28)  — 前輩 converts before overlay
+#   - KauElder    (裘老前輩, Ep26) — same mechanism for 裘
+#   - 我們the     (Ep28 sub 36)   — 我們 + term compound
+#   - Cing姑Mother (程姑娘, Ep28)  — 娘→Mother eats the 娘 before extras
+# Yale variants appended to yale_fixes below.
+shared_concat_fixes = {
+    "Luksenior": "senior Luk",
+    "KauElder": "Elder Kau",
+    "我們the ": "our ",
+    "Cing姑Mother": "Miss Cing",
+}
+
 yale_fixes = {
     "靖哥哥": "Jing-gogo", "靖兒": "Jing-yi", "靖": "Jing",
     "週大哥": "週-daaih-go", "周大哥": "週-daaih-go",
@@ -142,6 +156,14 @@ yale_fixes = {
     "歐陽": "Au-Yeung", "洪": "Huhng", "周": "Jau",
     "完顏": "Yun-Ngaan", "程": "Ching",
     "丘道長": "Taoist Yau", "洪前輩": "Senior Huhng",
+}
+
+# Yale-specific concat-trap fixes (promoted under v11; companion to shared_concat_fixes)
+yale_concat_fixes = {
+    "Luksenior": "senior Luhk",
+    "KauhElder": "Elder Kauh",
+    "我們the ": "our ",
+    "Ching姑Mother": "Miss Ching",
 }
 
 # Name-variant OCR collapse — runs on ALL THREE variants before variant-specific
@@ -175,6 +197,11 @@ for variant in ["jyutping", "yale"]:
     if variant == "yale": lookup.update(yale_fixes)
     for k in sorted(lookup, key=len, reverse=True):
         content = content.replace(k, lookup[k])
+    # v11 concat-trap post-build fixes (see SESSION-NOTES v10 Watch List promotions)
+    concat = dict(shared_concat_fixes)
+    if variant == "yale": concat.update(yale_concat_fixes)
+    for k, v in concat.items():
+        content = content.replace(k, v)
     # Clean up double spaces
     content = re.sub(r'  +', ' ', content)
     # Collapse "X — Y" duplicate-gloss patterns (StyleRulings Ep22/23 learning).

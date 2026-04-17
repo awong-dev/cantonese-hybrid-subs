@@ -238,6 +238,10 @@ Canonical renderings for recurring name/nickname forms. Personal names proper li
 | 公主 | 公主 | Princess | Princess |
 | 玄風 (bare) | 玄風 | Jyun-fung | Yuhn-fung |
 | 陳玄風 | 陳玄風 | Can Jyun-fung | Chahn Yuhn-fung |
+| 程姑娘 | 程姑娘 | Miss Cing | Miss Ching |
+| 瑤迦 (程瑤迦) | 瑤迦 | Jiu-gaa | Yiu-ga |
+| 冠英 (陸冠英) | 冠英 | Gun-jing | Gun-ying |
+| 孫不二 | 孫不二 | Syun Bat-ji | Syun Bat-ji |
 
 Notes on specific entries:
 - **老賊** — literally "Old Thief/Scoundrel", but 梅超風 uses it as an intimate term for her dead husband 陳玄風. Softened to "the Old Man" in romanised. See `REFERENCE.md` for context.
@@ -360,6 +364,17 @@ Canonical English renderings for high-frequency terms:
 | 望江樓 | Wangjiang Inn |
 | 清溪別院 | the Riverside Manor |
 | 江南 | Gong-naam (jy) / Gong-naahm (yl) |
+| 積翠亭 | Zik-ceoi Pavilion (jy) / Jik-cheui Pavilion (yl) |
+| 梅花樁 | the plum-blossom posts |
+| 梅花陣 | the Plum Blossom Formation |
+| 奇門八卦 | the Eight Trigram Formation |
+| 奇門八卦之術 | the art of the Eight Trigram Formation |
+| 神龍擺尾 | Divine Dragon Swishes Its Tail |
+| 碧海潮生曲 | the Blue Sea Tide Melody |
+| 文鬥 / 武鬥 | contest of arts / contest of arms |
+| 內子 | my wife |
+| 岳父大人 | father-in-law |
+| 叔叔 | Uncle |
 | 無毒不丈夫 | ruthlessness is the mark of a great man |
 | 雪蓮玉露丸 | the Snow Lotus Jade Pill |
 | 雪蓮 | Snow Lotus |
@@ -493,6 +508,18 @@ Settled English renderings for idioms encountered across Eps 1–29 (especially 
 - **豈有此理** — "outrageous / how can this be!"
 - **邪中有三分正, 正中帶七分邪** — "The heretical are three parts righteous; the righteous are seven parts heretical!" (黃藥師's couplet about 蓉兒). **Keep Chinese in hybrid; English translation only in romanised. Do NOT double-print Chinese + English in romanised.**
 - **有失遠迎** — "forgive us for not welcoming you sooner" (standard courtesy)
+
+### Marriage alliance / classical references
+- **秦晉之好** — "the bond of 秦晉" (hybrid) / "the bond of Chun-Zeon" (jy) / "the bond of Chun-Jeun" (yl). Classical allusion to the marriage alliance between the states of 秦 and 晉. These are idiom-of-reference, not modern place names.
+- **泰山北斗** — "the 泰山北斗 of 武林" (hybrid) / "the Mount Tai of the Northern Dipper of the martial world" (romanised). Classical allusion: the authoritative figures in a field.
+- **天作之合** — "a match made in Heaven". English idiom maps cleanly; no CJK+gloss needed.
+
+### Classical laments / elegiac verse
+- **想逝者之不罪兮, 惜形中之載道** / **天蓋高而無階, 懷此恨其最苦** (Ep28) — 陸乘風's lament for 瑤迦. Format as CJK + em-dash + English gloss on the next line (Dragon-chant quartet pattern). Glosses: "my love runs deep, the dead beyond recall" / "Heaven is high but has no stair; this sorrow cuts deepest".
+
+### 九陰真經 quotations (from 周伯通's slap-memorise teaching, Ep29+)
+- **天之道, 損有餘而補不足** — "Heaven's way: take from the surplus and replenish the lack". Adapted from 道德經 77. Hybrid: CJK + em-dash + English on next line; romanised: English only.
+- Related meditation-text fragments (任督二脈, 氣聚丹田, 百會, 大椎, 足少陽/足少陰, 十二經筋) — render per the meditation/qi subsection below.
 
 ### 內功 / 內力 / 內傷 family
 - **內力** — "internal strength"
@@ -665,8 +692,16 @@ These leaks appear episode after episode and need to be fixed in a targeted pass
 - `Brother 鐵心` → "Brother Tiexin"
 - `Yeung叔叔` → "Uncle Yeung"
 - `Yeung兄` → "Brother Yeung"
-- `瑤迦`, `冠英`, `孫不二` — recurring OCR/name leaks; fold into `cjk_fix_v2.py` properly (identified Ep28 session)
 - Classical Chinese phrases left in romanised files → translate to English
+
+Already handled by `cjk_fix_v2.py` under v11 (listed here for reference — do NOT re-add unless the automation regresses):
+- `週Big Brother` / `周Big Brother` → `週-daai-go` / `週-daaih-go` (v11)
+- 陸乘風 OCR-variant collapse (陸成風, 陸承鋒, 陸承峰, 陸勝鋒, 六成風, 六兄 → 陸乘風 / 陸兄; v11)
+- `Luksenior` → `senior Luk` / `Luhksenior` → `senior Luhk` (v11 concat-trap)
+- `KauElder` → `Elder Kau` / `KauhElder` → `Elder Kauh` (v11 concat-trap)
+- `我們the ` → `our ` (v11 concat-trap)
+- `Cing姑Mother` → `Miss Cing` / `Ching姑Mother` → `Miss Ching` (v11 concat-trap)
+- `瑤迦`, `冠英`, `孫不二` — now have explicit rows in §5 (v11).
 
 ### Hybrid-variant duplication trap (IMPORTANT — learned Ep22/23)
 
