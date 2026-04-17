@@ -24,7 +24,7 @@ assert len(overrides) == len(aligned), f"Override count {len(overrides)} != alig
 # ============================================================
 
 names_jy = {}; names_yl = {}
-with open('/mnt/user-data/uploads/PersonalNamesUpdated.csv', 'r', encoding='utf-8-sig') as f:
+with open('/home/claude/PersonalNamesUpdated.csv', 'r', encoding='utf-8-sig') as f:
     reader = csv.DictReader(f)
     for row in reader:
         ch = row['Chinese'].strip()
