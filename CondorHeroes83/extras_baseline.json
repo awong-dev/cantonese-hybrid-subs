@@ -74,7 +74,11 @@
     "衍數": "yan numbers",
     "大衍數": "the Dayan Numbers",
     "零": "ling", "一": "yat", "地": "dei", "三": "saam",
-    "起": "hei", "伏": "fuk", "定": "ding", "已": "ji", "和": "wo"
+    "起": "hei", "伏": "fuk", "定": "ding", "已": "ji", "和": "wo",
+    "時辰": "sichen",
+    "氣聚丹田": "qi gathers at the dantian",
+    "內力": "internal force",
+    "真經": "the Manual"
   },
   "yl": {
     "歐陽": "Au-Yeung", "郭": "Gwok", "陸": "Luk",
@@ -150,6 +154,10 @@
     "衍數": "yan numbers",
     "大衍數": "the Dayan Numbers",
     "零": "lihng", "一": "yat", "地": "deih", "三": "saam",
-    "起": "hei", "伏": "fuhk", "定": "dihng", "已": "yih", "和": "woh"
+    "起": "hei", "伏": "fuhk", "定": "dihng", "已": "yih", "和": "woh",
+    "時辰": "sichen",
+    "氣聚丹田": "qi gathers at the dantian",
+    "內力": "internal force",
+    "真經": "the Manual"
   }
 }

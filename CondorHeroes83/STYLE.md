@@ -703,6 +703,32 @@ Already handled by `cjk_fix_v2.py` under v11 (listed here for reference — do N
 - `Cing姑Mother` → `Miss Cing` / `Ching姑Mother` → `Miss Ching` (v11 concat-trap)
 - `瑤迦`, `冠英`, `孫不二` — now have explicit rows in §5 (v11).
 
+Added by `cjk_fix_v2.py` under v13 (do NOT re-register in episode overlays):
+- `我Father` → `my father` / `你Father` → `your father` (v13 `<titles-key>+<suffix>` family — our Ep21)
+- `the Chief萬福` → `Good fortune to the Chief` (v13 — Ep21 丐幫 greeting)
+- `大Jin` → `the great Jin empire` (v13 — Ep21 大金國)
+- `報告the Princess` → `Your report, Princess` (v13 — Ep21 華箏 scout report)
+- `週-daai-go` / `周-daai-go` → `daai-go`; `週-daaih-go` / `周-daaih-go` → `daaih-go` (v13 leading-週 strip, Ep31/Ep32)
+- Extended `OCR_NAME_COLLAPSE` table: 老頑童 variants (老誠童/老顏童/老其童/老示童/老顛童/老和童/老基童/老阿棟/老誠和童); 歐陽蜂/歐陽鋒 → 歐陽峰; 郭蜻 → 郭靖; 阿蜻 → 阿靖; 其兒/鞭兒 → 蓉兒; 量有此理 → 豈有此理; 王老邪/羅老邪 → 黃老邪; 若師兄 → 藥師兄; 瑤珈 → 瑤迦 (v13 chi-OCR batch damage, Ep28/Ep30/Ep31/Ep32).
+
+### The `<titles-key>+<suffix>` cross-stage trap — structural rule (v13)
+
+**Rule:** registering a compound in `extras_baseline.json` or an episode overlay is insufficient when `build.py`'s titles stage contains a shorter-key match that is a substring of the compound. The titles stage (stage 3) fires before the extras stage (stage 5), so the shorter key converts first and strands the remaining prefix/suffix as CJK.
+
+**Examples of the trap firing (and how each was caught):**
+- `爹` (titles: "Father") + overlay `我爹 → my father` ⇒ produces `我Father`, requires post-build `我Father → my father` in `cjk_fix_v2.py`.
+- `幫主` (titles: "the Chief") + overlay `幫主萬福 → Good fortune to the Chief` ⇒ produces `the Chief萬福`, requires post-build strip.
+- `金國` (baseline: "Jin") + overlay `大金國 → the great Jin empire` ⇒ produces `大Jin`, requires post-build strip.
+- `公主` (titles: "the Princess") + overlay `報告公主 → Your report, Princess` ⇒ produces `報告the Princess`, requires post-build strip.
+- `七公` (titles: "Seven Elder") + CSV name `洪七公 → Hung Cat-gung` ⇒ produces `洪Seven Elder`, fixed by `洪Seven Elder → Hung Seven Elder` in `cjk_fix_v2.py` `fixes` table.
+
+**When to reach for which tool:**
+1. If the compound's semantic target is the same as the titles-stage output plus a modifier (e.g. `我爹` = "my" + "Father"), a post-build `cjk_fix_v2.py` entry of the form `<stranded-CJK><titles-output> → <full-English>` is the cheap fix.
+2. If the compound needs a wholly different English rendering, either (a) promote the compound entry into `build.py`'s idioms stage (stage 1) so it wins by ordering, or (b) post-build-fix in `cjk_fix_v2.py`.
+3. Option (a) is structurally cleaner but requires editing `build.py` and re-checking that the compound doesn't break other idioms. Option (b) is lower-risk for one-off entries.
+
+**Known firings and their current resolution:** see the bullet list above. New compounds of this family should be added to `cjk_fix_v2.py`'s `shared_concat_fixes` as they're discovered.
+
 ### Hybrid-variant duplication trap (IMPORTANT — learned Ep22/23)
 
 When an idiom-plus-gloss is written in the hybrid as `ENGLISH — CJK-idiom` or `CJK-idiom — ENGLISH`, `build.py`'s romanised conversion turns the CJK into English and leaves the English gloss alongside, producing visibly-duplicated lines like:

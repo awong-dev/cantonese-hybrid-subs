@@ -65,6 +65,30 @@ This document is lookup material — consult when you hit a specific name, idiom
 - Confirmed Ep29 (subs 324, 331, 398), Ep30 throughout.
 - Same pattern-class as the Ep28 歐陽克 → 歐陽黑/歐陽客/歐陽鹿 cluster (克/黑/客 all `haak1`). Flag if the yue form ever appears uncorrected in hybrid — it shouldn't.
 
+### Ep30/31/32 chi-OCR batch damage (v13)
+
+Three-episode confirmation that the chi track for mid-30s episodes was OCR'd in a single degraded batch. Major names and one stock idiom drift across visually-similar variants. The chi is nominally the semantic authority (per `STYLE.md` §2, Rule B), but for these specific tokens in these specific episodes, **trust yue's clean reading or any prior-FULL-episode rendering over the chi reading when it appears corrupted**.
+
+| Canonical | Damaged variants observed | Firings |
+|-----------|--------------------------|---------|
+| 老頑童 | 老誠童 / 老顏童 / 老其童 / 老示童 / 老顛童 / 老和童 / 老基童 / 老阿棟 / 老誠和童 / 老阿姨 | Ep30, Ep31, Ep32 |
+| 歐陽峰 | 歐陽蜂 (chi) / 歐陽鋒 (yue) | Ep30, Ep31, Ep32 |
+| 郭靖 | 郭蜻 | Ep30, Ep31, Ep32 |
+| 阿靖 | 阿蜻 | Ep31 |
+| 蓉兒 | 其兒 / 鞭兒 | Ep30, Ep31, Ep32 |
+| 豈有此理 | 量有此理 | Ep32 (three firings: subs 38, 63, 167) |
+| 黃老邪 | 王老邪 / 王老爺 / 王老奇 / 王老闆 / 羅老邪 | Ep30, Ep31 |
+| 藥師兄 | 若師兄 | Ep30 |
+| 周伯通 | 白通 / 伯東 / 白同 / 不同 / 周伯仲 | Ep31, Ep32 |
+| 梅超風 | 梅竹風 | Ep31 |
+| 陳玄風 | 陳元鳳 | Ep31 |
+| 王重陽 | 旺銅銀 | Ep31 |
+| 鯊魚 | 准魚 / 徐魚 | Ep32 |
+| 狡猾 | 狡獨 | Ep32 |
+| 無緣無故 | 無原無故 | Ep32 |
+
+**Handling:** the most common variants (老頑童, 歐陽峰, 郭靖, 阿靖, 蓉兒, 豈有此理, 黃老邪, 藥師兄) are in `cjk_fix_v2.py`'s `OCR_NAME_COLLAPSE` as a pre-pass that runs on all three variants. Step 4 override is still the primary line of defence — the pre-pass is a belt-and-suspenders catch for variants that slipped through. Long-tail variants (周伯通 sub-variants, 梅超風, 陳玄風, 王重陽, common nouns) are not yet in the collapse table; canonicalise them manually at Step 4 when they fire in a new episode, and promote to the table if they appear in 2+ episodes.
+
 ---
 
 ## 2. Difficult Idiom Decisions

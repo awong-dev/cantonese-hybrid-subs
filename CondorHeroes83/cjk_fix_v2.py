@@ -134,12 +134,32 @@ fixes = {
 #   - KauElder    (裘老前輩, Ep26) — same mechanism for 裘
 #   - 我們the     (Ep28 sub 36)   — 我們 + term compound
 #   - Cing姑Mother (程姑娘, Ep28)  — 娘→Mother eats the 娘 before extras
-# Yale variants appended to yale_fixes below.
+# Promoted under v13 (the <titles-key>+<suffix> cross-stage trap family,
+# confirmed Ep21). The generalisable lesson: registering a compound in
+# extras/baseline is insufficient when build.py's titles stage has a
+# shorter-key match. See STYLE.md §19.
+#   - 我Father / 你Father  (我爹/你爹, Ep21)  — 爹→Father eats the 爹 before extras
+#   - the Chief萬福        (幫主萬福, Ep21)   — 幫主→the Chief eats it first
+#   - 大Jin                 (大金國, Ep21)     — 金國→Jin stranding 大
+#   - 報告the Princess      (報告公主, Ep21)   — 公主→the Princess eats it first
+#   - 週-daai-go / 週-daaih-go leading-週 strip (Ep31/Ep32) — the baseline
+#     rendering includes the CJK 週 prefix which violates STYLE §1's
+#     zero-CJK rule; strip it post-build.
+# Yale variants appended to yale_concat_fixes below.
 shared_concat_fixes = {
     "Luksenior": "senior Luk",
     "KauElder": "Elder Kau",
     "我們the ": "our ",
     "Cing姑Mother": "Miss Cing",
+    # v13 <titles-key>+<suffix> family (Ep21):
+    "我Father": "my father",
+    "你Father": "your father",
+    "the Chief萬福": "Good fortune to the Chief",
+    "大Jin": "the great Jin empire",
+    "報告the Princess": "Your report, Princess",
+    # v13 週-daai-go leading-週 strip (Ep31/Ep32):
+    "週-daai-go": "daai-go",
+    "周-daai-go": "daai-go",
 }
 
 yale_fixes = {
@@ -164,6 +184,9 @@ yale_concat_fixes = {
     "KauhElder": "Elder Kauh",
     "我們the ": "our ",
     "Ching姑Mother": "Miss Ching",
+    # v13 週-daaih-go leading-週 strip (Ep31/Ep32):
+    "週-daaih-go": "daaih-go",
+    "周-daaih-go": "daaih-go",
 }
 
 # Name-variant OCR collapse — runs on ALL THREE variants before variant-specific
@@ -175,10 +198,34 @@ yale_concat_fixes = {
 # into the hybrid SRT uncorrected — and it also protects romanised output
 # since the bare-surname 陸 pass would otherwise convert only the Luk/Luhk
 # part and strand the garbled second/third character.
+#
+# v13 additions — Ep30/31/32 chi-OCR batch damage (three-episode confirmation).
+# The source chi-track OCR for mid-30s episodes was done in a single degraded
+# batch; variants below appeared across Ep30/31/32 for the same canonical names.
+# yue was the witness track; Step 4 override process canonicalised in hybrid,
+# but the pre-pass catches any that slipped through.
 OCR_NAME_COLLAPSE = {
     "陸成風": "陸乘風", "陸承鋒": "陸乘風", "陸承峰": "陸乘風",
     "陸勝鋒": "陸乘風", "六成風": "陸乘風",
     "六兄": "陸兄",
+    # v13 — 老頑童 variants (Ep30/31/32):
+    "老誠童": "老頑童", "老顏童": "老頑童", "老其童": "老頑童",
+    "老示童": "老頑童", "老顛童": "老頑童", "老和童": "老頑童",
+    "老基童": "老頑童", "老阿棟": "老頑童", "老誠和童": "老頑童",
+    # v13 — 歐陽峰 variants (Ep30/31/32 — chi usually 歐陽蜂, yue 歐陽鋒):
+    "歐陽蜂": "歐陽峰", "歐陽鋒": "歐陽峰",
+    # v13 — 郭靖 / 阿靖 (Ep30/31/32):
+    "郭蜻": "郭靖", "阿蜻": "阿靖",
+    # v13 — 蓉兒 (Ep30/31/32, persistent):
+    "其兒": "蓉兒", "鞭兒": "蓉兒",
+    # v13 — 豈有此理 (Ep32 three firings):
+    "量有此理": "豈有此理",
+    # v13 — 黃老邪 variants (Ep30/31):
+    "王老邪": "黃老邪", "羅老邪": "黃老邪",
+    # v13 — 藥師兄 (Ep30):
+    "若師兄": "藥師兄",
+    # v13 — 瑤珈 → 瑤迦 (Ep28 single-ep; canonical form per CSV):
+    "瑤珈": "瑤迦",
 }
 for variant in ["hybrid", "jyutping", "yale"]:
     fp = f"/mnt/user-data/outputs/{ep}-eng-{variant}-v{VERSION}.srt"
