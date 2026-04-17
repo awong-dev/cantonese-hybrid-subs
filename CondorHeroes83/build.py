@@ -58,6 +58,10 @@ terms = {
     '花雕': 'Huadiao', '女兒紅': 'Nu-er Hong',
     '太湖': 'Lake Tai', '宜興': 'Yixing', '臨安': "Lin'an",
     '大理': 'Dali', '蒙古': 'Mongolia',
+    '蒙古人': 'the Mongolians',
+    '金國太子': 'the Prince of Jin',
+    '金國': 'Jin',
+    '武林正道': 'the righteous path of the martial world',
 }
 
 # Titles
@@ -79,6 +83,11 @@ titles_jy = {
     '黃姑娘': 'Miss Wong', '穆姑娘': 'Miss Muk',
     '丘道長': 'Taoist Jau',
     '娘親': 'Mother', '阿爹': 'Father',
+    # Bare kinship forms — safe because longest-first sort within this
+    # dict prefers 阿爹/娘親/靖哥哥 etc. over these bare keys, and no
+    # CSV name contains 爹/娘/哥哥 as a substring.
+    # (Bare 康 is handled in extras because it's a substring of 楊康.)
+    '爹': 'Father', '娘': 'Mother', '哥哥': 'Brother',
     '王子': 'the Prince', '公主': 'the Princess',
 }
 titles_yl = dict(titles_jy)  # Start with copy, override differences
@@ -102,6 +111,57 @@ try:
 except FileNotFoundError:
     pass
 
+# ============================================================
+# CROSS-STAGE PREFIX GUARD
+# Detects bugs where a shorter CJK key in an earlier stage "eats"
+# a longer CJK key defined in a later stage. Longest-first sort
+# only protects within a stage, not across stages.
+# ============================================================
+
+def check_prefix_ordering(system):
+    """Warn if a shorter CJK key in an earlier stage is a substring
+    of a longer key in a later stage AND the longer key actually appears
+    in this episode's hybrid overrides AND the conversion would produce
+    the wrong output.
+
+    False-positive guard: if the longer key is also defined in a stage
+    at-or-before the shorter key's stage, longest-first within-stage
+    sort wins and there is no bug."""
+    tbl = titles_jy if system == 'jy' else titles_yl
+    ntbl = names_jy if system == 'jy' else names_yl
+    etbl = extra_jy if system == 'jy' else extra_yl
+    stages = [('idioms', idioms), ('terms', terms),
+              ('titles', tbl), ('names', ntbl), ('extras', etbl)]
+    ep_text = ' '.join(overrides.values())
+    issues = []
+    for i, (name_i, dict_i) in enumerate(stages):
+        for j, (name_j, dict_j) in enumerate(stages):
+            if j <= i:
+                continue
+            for short in dict_i:
+                for long in dict_j:
+                    if short == long or short not in long:
+                        continue
+                    if long not in ep_text:
+                        continue
+                    # Is `long` also present in any stage ≤ i? If so,
+                    # within-stage longest-first will match `long` first
+                    # and the short key never gets a chance.
+                    shadowed = any(long in stages[k][1] for k in range(i + 1))
+                    if shadowed:
+                        continue
+                    desired = dict_j[long]
+                    simulated = long.replace(short, dict_i[short])
+                    if simulated != desired:
+                        issues.append((short, name_i, long, name_j, simulated, desired))
+    return issues
+
+for sys_name in ('jy', 'yl'):
+    for short, stage_s, long, stage_l, sim, desired in check_prefix_ordering(sys_name):
+        print(f"⚠ {sys_name}: '{short}' ({stage_s}) eats '{long}' ({stage_l}) "
+              f"in this ep → produces '{sim}', should be '{desired}'. "
+              f"Move '{long}' to '{stage_s}' or earlier.")
+
 def convert(text, system):
     result = text
     # 1. Idioms (longest first)
@@ -122,8 +182,10 @@ def convert(text, system):
     etbl = extra_jy if system == 'jy' else extra_yl
     for k in sorted(etbl, key=len, reverse=True):
         result = result.replace(k, etbl[k])
-    # Fix double articles
-    result = result.replace('a the ', 'the ').replace('a The ', 'The ')
+    # Fix double articles (possessive/article + 'the' from converted terms)
+    result = re.sub(r'\b(my|your|his|her|our|their)\s+the\s+', r'\1 ', result)
+    result = re.sub(r'\b([Aa])\s+the\s+', lambda m: 'the ' if m.group(1)=='a' else 'The ', result)
+    result = re.sub(r'\bthe\s+the\s+', 'the ', result)
     return result
 
 # ============================================================

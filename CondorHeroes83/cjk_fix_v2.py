@@ -36,7 +36,8 @@ fixes = {
     # Places
     "桃花島": "Peach Blossom Island", "桃花陣": "the Peach Blossom Formation",
     "白駝山": "White Camel Mountain", "歸雲莊": "Guiyun Manor",
-    "牛家村": "Niu Family Village", "蒙古": "Mongolia",
+    "牛家村": "Niu Family Village", "蒙古人": "the Mongolians", "蒙古": "Mongolia",
+    "金國": "Jin",
     "臨安": "Lin'an", "大理": "Dali",
     # Terms
     "九陰真經": "the Jiuyin Manual", "九陰白骨爪": "the Jiuyin Baigu Claw",
@@ -127,6 +128,34 @@ for variant in ["jyutping", "yale"]:
         content = content.replace(k, lookup[k])
     # Clean up double spaces
     content = re.sub(r'  +', ' ', content)
+    # Collapse "X — Y" duplicate-gloss patterns (StyleRulings Ep22/23 learning).
+    # Happens when hybrid uses "ENGLISH — CJK-idiom" and the CJK-idiom
+    # converts to the same (or very similar) English. Two triggers:
+    #   (a) Content words heavily overlap (>70% Jaccard).
+    #   (b) One side's content words are a subset of the other's AND the
+    #       smaller side has ≥2 content words. Catches "a blood exchange"
+    #       being a subset of "perform a blood exchange on him".
+    STOPWORDS = {'a','an','the','of','to','on','in','for','with','and',
+                 'is','was','be','it','i','you','we','he','she','him','her',
+                 'his','our','my','your','this','that','these','those'}
+    def content_words(s):
+        return {w for w in re.findall(r'\w+', s.lower()) if w not in STOPWORDS}
+    def collapse_dupe(m):
+        left, sep, right = m.group(1), m.group(2), m.group(3)
+        lc = content_words(left)
+        rc = content_words(right)
+        if not lc or not rc:
+            return m.group(0)
+        jaccard = len(lc & rc) / len(lc | rc)
+        subset = (lc.issubset(rc) or rc.issubset(lc)) and min(len(lc), len(rc)) >= 2
+        if jaccard > 0.7 or subset:
+            # Keep the side with more content; drop the em-dash phrase entirely
+            return left if len(left) >= len(right) else right
+        return m.group(0)
+    content = re.sub(
+        r'([^\n—]{8,}?)(\s+—\s+)([^\n—.!?]{8,}?)(?=[.!?\n])',
+        collapse_dupe, content
+    )
     with open(fp, "w", encoding="utf-8") as f:
         f.write(content)
 
