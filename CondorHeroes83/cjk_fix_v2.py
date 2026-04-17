@@ -27,6 +27,10 @@ fixes = {
     # Names
     "靖哥哥": "Zing-gogo", "靖兒": "Zing-ji", "靖": "Zing",
     "週大哥": "週-daai-go", "周大哥": "週-daai-go",
+    # Post-build leak: build.py's titles stage converts 大哥→Big Brother
+    # before extras runs, stranding the 週. Promoted from SESSION-NOTES
+    # (confirmed Ep28, Ep29). See also: 陸乘風 name-variant collapse below.
+    "週Big Brother": "週-daai-go", "周Big Brother": "週-daai-go",
     "周伯通": "Zau Baak-tung",
     "洪Seven Elder": "Hung Seven Elder",
     # Nicknames
@@ -127,6 +131,7 @@ fixes = {
 yale_fixes = {
     "靖哥哥": "Jing-gogo", "靖兒": "Jing-yi", "靖": "Jing",
     "週大哥": "週-daaih-go", "周大哥": "週-daaih-go",
+    "週Big Brother": "週-daaih-go", "周Big Brother": "週-daaih-go",
     "周伯通": "Jau Baak-tung",
     "洪Seven Elder": "Huhng Seven Elder",
     "克兒": "Hak-yi", "康兒": "Hong-yi",
@@ -138,6 +143,29 @@ yale_fixes = {
     "完顏": "Yun-Ngaan", "程": "Ching",
     "丘道長": "Taoist Yau", "洪前輩": "Senior Huhng",
 }
+
+# Name-variant OCR collapse — runs on ALL THREE variants before variant-specific
+# passes. Promoted from SESSION-NOTES (confirmed Ep26, Ep28). The chi track
+# OCR-drifts 陸乘風 across a handful of visually-similar variants; yue Whisper
+# additionally produces 六成風 / 六兄 via the 陸→六 homophone (both `luk6`).
+# The Step 4 override process usually canonicalises to 陸乘風 in the hybrid,
+# but this is a belt-and-suspenders catch for cases where a variant slipped
+# into the hybrid SRT uncorrected — and it also protects romanised output
+# since the bare-surname 陸 pass would otherwise convert only the Luk/Luhk
+# part and strand the garbled second/third character.
+OCR_NAME_COLLAPSE = {
+    "陸成風": "陸乘風", "陸承鋒": "陸乘風", "陸承峰": "陸乘風",
+    "陸勝鋒": "陸乘風", "六成風": "陸乘風",
+    "六兄": "陸兄",
+}
+for variant in ["hybrid", "jyutping", "yale"]:
+    fp = f"/mnt/user-data/outputs/{ep}-eng-{variant}-v{VERSION}.srt"
+    with open(fp, "r", encoding="utf-8") as f:
+        content = f.read()
+    for k, v in OCR_NAME_COLLAPSE.items():
+        content = content.replace(k, v)
+    with open(fp, "w", encoding="utf-8") as f:
+        f.write(content)
 
 for variant in ["jyutping", "yale"]:
     fp = f"/mnt/user-data/outputs/{ep}-eng-{variant}-v{VERSION}.srt"

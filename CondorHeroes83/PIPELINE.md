@@ -56,7 +56,8 @@ Status output has a context cost. Long conversational summaries between tool cal
 
 ### Required output (keep)
 - **Step 0 context baseline report.** Required before any tool call for the Quality Control gate. Format per Step 0.
-- **Step 9 ending context report.** Required after `present_files`. Format per Step 9.
+- **Step 8.5 SESSION-NOTES update and present.** Required after the three SRTs are presented. Format per Step 8.5.
+- **Step 9 ending context report.** Required after the SESSION-NOTES `present_files`. Format per Step 9.
 - **Stop-and-ask prompt** when the context budget is insufficient (see Fallback Protocol).
 - **User-directed questions** when a genuine ambiguity requires a decision (rare in a FULL pass).
 - **The final `present_files` call** with the three SRTs.
@@ -66,7 +67,7 @@ Status output has a context cost. Long conversational summaries between tool cal
 - **"Let me now run X" / "Let me check Y" narration** before tool calls. Just run the tool.
 - **End-of-turn recaps** that list what each step produced. The files produced are visible to the user; the TSV and overlay are in `/home/claude/` and reachable if needed.
 - **Speculative interpretive commentary** on tool output ("Build guard caught...", "The lint warning is a false positive because..."). If the finding is actionable, act on it silently; if it's not, don't mention it.
-- **"Candidates to promote" / "Watch List additions"** lists at the end of an episode. These belong in `SESSION-NOTES.md` updates, not in chat. If the session has findings worth persisting, edit SESSION-NOTES directly and mention the edit in one sentence — don't restate the content.
+- **"Candidates to promote" / "Watch List additions"** lists at the end of an episode. These belong in the `SESSION-NOTES.md` file that Step 8.5 writes and presents, not in chat. Make the edit, present the file, and stop — don't also list what you put in it.
 
 ### Exception — real issues
 If something actually went wrong — a Step that couldn't complete, a source file that was malformed, a validation failure that required a non-trivial workaround — surface it in a short issues list at the end. One line per issue. Use plain phrasing, not section headers.
@@ -78,9 +79,12 @@ Good:
 > *[reads dump in ranges, writes TSV silently]*
 > *[runs apply_overrides, shared_extras, lint, build, cjk_fix_v2 silently]*
 > *[runs validation silently]*
-> *[calls present_files]*
+> *[calls present_files with the three SRTs]*
 >
 > Ep27 complete. 503 subs, 420 overrides applied. One issue: cjk_fix_v2's duplicate-gloss collapser has an 8-char-per-side minimum that missed "crafty — crafty"; post-cleaned.
+>
+> *[edits SESSION-NOTES.md: moves Ep27 to Completed table, adds 2 Watch List items, promotes 1 stable entry out]*
+> *[calls present_files with the updated SESSION-NOTES.md]*
 >
 > [Step 9 context report]
 
@@ -340,6 +344,26 @@ Then apply targeted `sed` fixes for any remaining CJK in romanised files — see
 - Validate: zero CJK in romanised files; zero banned terms; zero overlapping timestamps; same subtitle count and indices as source `{N}-chi_tra.csv` (chi is the entry spine; see `STYLE.md` §16).
 - `present_files` with all three SRTs.
 
+### Step 8.5 — Update and Present SESSION-NOTES.md
+
+After the three SRTs are presented, update `SESSION-NOTES.md` and present the updated file so the user can drop it into the next session's handoff bundle. This replaces the prior flow where session findings were lost between chats unless the user remembered to ask for them.
+
+What to update, in order:
+
+1. **Move the episode's status entry.** If the episode completed FULL under the current bundle version, move its row out of the "Pending — Needs FULL Processing" table and into the "Completed under v{VERSION} (FULL)" table. Replace any prior-session content preview with a one-to-two-sentence summary of what actually happened in the episode (major plot beats, any canonical case studies this episode produced). If the outcome was PARTIAL or MECHANICAL-ONLY, leave the row in Pending and annotate the outcome honestly — don't promote a degraded delivery.
+
+2. **Add new Watch List entries.** Anything encountered during processing that doesn't yet have a settled rendering goes under a short descriptive heading in the Watch List. Skip things already covered by `STYLE.md` §5 (names), §6 (titles), §10 (idioms), or `REFERENCE.md`. Recurring CJK leaks, name-variant OCR drift, cross-stage concat traps, and classical allusions are typical additions. If a concat-trap fix needed a post-build `sed` pass (rather than overlay registration working cleanly), log the mechanism and the fix — that's what the Watch List's "Cross-stage concat traps" section exists for.
+
+3. **Promote stable items out of the Watch List.** Any Watch List entry that has now fired in two-or-more episodes without contradicting renderings should be moved into the appropriate consolidated doc (name → `STYLE.md` §5; title → §6; idiom → §10; context-dependent judgment → `REFERENCE.md`; concat-trap fix → `cjk_fix_v2.py` or `extras_baseline.json`) and deleted from `SESSION-NOTES.md`. If the promotion target is a script or JSON config rather than a markdown doc, note in the SESSION-NOTES edit that the companion file needs updating — but actually editing the script is not required if it wasn't part of this session's work.
+
+4. **Call `present_files` on the updated `SESSION-NOTES.md`.** This is what makes the update reachable — without a present_files call, the edit sits in `/home/claude/` where the user can't retrieve it.
+
+What NOT to do:
+
+- Don't restate the SESSION-NOTES edits in chat. The user can read the file. Narration of what you changed costs context and duplicates what's in the file. One sentence — "Updated SESSION-NOTES with Ep{N} status and {N} new Watch List items" — is enough, and often even that is optional if the file speaks for itself.
+- Don't add content-free edits (minor phrasing tweaks, reformatting, editorial prettification). SESSION-NOTES is append-mostly with targeted promotions; it's not a doc to polish.
+- Don't promote something after only one episode's evidence. The two-episode threshold exists because single-episode patterns are often episode-specific and don't generalise.
+
 ### Step 9 — Report Ending Context
 
 After `present_files` completes, report the ending context estimate in the same format as Step 0, plus the delta.
@@ -504,6 +528,7 @@ Upload ALL of these to start a new session:
    - Run `lint_overrides.py <N>` — fix any concat-trap warnings by updating the overlay
    - Build, CJK-fix, validate (zero CJK in romanised, zero banned terms)
    - Present output files
+   - **Update and present `SESSION-NOTES.md`** — move episode's row into Completed table, add new Watch List items, promote stable items out (see Step 8.5)
    - **Report Step 9 ending context** (informational)
 4. **ONE EPISODE PER REQUEST for FULL quality.** If context is getting full, **ASK** before proceeding.
 5. **Follow Narration Discipline.** Run tools silently between the Step 0 and Step 9 reports; surface only actual issues (one line each) and the final `present_files`. Do not produce mid-turn progress recaps, interpretive commentary on tool output, or end-of-episode "candidates to promote" / "watch list" summaries — edits to `SESSION-NOTES.md` are where such findings go.
