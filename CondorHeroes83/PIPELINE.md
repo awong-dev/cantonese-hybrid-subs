@@ -50,6 +50,53 @@ FULL is the only acceptable quality target. PARTIAL and MECHANICAL-ONLY are name
 
 ---
 
+## Narration Discipline
+
+Status output has a context cost. Long conversational summaries between tool calls — "Here's what I've done so far", "Summary of Step 4 work", "Candidates to promote", "Watch List additions" — consume roughly 15–25% of the session's budget during a FULL pass and largely repeat information the user already sees in tool output and the delivered SRTs. Keep conversational output minimal.
+
+### Required output (keep)
+- **Step 0 context baseline report.** Required before any tool call for the Quality Control gate. Format per Step 0.
+- **Step 9 ending context report.** Required after `present_files`. Format per Step 9.
+- **Stop-and-ask prompt** when the context budget is insufficient (see Fallback Protocol).
+- **User-directed questions** when a genuine ambiguity requires a decision (rare in a FULL pass).
+- **The final `present_files` call** with the three SRTs.
+
+### Cut (don't produce)
+- **Mid-turn "progress report" blocks** between script runs. The tool outputs already say "applied 420 overrides" or "✓ jyutping: clean" — don't restate.
+- **"Let me now run X" / "Let me check Y" narration** before tool calls. Just run the tool.
+- **End-of-turn recaps** that list what each step produced. The files produced are visible to the user; the TSV and overlay are in `/home/claude/` and reachable if needed.
+- **Speculative interpretive commentary** on tool output ("Build guard caught...", "The lint warning is a false positive because..."). If the finding is actionable, act on it silently; if it's not, don't mention it.
+- **"Candidates to promote" / "Watch List additions"** lists at the end of an episode. These belong in `SESSION-NOTES.md` updates, not in chat. If the session has findings worth persisting, edit SESSION-NOTES directly and mention the edit in one sentence — don't restate the content.
+
+### Exception — real issues
+If something actually went wrong — a Step that couldn't complete, a source file that was malformed, a validation failure that required a non-trivial workaround — surface it in a short issues list at the end. One line per issue. Use plain phrasing, not section headers.
+
+### Model for a Step 4 → present cycle
+
+Good:
+> *[runs pipeline.py, shared_extras.py, auto_override_v2.py silently]*
+> *[reads dump in ranges, writes TSV silently]*
+> *[runs apply_overrides, shared_extras, lint, build, cjk_fix_v2 silently]*
+> *[runs validation silently]*
+> *[calls present_files]*
+>
+> Ep27 complete. 503 subs, 420 overrides applied. One issue: cjk_fix_v2's duplicate-gloss collapser has an 8-char-per-side minimum that missed "crafty — crafty"; post-cleaned.
+>
+> [Step 9 context report]
+
+Bad (what the v10 first-pass produced):
+> "Let me now read STYLE.md..."
+> "Good — I have the full style and reference context. Now let me set up the working directory..."
+> "Step 3 complete. Only 19 AUTO-KEEPs out of 503 — that's a low rate, which makes sense for an episode with lots of CJK-dense scenes..."
+> "**Ep27 progress report — Ep27**  [paragraph of recap]"
+> "**Summary of Step 4 work:** [bullet list of what was already visible in tool output]"
+> "**Candidates to promote from Ep27 overlay → `extras_baseline.json`**: [long list]"
+> "**Watch List additions** [another long list]"
+
+The good version delivers the same work product with a small fraction of the conversational text.
+
+---
+
 ## Project Overview
 
 Producing three SRT subtitle variants per episode from three source tracks (eng CSV, chi_tra CSV, yue Whisper JSON):
@@ -459,3 +506,4 @@ Upload ALL of these to start a new session:
    - Present output files
    - **Report Step 9 ending context** (informational)
 4. **ONE EPISODE PER REQUEST for FULL quality.** If context is getting full, **ASK** before proceeding.
+5. **Follow Narration Discipline.** Run tools silently between the Step 0 and Step 9 reports; surface only actual issues (one line each) and the final `present_files`. Do not produce mid-turn progress recaps, interpretive commentary on tool output, or end-of-episode "candidates to promote" / "watch list" summaries — edits to `SESSION-NOTES.md` are where such findings go.
