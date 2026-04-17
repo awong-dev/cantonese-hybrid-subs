@@ -109,7 +109,12 @@ Block 350: "Yan Alie" → "Yan A'ao" (阿鰲, corrected name)
 ```
 
 
-Refinements were made through a very large series of observations and discussions about translation errors and styling opinions prompts
+Refinements were made by concatenating ALL the subtitles for 59 episodes of Legend of the
+Condor Heroes 1983 and then asking the system to create a process for sub creation. The
+initial concatenation allowed the LLM to build a glossary of terms.
+
+The process, over time, was refined through a very large series of observations and
+discussions about translation errors and styling opinions prompts
 
 ```
 Make a revision of the english based on inputs from both concentrating on
