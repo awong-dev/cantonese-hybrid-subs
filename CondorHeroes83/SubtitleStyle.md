@@ -24,7 +24,7 @@ The English phrasing should mirror the Cantonese spoken dialogue — its registe
 | Yue says | RIGHT | WRONG |
 |---|---|---|
 | 去叫東西吃我很快就回來的 (casual, quick) | Go order some food first. I'll be right back. | Why don't you go in and order something to eat first? I'll be back shortly |
-| 又是你這臭要飯的 (blunt insult, 臭 = stinking) | You again, you stinking beggar! | Stupid beggar! |
+| 又是你這臭要飯的 (chi OCR; actual Cantonese is 死乞兒 = damned beggar) | You again, you stupid beggar! | You again, you stinking beggar! |
 | 大宋有救了 (short excited) | There is hope for 大宋! | 大宋 is saved! |
 | 如果大宋有多位岳王爺嘅話咁就有救啦 (full conditional) | If we had another 岳王爺, there'd be hope. | If the great Song had a few more men like 岳王爺, there'd still be hope! |
 | 我搜晒翠紅樓咩都冇 (搜晒 = exhaustive search, 咩都冇 = absolutely nothing) | I searched every corner of 翠紅樓. There was nothing there. | I searched all over 翠紅樓 just now but found nothing |
@@ -99,7 +99,7 @@ Place the English gloss first, then em-dash, then the Chinese idiom.
 The English should feel like the yue/chi, not like smoothed-out English prose. If the Cantonese is clipped, the English is clipped. If it's formal, the English is formal. If it's awkward or stilted in the source, it can be awkward in English — that's characterisation.
 
 - 這麼緊張幹甚麼 → "Why so uptight?" (casual dismissal — match it)
-- 不知道誰亂來 → "Who's the one fooling around?" (accusatory question — match it)
+- 不知道誰亂來 → "Who's the one trying something funny?" (accusatory question — match it)
 - 不去了 → "Not going anymore" (abrupt — match it)
 - 小姑娘過來放了我們 → "Have mercy!" is WRONG if yue actually says "Miss, please come let us go" — match the actual words
 
