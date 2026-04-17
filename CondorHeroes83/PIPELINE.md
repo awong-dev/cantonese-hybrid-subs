@@ -95,7 +95,7 @@ Context baseline — Episode N
 • Assessment: feasible / borderline / should stop-and-ask
 ```
 
-**How to make the call:** use conservative sub-count estimates — a 400-sub episode consumes roughly ~35% of context during Step 4; a 600-sub episode roughly ~50%. Stop-and-ask if `baseline + expected delta` would exceed ~90%. These estimates are deliberately conservative; actual usage varies with episode density, but it's safer to over-warn than to abort Step 4 partway through.
+**How to make the call (v10):** with the v10 efficiency changes (file-based dump, AUTO-KEEP pre-filter, TSV override format, overlay-based extras, pre-build lint), the conservative sub-count estimates are roughly ~25% of context for a 400-sub episode during Step 4, and ~40% for a 600-sub episode — down from ~35% / ~50% in v9. Stop-and-ask if `baseline + expected delta` would exceed ~90%. These remain deliberately conservative; actual usage varies with episode density, and the efficiency gains depend on the reviewer actually using the file-based flow (reading `ep{N}_dump.txt` via `view` ranges rather than re-dumping via `python3 -c`).
 
 ### Step 1 — Parse & Align
 
@@ -104,7 +104,9 @@ cp /mnt/user-data/uploads/PersonalNamesUpdated.csv /home/claude/
 python3 pipeline.py <N>
 ```
 
-Parses the three source tracks and aligns them onto a **chi-spine skeleton**: the output's entry count and timestamps are taken from chi, not eng. Outputs `ep{N}_aligned.json` plus a full dump to stdout.
+Parses the three source tracks and aligns them onto a **chi-spine skeleton**: the output's entry count and timestamps are taken from chi, not eng. Outputs `ep{N}_aligned.json`, `ep{N}_dump.txt`, plus a compact summary to stdout.
+
+**v10 change — dump goes to file, not stdout.** In prior bundles, the full alignment dump was printed to stdout and a reviewer session would re-read it by echoing through `python3 -c` commands. Every echo cost context. In v10, `pipeline.py` writes the dump once to `/home/claude/ep{N}_dump.txt` and prints only a compact summary (sub count, confidence distribution, timing-adjustment count) to stdout. The reviewer consumes the dump by `view`ing line ranges of `ep{N}_dump.txt` in Step 2 — cheaper than regenerating it, and stable (doesn't shift under the reviewer mid-examination).
 
 **Chi as entry spine (pipeline.py v6):**
 - Output entry count = chi entry count (not eng). See `STYLE.md` §16.
@@ -127,14 +129,16 @@ Parses the three source tracks and aligns them onto a **chi-spine skeleton**: th
 - **MEDIUM** (≥ −0.8) — chi remains authority; yue consulted for tone/register/nuance.
 - **LOW** (< −0.8) — yue text discarded entirely; prefixed with `[DISCARDED]` in dump.
 
-Each sub in the dump is annotated `[HIGH]` / `[MEDIUM]` / `[LOW]`, and `[T-ADJ]` marks subs whose start/end times were tightened to word boundaries (Whisper `score ≥ 0.7`). A confidence summary section shows distribution and lists HIGH-authority and LOW-discarded subs. Per-sub confidence notes are written to `ep{N}_confidence.json` for the manual review pass.
+Each sub in the dump is annotated `[HIGH]` / `[MEDIUM]` / `[LOW]`, and `[T-ADJ]` marks subs whose start/end times were tightened to word boundaries (Whisper `score ≥ 0.7`). Per-sub confidence notes are written to `ep{N}_confidence.json` for the manual review pass.
 
 ### Step 2 — Read the Full Dump (MANDATORY)
 
-Read EVERY line of the dump. For each sub, compare the three columns:
-- Column 2 (eng) — the rough draft
-- Column 3 (chi) — the semantic authority
-- Column 4 (yue) — the actual spoken dialogue; at HIGH Whisper confidence, overrides chi on wording/register per the Yue-Authority Rule (`STYLE.md` §2)
+Read EVERY line of `ep{N}_dump.txt` (written by Step 1). Use `view` with line ranges — typically 100–200 subs per range — rather than `cat` or `python3 -c` round-trips.
+
+For each sub, compare the three columns:
+- Column E (eng) — the rough draft
+- Column C (chi) — the semantic authority
+- Column Y (yue) — the actual spoken dialogue; at HIGH Whisper confidence, overrides chi on wording/register per the Yue-Authority Rule (`STYLE.md` §2)
 
 Note as you go:
 - **Fabrications** — eng says something neither chi nor yue supports → mark for deletion. If yue HIGH confirms eng and chi diverges, treat as OCR error in chi (see Ep28 Sub 22).
@@ -165,6 +169,10 @@ The output is saved to `ep{N}_h_all.json`. **This output is not a draft translat
 
 Think of Step 3 as "setting up the hybrid's CJK scaffolding so the human isn't retyping 白駝山 or remembering to inject 奮不顧身 themselves."
 
+**v10 change — baseline/overlay split for extras.** Prior bundles kept the entire baseline of shared romanisation mappings (plus every episode's new entries) inside `shared_extras.py`, so each episode's builder file duplicated ~180 lines of boilerplate. In v10, `shared_extras.py` is a thin merger: it reads `extras_baseline.json` (ships with the bundle) and optionally `ep{N}_extras_add.json` (per-episode overlay — the reviewer writes this in Step 5), merges them, and writes `ep{N}_extra.json` for `build.py` to consume. A reviewer with nothing new to add can skip the overlay file and `shared_extras.py` still works. Overlay keys override baseline keys on collision.
+
+**v10 addition — AUTO-KEEP heuristic.** `auto_override_v2.py` now annotates each sub in `ep{N}_confidence.json` with an `auto_keep: true/false` flag. An `auto_keep: true` flag means the sub passed all seven conservative gates (all tracks non-empty, yue HIGH/MEDIUM, no fabrication-risk markers, no idioms in chi, no missing address terms, ≤1.5× length ratio, ≥0.7 content-word overlap) — indicating the Step 3 output is very likely already faithful. AUTO-KEEP is a **priority signal, not a gate**: the reviewer still reads every sub in Step 4, but concentrates examination time on the NEEDS REVIEW set (anything not flagged AUTO-KEEP). The heuristic is designed for false-negative bias: when in doubt, the heuristic does not flag. A false positive (flagging a sub faithful when it has a subtle meaning/register issue) would silently degrade quality; a false negative just costs a sub's worth of examination that was probably going to be quick anyway.
+
 ### Step 4 — Examine Every Sub; Override When Warranted
 
 Read `ep{N}_h_all.json` (now populated with Step 3's CJK substitutions) alongside the chi track, the yue track, and the `ep{N}_confidence.json` tier annotations from Step 3. Examine EVERY sub against the priority chain: **yue (HIGH) > chi (semantic authority) > eng (draft)**. If the text — with its mechanical substitutions applied — already matches the source content and register faithfully, default to it. Override only when content or register mismatches.
@@ -191,7 +199,30 @@ For every sub, walk this checklist:
 8. If chi or yue has an address term Step 3 didn't catch → ensure it's **CJK in hybrid**.
 9. If chi or yue has an idiom Step 3 didn't catch → ensure it's **in the hybrid sub**.
 10. If none of the above apply → **leave the sub alone**; the draft is faithful.
-11. Save any corrections to `ep{N}_h_all.json`.
+11. Collect your corrections into `ep{N}_overrides.tsv` (see below) and apply with `apply_overrides.py`.
+
+**v10 — how to triage the examination.** `ep{N}_confidence.json` now carries an `auto_keep` flag per sub (see Step 3). Subs with `auto_keep: true` should still be read, but quickly — the heuristic has already checked for fabrication risk, idiom injection, address-term drops, and length divergence, and all of those gates passed. Treat AUTO-KEEP as "likely quick confirm". Subs with `auto_keep: false` are where examination time earns its keep: fabrications, meaning flattening, yue-authority overrides, register drift, idiom injection all concentrate in the NEEDS REVIEW set.
+
+**v10 — how to write overrides.** Collect corrections into `/home/claude/ep{N}_overrides.tsv`, one per line, tab-separated:
+
+```
+<index>\t<English text with \\n for embedded newlines>
+```
+
+Example:
+```
+22\tA useless man of sorts — 廢人 — cannot compare to 岳 將軍's spirit
+47\t- 黃姑娘 will stay next door
+296\t蓉兒\nNo need to say it — 梅超風 must be coming
+```
+
+Lines starting with `#` are comments. Apply the file with:
+
+```bash
+python3 apply_overrides.py <N>
+```
+
+This merges the TSV into `ep{N}_h_all.json`, replacing entries by index. Subs not listed in the TSV keep whatever Step 3 wrote — an empty TSV is a valid "trust Step 3 completely" signal (though unlikely to be the right call for a full episode). The TSV format replaces the prior pattern of emitting overrides as a Python literal dict inside a patch script, which cost ~1.3× the text size in context due to dict/quoting overhead.
 
 Examining every sub is what makes FULL quality — not rewriting every sub. A faithful draft left untouched is a correct outcome.
 
@@ -199,7 +230,47 @@ Examining every sub is what makes FULL quality — not rewriting every sub. A fa
 
 ### Step 5 — Add Episode Extras
 
-Add episode-specific romanisation entries to `ep{N}_extra.json` for all CJK that appears in the hybrid overrides but isn't already in `PersonalNamesUpdated.csv`.
+For any CJK that appears in the hybrid overrides but isn't already in `PersonalNamesUpdated.csv` or the shared baseline (`extras_baseline.json`), add entries to `ep{N}_extras_add.json` — the episode-specific **overlay**:
+
+```json
+{
+  "jy": {
+    "陸乘風": "Luk Sing-fung",
+    "裘老前輩": "Elder Kau"
+  },
+  "yl": {
+    "陸乘風": "Luhk Sihng-fung",
+    "裘老前輩": "Elder Kauh"
+  }
+}
+```
+
+Then re-run `shared_extras.py <N>` to merge the overlay into `ep{N}_extra.json`.
+
+**How to find what's missing.** After writing overrides in Step 4, scan `ep{N}_h_all.json` for CJK tokens not covered by the baseline. A quick Python one-liner works:
+
+```python
+import json, re
+from collections import Counter
+with open('/home/claude/ep{N}_h_all.json') as f: h = json.load(f)
+runs = re.findall(r'[\u4e00-\u9fff]+', ' '.join(h.values()))
+for tok, n in sorted(Counter(runs).items(), key=lambda x: -x[1])[:80]:
+    print(f'{n:3d} {tok}')
+```
+
+Cross-reference against `extras_baseline.json` and `PersonalNamesUpdated.csv`; anything unmatched goes into the overlay.
+
+**Promotion path.** If an overlay term proves stable across 2+ episodes (same CJK always rendered the same way), promote it into `extras_baseline.json` and drop it from the episode overlays. This is what the `extras_baseline.json` + overlay split exists to support.
+
+### Step 5.5 — Pre-build Lint (v10)
+
+```bash
+python3 lint_overrides.py <N>
+```
+
+Scans `ep{N}_h_all.json` for known CJK-leak concat traps catalogued in `STYLE.md` §19 and the `SESSION-NOTES.md` Watch List. Reports each potential issue by sub index with a suggested fix. **Non-fatal** — the reviewer inspects each warning and decides whether to register the compound in the overlay (usually yes) or leave it (occasionally the pattern is intended).
+
+The catalogued concat patterns include: `裘老前輩` / `裘前輩` (surname+title), `X大哥` (surname+Brother), `我爹` / `你爹` (possessive+kinship), `大金國` / `大宋` (dynasty prefix), `我<FullName>` (emphatic self-reference), `大師父`. Running this before `build.py` lets the reviewer add the missing compound entries to the overlay once, rather than iterating after build.
 
 ### Step 6 — Build 3 Variants
 
@@ -346,37 +417,44 @@ Upload ALL of these to start a new session:
 4. `SESSION-NOTES.md` — episode completion status, pending-episode previews, watch list of names/terms/oddities
 
 ### Version file
-5. `VERSION` — single line containing the handoff bundle version (e.g. `9`). `build.py` and `cjk_fix_v2.py` read this at runtime and stamp it into output SRT filenames (`{EP}-eng-{variant}-v{VERSION}.srt`) so every delivered subtitle file is traceable to the rule-set that produced it. A bundle with missing or malformed VERSION will fail loudly rather than ship unstamped SRTs.
+5. `VERSION` — single line containing the handoff bundle version (e.g. `10`). `build.py` and `cjk_fix_v2.py` read this at runtime and stamp it into output SRT filenames (`{EP}-eng-{variant}-v{VERSION}.srt`) so every delivered subtitle file is traceable to the rule-set that produced it. A bundle with missing or malformed VERSION will fail loudly rather than ship unstamped SRTs.
 
-### Data file
+### Data files (2)
 6. `PersonalNamesUpdated.csv` — name lookup (copy to `/home/claude/` first)
+7. `extras_baseline.json` — shared romanisation baseline for terms beyond personal names (titles, places, sects, idioms, kinship). Loaded by `shared_extras.py`; merged with any `ep{N}_extras_add.json` overlay to produce `ep{N}_extra.json`.
 
-### Pipeline scripts (5 files)
-7. `pipeline.py` — CSV/JSON parser and chi-spine alignment (v6: Whisper preprocessing, chi-as-entry-spine). Importable module with `run()` and `main()`.
-8. `auto_override_v2.py` — deep override with CJK injection + idioms (v2.1: confidence-tier aware)
-9. `shared_extras.py` — episode extras generator
-10. `build.py` — builder with all conversion tables. Fix path: `PersonalNamesUpdated.csv` → `/home/claude/PersonalNamesUpdated.csv`. Reads `VERSION` adjacent to itself for output filename stamping.
-11. `cjk_fix_v2.py` — comprehensive CJK cleanup for romanised files. Reads `VERSION` to locate the SRTs build.py wrote.
+### Pipeline scripts (7 files)
+8. `pipeline.py` — CSV/JSON parser and chi-spine alignment (v6: Whisper preprocessing, chi-as-entry-spine). v10: writes the full dump to `ep{N}_dump.txt` rather than stdout. Importable module with `run()` and `main()`.
+9. `auto_override_v2.py` — deep override with CJK injection + idioms (v2.1: confidence-tier aware; v10: AUTO-KEEP heuristic annotation)
+10. `shared_extras.py` — thin merger: baseline + optional `ep{N}_extras_add.json` overlay → `ep{N}_extra.json`
+11. `apply_overrides.py` (v10) — applies Step 4 reviewer overrides from `ep{N}_overrides.tsv` into `ep{N}_h_all.json`
+12. `lint_overrides.py` (v10) — pre-build lint for known CJK-leak concat patterns
+13. `build.py` — builder with all conversion tables. Fix path: `PersonalNamesUpdated.csv` → `/home/claude/PersonalNamesUpdated.csv`. Reads `VERSION` adjacent to itself for output filename stamping.
+14. `cjk_fix_v2.py` — comprehensive CJK cleanup for romanised files. Reads `VERSION` to locate the SRTs build.py wrote.
 
 ### Tests (1 file)
-12. `test_pipeline.py` — unittest suite covering synthetic reflow cases and a 17-row Ep24 real-data slice. Run with `python3 -m unittest test_pipeline.py -v`. Not required for sub generation, but verifies pipeline.py still works correctly after any edits.
+15. `test_pipeline.py` — unittest suite covering synthetic reflow cases and a 17-row Ep24 real-data slice. Run with `python3 -m unittest test_pipeline.py -v`. Not required for sub generation, but verifies pipeline.py still works correctly after any edits.
 
 ### Per-episode inputs
-13. `{N}-eng.csv`, `{N}-chi_tra.csv`, `{N}-yue.json`
+16. `{N}-eng.csv`, `{N}-chi_tra.csv`, `{N}-yue.json`
 
 ---
 
 ## Quick-Start for New Chat
 
-1. Upload the handoff bundle — **4 reference docs + 1 VERSION file + 1 data file + 5 scripts + 1 test file = 12 files** (see [Handoff Files Checklist](#handoff-files-checklist) above) — plus the episode sources `{N}-eng.csv`, `{N}-chi_tra.csv`, `{N}-yue.json`.
+1. Upload the handoff bundle — **4 reference docs + 1 VERSION file + 2 data files + 7 scripts + 1 test file = 15 files** (see [Handoff Files Checklist](#handoff-files-checklist) above) — plus the episode sources `{N}-eng.csv`, `{N}-chi_tra.csv`, `{N}-yue.json`.
 2. Say: *"Process episode N with full source-authority rewriting (FULL standard)"* — i.e. examine every sub against chi and yue per the priority chain in `STYLE.md` §2.
 3. The assistant MUST:
    - **Report Step 0 context baseline** before doing anything else
    - Copy `PersonalNamesUpdated.csv` to `/home/claude/`
-   - Place/create all 5 scripts
-   - Run `pipeline.py`, **READ THE FULL DUMP against chi and yue**
-   - Examine every sub against chi and yue (including confidence tiers); write manual overrides where content or register mismatches
-   - Add episode-specific extras
+   - Place/create all 7 scripts and `extras_baseline.json`
+   - Run `pipeline.py` → `ep{N}_dump.txt` + `ep{N}_aligned.json`; `view` the dump file in ranges
+   - Run `shared_extras.py` → `ep{N}_extra.json` (baseline only, initially)
+   - Run `auto_override_v2.py` → `ep{N}_h_all.json` + `ep{N}_confidence.json` (with AUTO-KEEP flags)
+   - Examine every sub; concentrate effort on NEEDS REVIEW subs (not AUTO-KEEP)
+   - Collect corrections into `ep{N}_overrides.tsv`; run `apply_overrides.py <N>`
+   - Write `ep{N}_extras_add.json` if new CJK terms introduced; re-run `shared_extras.py <N>` to merge
+   - Run `lint_overrides.py <N>` — fix any concat-trap warnings by updating the overlay
    - Build, CJK-fix, validate (zero CJK in romanised, zero banned terms)
    - Present output files
    - **Report Step 9 ending context** (informational)

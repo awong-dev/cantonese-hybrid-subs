@@ -1,162 +1,108 @@
-import json, sys
+#!/usr/bin/env python3
+"""Build ep{N}_extra.json by merging the shared baseline with an optional
+episode-specific overlay.
 
-ep = sys.argv[1]
-extras = {
-    'jy': {
-        '歐陽': 'Au-Joeng', '郭': 'Gwok', '陸': 'Luk',
-        '老頑童': 'Overgrown Child', '老毒物': 'Old Venom',
-        '周大哥': '週-daai-go', '大哥': 'Big Brother',
-        '賴蛤蟆': 'the Old Toad',
-        '傻小子': 'that silly boy',
-        '七兄': 'Brother Seven', '克兒': 'Hak-ji',
-        '黃島主': 'Island Lord Wong', '島主': 'Island Lord',
-        '靖兒': 'Zing-ji', '康兒': 'Hong-ji',
-        '靈智上人': 'Ling-zi Soeng-jan', '仙翁': 'the Immortal Elder',
-        '歐陽世兄': 'Brother Au-Joeng', '父王': 'Royal Father',
-        '白駝山': 'White Camel Mountain',
-        '閻王爺': 'the King of Hell',
-        '藥師兄': 'Brother Joek-si',
-        '阿衡': 'Aa-Hang',
-        # Ep24 additions
-        '軟蝟甲': 'the Soft Hedgehog Vest',
-        '小寶': 'Siu-bou',
-        '事到如今': 'at this point',
-        '痛改前非': 'turn over a new leaf',
-        '拖泥帶水': 'wishy-washy',
-        '義父': 'foster father',
-        '黃帝內經': "the Yellow Emperor's Inner Classic",
-        '內功': 'internal energy',
-        '推宮換血': 'a blood exchange',
-        '忘恩負義': 'ungrateful',
-        '後會有期': 'we will meet again',
-        '老乞兒': 'Old Beggar',
-        '康': 'Hong',
-        # Ep25 additions
-        '冠英': 'Gun-jing', '瑤迦': 'Jiu-gaa',
-        '孫不二': 'Syun Bat-ji',
-        '方掌櫃': 'Innkeeper Fong',
-        '陸少爺': 'Master Luk', '陸兄': 'Brother Luk',
-        '陸家': 'the Luk family', '程家': 'the Cing family',
-        '程陸': 'the Cing and Luk',
-        '程大小姐': 'the Cing young mistress',
-        '郭兄': 'Brother Gwok',
-        '羞花亭': 'the Sau-faa Pavilion',
-        '漢人': 'a Han',
-        '香囊': 'sachet',
-        '羅巾': 'kerchief', '羅布': 'laundry', '夢不成': 'no dream comes',
-        '淚濕羅布': 'tears dampen the laundry',
-        '琵琶鴨': 'pipa duck', '燉甲魚': 'stewed turtle',
-        '元氣': 'vital energy',
-        '壓驚': 'to soothe shock',
-        '黑鍋': "scapegoat's burden",
-        '佛爺': 'Buddha',
-        '阿全': 'Aa-Cyun', '阿雲': 'Aa-Wan',
-        '東邪西毒': 'East Heretic and West Venom',
-        '南帝北丐': 'South Emperor and North Beggar',
-        '忘年之交': 'old friends despite their years',
-        '以國家為重': 'country comes first',
-        '神機妙算': 'anticipate everything',
-        '人有相似': 'people look alike', '物有相同': 'things match',
-        '香丁玉堅會五湖': 'Xiangding Five Delights',
-        # Poetry lines (白居易 後宮詞)
-        '淚濕羅巾夢不成': 'tears dampen the kerchief, no dream comes',
-        '袍深前殿按歌聲': 'beyond the robes, the front palace sings on',
-        '紅顏未老恩先斷': 'her youth unfaded, his favour already done',
-        '斜倚薰籠坐到明': 'she leans on her incense pillow till dawn',
-        '里': 'li',
-        # Ep25 idiom/misc fixes
-        '仙姑': 'the Taoist Nun',
-        '幫人幫到底': 'see a kindness through',
-        '送佛送到西': 'escort the Buddha west',
-        '兩': 'taels',
-        '勢不兩立': 'sworn enemies',
-        '男歡女愛': 'love between a man and a woman',
-        '天公地道': 'is perfectly natural',
-        '死罪可免': 'spared from death',
-        '活罪難逃': 'but punishment is unavoidable',
-        '衍數': 'yan numbers',
-        '大衍數': 'the Dayan Numbers',
-        '零': 'ling', '一': 'yat', '地': 'dei', '三': 'saam',
-        '起': 'hei', '伏': 'fuk', '定': 'ding', '已': 'ji', '和': 'wo',
-    },
-    'yl': {
-        '歐陽': 'Au-Yeung', '郭': 'Gwok', '陸': 'Luk',
-        '老頑童': 'Overgrown Child', '老毒物': 'Old Venom',
-        '周大哥': '週-daaih-go', '大哥': 'Big Brother',
-        '賴蛤蟆': 'the Old Toad',
-        '傻小子': 'that silly boy',
-        '七兄': 'Brother Seven', '克兒': 'Hak-yi',
-        '黃島主': 'Island Lord Wong', '島主': 'Island Lord',
-        '靖兒': 'Jing-yi', '康兒': 'Hong-yi',
-        '靈智上人': 'Lihng-ji Seuhng-yahn', '仙翁': 'the Immortal Elder',
-        '歐陽世兄': 'Brother Au-Yeung', '父王': 'Royal Father',
-        '白駝山': 'White Camel Mountain',
-        '閻王爺': 'the King of Hell',
-        '藥師兄': 'Brother Yeuhk-si',
-        '阿衡': 'Aa-Hahng',
-        # Ep24 additions
-        '軟蝟甲': 'the Soft Hedgehog Vest',
-        '小寶': 'Siu-bou',
-        '事到如今': 'at this point',
-        '痛改前非': 'turn over a new leaf',
-        '拖泥帶水': 'wishy-washy',
-        '義父': 'foster father',
-        '黃帝內經': "the Yellow Emperor's Inner Classic",
-        '內功': 'internal energy',
-        '推宮換血': 'a blood exchange',
-        '忘恩負義': 'ungrateful',
-        '後會有期': 'we will meet again',
-        '老乞兒': 'Old Beggar',
-        '康': 'Hong',
-        # Ep25 additions
-        '冠英': 'Gun-ying', '瑤迦': 'Yiu-ga',
-        '孫不二': 'Syun Bat-ji',
-        '方掌櫃': 'Innkeeper Fong',
-        '陸少爺': 'Master Luk', '陸兄': 'Brother Luk',
-        '陸家': 'the Luk family', '程家': 'the Ching family',
-        '程陸': 'the Ching and Luk',
-        '程大小姐': 'the Ching young mistress',
-        '郭兄': 'Brother Gwok',
-        '羞花亭': 'the Sau-fa Pavilion',
-        '漢人': 'a Han',
-        '香囊': 'sachet',
-        '羅巾': 'kerchief', '羅布': 'laundry', '夢不成': 'no dream comes',
-        '淚濕羅布': 'tears dampen the laundry',
-        '琵琶鴨': 'pipa duck', '燉甲魚': 'stewed turtle',
-        '元氣': 'vital energy',
-        '壓驚': 'to soothe shock',
-        '黑鍋': "scapegoat's burden",
-        '佛爺': 'Buddha',
-        '阿全': 'Aa-Chyun', '阿雲': 'Aa-Wahn',
-        '東邪西毒': 'East Heretic and West Venom',
-        '南帝北丐': 'South Emperor and North Beggar',
-        '忘年之交': 'old friends despite their years',
-        '以國家為重': 'country comes first',
-        '神機妙算': 'anticipate everything',
-        '人有相似': 'people look alike', '物有相同': 'things match',
-        '香丁玉堅會五湖': 'Xiangding Five Delights',
-        # Poetry lines (白居易 後宮詞)
-        '淚濕羅巾夢不成': 'tears dampen the kerchief, no dream comes',
-        '袍深前殿按歌聲': 'beyond the robes, the front palace sings on',
-        '紅顏未老恩先斷': 'her youth unfaded, his favour already done',
-        '斜倚薰籠坐到明': 'she leans on her incense pillow till dawn',
-        '里': 'li',
-        # Ep25 idiom/misc fixes
-        '仙姑': 'the Taoist Nun',
-        '幫人幫到底': 'see a kindness through',
-        '送佛送到西': 'escort the Buddha west',
-        '兩': 'taels',
-        '勢不兩立': 'sworn enemies',
-        '男歡女愛': 'love between a man and a woman',
-        '天公地道': 'is perfectly natural',
-        '死罪可免': 'spared from death',
-        '活罪難逃': 'but punishment is unavoidable',
-        '衍數': 'yan numbers',
-        '大衍數': 'the Dayan Numbers',
-        '零': 'lihng', '一': 'yat', '地': 'deih', '三': 'saam',
-        '起': 'hei', '伏': 'fuhk', '定': 'dihng', '已': 'yih', '和': 'woh',
-    }
-}
-with open(f'/home/claude/ep{ep}_extra.json', 'w', encoding='utf-8') as f:
-    json.dump(extras, f, ensure_ascii=False, indent=1)
-print(f'Ep{ep} extras saved')
+Inputs:
+  extras_baseline.json          — shared baseline (this file ships with bundle)
+  ep{N}_extras_add.json         — episode overlay (OPTIONAL; create if the
+                                   episode introduces new CJK terms not in
+                                   the baseline)
+
+Output:
+  /home/claude/ep{N}_extra.json  — what build.py consumes
+
+Overlay format (OPTIONAL file, same schema as baseline):
+  {
+    "jy": { "<CJK>": "<Jyutping rendering>", ... },
+    "yl": { "<CJK>": "<Yale rendering>", ... }
+  }
+
+Overlay keys take precedence over baseline keys when they collide.
+
+Rationale (v10):
+  Prior bundle versions kept the entire baseline PLUS every episode's
+  new entries inside shared_extras.py — so each episode's builder file
+  duplicated the whole baseline. With ~90 baseline keys × 2 variants
+  (jy + yl) that's ~180 lines of duplicated boilerplate per episode.
+  Splitting baseline (data) from overlay (per-episode delta) cuts the
+  per-episode file to just the new entries, typically 10–40 lines.
+
+Usage:
+  python3 shared_extras.py <episode_number>
+  (kept as shared_extras.py for CLI compatibility with earlier bundles)
+"""
+
+import sys, json, os
+
+WORK = '/home/claude'
+
+def _load_baseline():
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                        'extras_baseline.json')
+    if not os.path.exists(path):
+        raise SystemExit(
+            f"ERROR: {path} not found. Every handoff bundle must ship "
+            f"extras_baseline.json alongside this script."
+        )
+    with open(path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    # Drop the comment key if present
+    data.pop('__comment__', None)
+    if 'jy' not in data or 'yl' not in data:
+        raise SystemExit(
+            f"ERROR: {path} malformed. Expected top-level keys 'jy' and 'yl'."
+        )
+    return data
+
+def _load_overlay(ep):
+    path = f'{WORK}/ep{ep}_extras_add.json'
+    if not os.path.exists(path):
+        return None
+    with open(path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    data.pop('__comment__', None)
+    if 'jy' not in data or 'yl' not in data:
+        raise SystemExit(
+            f"ERROR: {path} malformed. Expected top-level keys 'jy' and 'yl'."
+        )
+    return data
+
+def main():
+    if len(sys.argv) < 2:
+        print("Usage: python3 shared_extras.py <episode_number>")
+        sys.exit(1)
+    ep = int(sys.argv[1])
+
+    baseline = _load_baseline()
+    overlay  = _load_overlay(ep)
+
+    merged = {'jy': dict(baseline['jy']),
+              'yl': dict(baseline['yl'])}
+
+    added_jy = added_yl = 0
+    if overlay:
+        for k, v in overlay['jy'].items():
+            if k not in merged['jy']:
+                added_jy += 1
+            merged['jy'][k] = v
+        for k, v in overlay['yl'].items():
+            if k not in merged['yl']:
+                added_yl += 1
+            merged['yl'][k] = v
+
+    out_path = f'{WORK}/ep{ep}_extra.json'
+    with open(out_path, 'w', encoding='utf-8') as f:
+        json.dump(merged, f, ensure_ascii=False, indent=1)
+
+    total_jy = len(merged['jy'])
+    total_yl = len(merged['yl'])
+    if overlay:
+        print(f"Ep{ep} extras: baseline ({len(baseline['jy'])} jy, "
+              f"{len(baseline['yl'])} yl) + overlay (+{added_jy} jy, "
+              f"+{added_yl} yl new) = {total_jy} jy, {total_yl} yl total")
+    else:
+        print(f"Ep{ep} extras: baseline only ({total_jy} jy, {total_yl} yl). "
+              f"No overlay ep{ep}_extras_add.json found.")
+
+if __name__ == '__main__':
+    main()

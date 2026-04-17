@@ -183,6 +183,152 @@ def auto_override_v2(eng_text, chi_text, yue_text):
     return text
 
 # ============================================================
+# FAITHFUL-SUB HEURISTIC (v10)
+# ============================================================
+# Purpose: a conservative pre-filter flagging subs where the Step 3 output
+# is very likely already faithful to chi+yue. Reviewer defaults to keeping
+# these; Step 4 examination time concentrates on NOT-flagged subs.
+#
+# The heuristic is CONSERVATIVE BY DESIGN. A sub is flagged AUTO-KEEP only
+# if ALL seven gates pass. A false positive (flagging a sub faithful when
+# it has a register or meaning issue) is worse than a false negative
+# (re-examining an already-faithful sub). When in doubt, do NOT flag.
+#
+# Gates:
+#  (a) eng, chi, and yue are all non-empty (no sparse-source ambiguity)
+#  (b) no fabrication-risk markers in eng (long parentheticals, added
+#      relative clauses introduced by "which", "who was", etc., that could
+#      carry invented content)
+#  (c) no 四字成語 present in chi (idiom injection is Step 4 territory)
+#  (d) no address term in chi that's missing from the Step 3 output
+#      (仙姑 / 前輩 / 師父 / etc. — Category 3 leaks)
+#  (e) yue confidence is HIGH or MEDIUM (LOW and N/A stay in the review set)
+#  (f) chi-content-word overlap with Step 3 output ≥ 0.7 (Jaccard on
+#      content words, stop-word filtered)
+#  (g) eng and chi lengths within 1.5× of each other (strong divergence
+#      suggests compression / expansion worth examining)
+#
+# Even when flagged, the sub is STILL present in the dump and the reviewer
+# can still examine it. "AUTO-KEEP" is a priority signal, not a gate.
+
+_STOPWORDS = {
+    'a','an','the','of','to','on','in','for','with','and','or','but','at',
+    'is','was','were','be','been','being','it','you','we','he','she','him','her',
+    'his','our','my','your','their','this','that','these','those','so','then',
+    'i','me','us','them','do','does','did','have','has','had','not','no',
+    'can','will','would','could','should','just','go','going','from','as',
+    'by','if','up','down','out','about','what','who','why','how','where',
+}
+# Address terms that must appear in the hybrid output if present in chi
+# (longer before shorter for substring matching)
+_ADDRESS_TERMS = [
+    '靖哥哥', '蓉兒', '靖兒', '康兒', '阿爹', '阿靖', '阿康',
+    '父王', '娘親', '老夫', '莊主', '少莊主', '祖師爺', '幫主',
+    '小王爺', '駙馬爺',
+    '師父', '師姊', '師妹', '師兄', '師弟', '師叔', '師姑',
+    '前輩', '仙姑', '娘子', '老伯', '少爺', '公子', '大哥', '七公',
+    '爹', '娘',
+]
+# Cheap 四字成語 heuristic: look for the known idiom set from idiom_inject
+# (defined in this file's vocabulary above). We'll reuse it directly.
+
+def _content_words(s):
+    """Extract lowercase alphanumeric words, minus stopwords."""
+    if not s: return set()
+    return {w for w in re.findall(r"[a-zA-Z]+", s.lower()) if w not in _STOPWORDS}
+
+def _chi_has_idiom(chi_text):
+    """True if chi contains any idiom in the injection set."""
+    for idiom in idiom_inject:
+        if idiom in chi_text:
+            return True
+    return False
+
+def _chi_has_address_missing_from_output(chi_text, output_text):
+    """True if chi has an address term that didn't land in the Step 3 output
+    (as CJK or as an English equivalent rendering)."""
+    for term in _ADDRESS_TERMS:
+        if term in chi_text and term not in output_text:
+            # Also allow common English equivalents that didn't auto-CJK-ify.
+            # If eng_equiv for this term isn't in output either, it's missing.
+            english_equivs = {
+                '爹': ('Father', 'father', 'dad'),
+                '娘': ('Mother', 'mother', 'mom'),
+                '娘親': ('Mother', 'mother'),
+                '阿爹': ('Father', 'father'),
+                '父王': ('Royal Father', 'Father'),
+                '師父': ('Master', 'Teacher', 'teacher'),
+                '前輩': ('senior', 'Senior', 'Elder'),
+                '仙姑': ('Taoist Nun', 'Immortal Maiden'),
+                '莊主': ('Manor Lord',),
+                '少莊主': ('Young Master',),
+                '幫主': ('Chief',),
+                '小王爺': ('Young Prince',),
+                '大哥': ('Big Brother',),
+                '七公': ('Seven Elder',),
+            }
+            eq = english_equivs.get(term, ())
+            if not any(e in output_text for e in eq):
+                return True
+    return False
+
+def _has_fabrication_risk_markers(eng_text):
+    """Heuristic: long parentheticals or 'which'/'who' clauses that could
+    be the site of fabrication. Not a detector of fabrication — a detector
+    of subs that DESERVE manual examination for fabrication risk."""
+    if not eng_text: return False
+    # Parentheticals longer than 20 chars
+    for m in re.finditer(r'\(([^)]+)\)', eng_text):
+        if len(m.group(1)) > 20:
+            return True
+    # ", which" / ", who" / ", whom" clauses
+    if re.search(r',\s+(which|who|whom)\b', eng_text, re.IGNORECASE):
+        return True
+    return False
+
+def _length_ratio_ok(eng_text, chi_text):
+    """True if eng and chi are within 1.5× in character length."""
+    if not eng_text or not chi_text:
+        return False
+    le, lc = len(eng_text), len(chi_text)
+    lo, hi = min(le, lc), max(le, lc)
+    return lo > 0 and (hi / lo) <= 1.5
+
+def faithful_heuristic(eng_text, chi_text, yue_text, output_text, conf):
+    """Return True if ALL seven conservative gates pass."""
+    # (a) all three tracks populated
+    if not eng_text or not chi_text or not yue_text:
+        return False
+    # (e) yue confidence acceptable
+    if conf not in ('HIGH', 'MEDIUM'):
+        return False
+    # (b) no fabrication-risk markers in eng
+    if _has_fabrication_risk_markers(eng_text):
+        return False
+    # (c) no idiom in chi
+    if _chi_has_idiom(chi_text):
+        return False
+    # (d) no missing address term
+    if _chi_has_address_missing_from_output(chi_text, output_text):
+        return False
+    # (g) length ratio sanity
+    if not _length_ratio_ok(eng_text, chi_text):
+        return False
+    # (f) content-word overlap between chi (translated transitively via
+    #     eng as proxy — chi has CJK not words) ≥ 0.7. We use eng↔output
+    #     content-word overlap as the proxy, since the Step 3 output is
+    #     derived from eng with CJK substitutions layered on. A high overlap
+    #     means Step 3 didn't silently reshape meaning.
+    eng_cw = _content_words(eng_text)
+    out_cw = _content_words(output_text)
+    if not eng_cw or not out_cw:
+        return False
+    jac = len(eng_cw & out_cw) / len(eng_cw | out_cw)
+    if jac < 0.7:
+        return False
+    return True
+
+# ============================================================
 # Generate overrides with confidence annotations
 # ============================================================
 overrides = {}
@@ -224,6 +370,11 @@ for a in aligned:
 
     # Build annotation for manual review
     ann = {'confidence': conf}
+    # Apply the conservative AUTO-KEEP heuristic (v10).
+    # This uses the finalised text (including idiom injection) so it reflects
+    # the actual Step 3 output the reviewer will see.
+    auto_keep = faithful_heuristic(a['eng'], a['chi'], yue_clean, text, conf)
+    ann['auto_keep'] = auto_keep
     if conf == 'HIGH':
         ann['note'] = 'YUE-AUTH: yue is authoritative. Compare yue vs chi — prefer yue where they differ.'
         ann['yue'] = yue_clean
@@ -261,3 +412,12 @@ print(f"  N/A:                   {na_count}")
 if high_count:
     print(f"\n⚠ {high_count} subs flagged YUE-AUTH — these need special attention during manual review.")
     print(f"  Check ep{EP}_confidence.json for details on each flagged sub.")
+
+# v10 AUTO-KEEP summary (conservative pre-filter; see faithful_heuristic())
+auto_keep_count = sum(1 for v in confidence_annotations.values() if v.get('auto_keep'))
+review_count = len(confidence_annotations) - auto_keep_count
+print(f"\n=== Step 4 triage (v10 AUTO-KEEP heuristic) ===")
+print(f"  AUTO-KEEP (likely faithful, quick confirm): {auto_keep_count}")
+print(f"  NEEDS REVIEW (examine in detail):           {review_count}")
+print(f"  Per-sub annotations: ep{EP}_confidence.json['<idx>']['auto_keep']")
+print(f"  AUTO-KEEP is a PRIORITY SIGNAL, not a gate. Still read every sub.")

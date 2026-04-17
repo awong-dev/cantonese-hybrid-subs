@@ -507,28 +507,42 @@ def run(ep, *, uploads=UPLOADS, work=WORK, output=OUTPUT):
     with open(f'{work}/ep{ep}_aligned.json', 'w', encoding='utf-8') as f:
         json.dump(aligned, f, ensure_ascii=False, indent=1)
 
-    print(f"\n=== FULL DUMP Ep{ep} ({len(aligned)} subs) ===")
-    for a in aligned:
-        e = a['eng'].replace('\n', ' // ')
-        c = a['chi'].replace('\n', ' // ')
-        y = a['yue'][:60] if a['yue'] else ''
-        conf = a.get('yue_confidence', '')
-        conf_tag = f' [{conf}]' if conf and conf != 'N/A' else ''
-        adj = ' [T-ADJ]' if a.get('timing_adjusted') else ''
-        print(f"{a['index']}|{e}|{c}|{y}{conf_tag}{adj}")
+    # --- Dump goes to file, not stdout ---
+    # Rationale: the full dump is the canonical Step 2 examination artifact.
+    # In prior bundle versions (≤ v9) it was printed to stdout, which the
+    # assistant would then re-read by echoing through `python3 -c` calls —
+    # every round-trip cost context. Writing once to `ep{N}_dump.txt` lets
+    # the assistant `view` selective line ranges without regenerating the
+    # content. See PIPELINE.md Step 2.
+    dump_path = f'{work}/ep{ep}_dump.txt'
+    with open(dump_path, 'w', encoding='utf-8') as f:
+        f.write(f"=== FULL DUMP Ep{ep} ({len(aligned)} subs) ===\n")
+        f.write("FORMAT: index|conf|eng|chi|yue\n")
+        f.write("  conf: HIGH/MEDIUM/LOW/N/A; [T-ADJ] = timing adjusted\n")
+        f.write("  newlines in eng/chi are shown as ' // '\n")
+        f.write("  yue is truncated to 200 chars per sub to keep the file compact\n")
+        f.write("=" * 60 + "\n")
+        for a in aligned:
+            e = a['eng'].replace('\n', ' // ')
+            c = a['chi'].replace('\n', ' // ')
+            y = a['yue'][:200] if a['yue'] else ''
+            conf = a.get('yue_confidence', 'N/A')
+            adj = ' [T-ADJ]' if a.get('timing_adjusted') else ''
+            f.write(f"{a['index']}|{conf}{adj}|E:{e}|C:{c}|Y:{y}\n")
+        f.write("=== END DUMP ===\n")
 
-    print(f"\n=== END DUMP ===")
-
-    # Confidence summary
+    # --- Compact stdout summary ---
+    print(f"\n=== Ep{ep} alignment complete ===")
+    print(f"  Subs aligned: {len(aligned)}")
+    print(f"  Dump written: {dump_path}")
     if yue_is_whisper:
-        print(f"\n=== YUE CONFIDENCE SUMMARY ===")
         counts = {'HIGH': 0, 'MEDIUM': 0, 'LOW': 0, 'N/A': 0}
         for a in aligned:
             counts[a.get('yue_confidence', 'N/A')] += 1
-        for tier, n in counts.items():
-            print(f"  {tier}: {n}")
-
-    print(f"\nEp{ep} pipeline complete. Next: auto_override_v2.py {ep}")
+        print(f"  Confidence: HIGH={counts['HIGH']} MEDIUM={counts['MEDIUM']} "
+              f"LOW={counts['LOW']} N/A={counts['N/A']}")
+        print(f"  Timing adjustments: {timing_adjustments}")
+    print(f"\nNext: python3 auto_override_v2.py {ep}")
 
 
 def main():
