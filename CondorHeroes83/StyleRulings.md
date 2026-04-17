@@ -164,3 +164,24 @@ Process in this order to avoid partial matches:
 - **go-go dash**: Check all gogo compounds have no extra dash
 - **Bare surname fragments**: 洪Seven Elder → must be Hung Seven Elder (jyutping) / Huhng Seven Elder (yale)
 - **康 bare character**: When 楊康 is called just 康, romanised must be "Hong" not left as Chinese
+
+---
+
+## Yue-Authority Rule (Added Ep27 session)
+
+**When yue gives a more vivid, specific, or colloquial word than chi, and it is not an OCR error, yue overrides chi.** This is because the yue track is the actual spoken Cantonese dialogue of a Cantonese show. The chi (Mandarin) track is a written translation that sometimes flattens the spoken register.
+
+### Examples:
+- **古惑** (yue: crafty/street-smart) overrides **鬼主意** (chi: cunning schemes) — 古惑 is the word actually spoken
+- **淒涼** (yue: desolate/forlorn) overrides **可憐** (chi: pitiful) — 淒涼 is emotionally stronger
+- **開心** (yue: happy) overrides **瞑目** (chi: rest in peace) — 開心 is warmer, more colloquial
+- **好像** (yue: seemed) vs **非常** (chi: very) — yue preserves certainty level
+- **抵死** (yue: deserve to die, Cantonese colloquial) — inject as CJK with gloss
+- **百世千孫** (yue: descendants for a hundred generations) — yue adds obsequious detail chi omits
+
+### How to apply:
+1. Read chi as primary authority
+2. Cross-check yue for register, specificity, and emotional tone
+3. Where yue has a distinctly different word that is MORE vivid/specific/correct, use yue
+4. Where yue just has a Cantonese phonological variant (e.g. 家散人亡 vs 家破人亡), keep chi
+5. Where yue reveals an OCR error in chi, fix the error (this is already standard practice)
