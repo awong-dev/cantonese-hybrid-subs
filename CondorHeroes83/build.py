@@ -3,13 +3,39 @@
 Build three SRT variants from overrides.
 Usage: python3 build.py <episode_number>
 Requires: ep{N}_aligned.json and ep{N}_h_all.json in /home/claude/
+Output filenames are stamped with the handoff bundle version
+(read from VERSION file adjacent to this script): {N}-eng-{variant}-v{V}.srt
 """
 
-import sys, re, csv, io, json, unicodedata
+import sys, re, csv, io, json, unicodedata, os
 
 EP = int(sys.argv[1])
 WORK = '/home/claude'
 OUTPUT = '/mnt/user-data/outputs'
+
+# Handoff version — read from VERSION file adjacent to this script.
+# This file ships in the handoff bundle; its contents (e.g. "9") become
+# the filename suffix so SRTs are traceable to the rule-set that produced
+# them. Missing or malformed VERSION is a hard error: we'd rather fail
+# loudly than ship SRTs without a version stamp.
+def _load_version():
+    vpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'VERSION')
+    try:
+        with open(vpath, 'r', encoding='utf-8') as f:
+            v = f.read().strip()
+    except FileNotFoundError:
+        raise SystemExit(
+            f"ERROR: VERSION file not found at {vpath}. "
+            "Every handoff bundle must ship a VERSION file (one line, e.g. '9'). "
+            "Output SRTs are named {EP}-eng-{variant}-v{VERSION}.srt for traceability."
+        )
+    if not re.fullmatch(r'\d+', v):
+        raise SystemExit(
+            f"ERROR: VERSION file at {vpath} contains '{v}', expected a bare integer (e.g. '9')."
+        )
+    return v
+
+VERSION = _load_version()
 
 # Load aligned data and overrides
 with open(f'{WORK}/ep{EP}_aligned.json', 'r', encoding='utf-8') as f:
@@ -278,15 +304,15 @@ else:
     print("\n✓ ALL VALIDATION PASSED")
 
 # Write
-write_srt(hybrid_subs, f'{OUTPUT}/{EP}-eng-hybrid.srt')
-write_srt(jy_subs, f'{OUTPUT}/{EP}-eng-jyutping.srt')
-write_srt(yl_subs, f'{OUTPUT}/{EP}-eng-yale.srt')
+write_srt(hybrid_subs, f'{OUTPUT}/{EP}-eng-hybrid-v{VERSION}.srt')
+write_srt(jy_subs, f'{OUTPUT}/{EP}-eng-jyutping-v{VERSION}.srt')
+write_srt(yl_subs, f'{OUTPUT}/{EP}-eng-yale-v{VERSION}.srt')
 
 # Verify final file integrity
 for variant in ['hybrid', 'jyutping', 'yale']:
-    fp = f'{OUTPUT}/{EP}-eng-{variant}.srt'
+    fp = f'{OUTPUT}/{EP}-eng-{variant}-v{VERSION}.srt'
     with open(fp, 'r') as f:
         count = len(re.findall(r'^\d+$', f.read(), re.MULTILINE))
     print(f"  {variant}: {count} entries written")
 
-print(f"\n✓ Ep{EP} complete — files in {OUTPUT}/")
+print(f"\n✓ Ep{EP} complete — files in {OUTPUT}/ (bundle v{VERSION})")

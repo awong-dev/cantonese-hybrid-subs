@@ -52,35 +52,68 @@ Consolidated from: `StyleRulings.md` (all sections, including yue-authority rule
 The English phrasing should mirror the Cantonese spoken dialogue — its register, cadence, and level of detail. Fidelity to what's actually being said is the only goal.
 
 ### Priority chain
-1. **Yue (HIGH confidence)** — the actual spoken words. Match their register, tone, and specificity. If yue is blunt, be blunt. If yue is elaborate, be elaborate.
-2. **Chi** — the semantic authority. If the yue looks like ASR garble, fall back to chi meaning. If yue is MEDIUM confidence, chi drives the meaning but use yue for register, tone, and emotional nuance.
+1. **Yue (HIGH confidence)** — the actual spoken words. Source of register, tone, and specificity. Yue has **phonological authority** (what sound was made) but not semantic authority (what word was meant) — it reaches Claude through Whisper ASR, which can be HIGH-confident on homophones and garble alike.
+2. **Chi** — the **semantic authority**. A written translation that sometimes flattens the spoken register but reliably preserves what word was meant. When yue and chi semantically disagree, chi wins by default.
 3. **Eng (original)** — a rough draft. Override when it diverges from yue/chi; keep when it's already faithful.
 
-### The Yue-Authority Rule (added Ep27 session)
+### The Yue-Authority Rule — what it does and doesn't cover
 
-**When yue gives a more vivid, specific, or colloquial word than chi, and yue passes the intelligibility gate (coherent syntax, parseable as real speech), yue overrides chi.** The yue track is the actual spoken Cantonese dialogue of a Cantonese show. The chi (Mandarin) track is a written translation that sometimes flattens the spoken register. But Whisper can be HIGH-confident on garbled output, so yue only earns authority when it actually makes sense on its own.
+The Yue-Authority Rule is for **register and vividness**, not for **semantic arbitration**. It answers the question *"chi picked a flatter synonym of what yue kept vivid — use yue"*. It does not answer *"yue and chi are different words — pick one"*.
 
-**Examples:**
-- **古惑** (yue: crafty/street-smart) overrides **鬼主意** (chi: cunning schemes) — 古惑 is what's actually spoken
-- **淒涼** (yue: desolate/forlorn) overrides **可憐** (chi: pitiful) — 淒涼 is emotionally stronger
-- **開心** (yue: happy) overrides **瞑目** (chi: rest in peace) — 開心 is warmer, more colloquial
-- **好像** (yue: seemed) vs **非常** (chi: very) — yue preserves the correct certainty level
-- **抵死** (yue: deserve to die, Cantonese colloquial) — inject as CJK with gloss
-- **百世千孫** (yue: descendants for a hundred generations) — yue adds obsequious detail chi omits
-- **叫化子 / 叫化** (chi: Mandarin for beggar) → always use Cantonese forms in hybrid: **老叫化子** → **乞兒仔**, **老叫化** → **老乞兒**, **叫化子窩** → **乞兒窩**. The show is Cantonese — 叫化 is a Mandarin subtitle artefact.
-- **臭要飯的** (chi: stinking beggar) → actual Cantonese is **死乞兒** (damned/stupid beggar). Both chi and yue ASR transcribe this incorrectly. Render as **"stupid beggar"** in all three variants (not CJK in hybrid).
+Splitting the rule into its two real jobs avoids the failure mode where a HIGH-confidence yue homophone gets promoted over a correct chi reading (Ep24 sub 344: 推宮換血 chi vs 推功換血 yue — different compounds, not register variants; chi should win).
 
-### How to apply
-1. Read chi as primary authority.
-2. Cross-check yue for register, specificity, and emotional tone.
-3. If yue agrees semantically with chi, trust yue (regardless of surface Cantonese-vs-Mandarin form) and use it for register/wording nuance per rule 2.
-4. **If yue diverges semantically from chi, apply the intelligibility gate:**
-   - Is yue coherent on its own terms — does it parse as something a character would plausibly say? If **yes**, treat the divergence as authoritative (yue wins; apply rules 5–7 below).
-   - Is yue garbled — broken syntax (missing particles, scrambled word order, non-words), or semantically incoherent (real words that don't form a sensible sentence)? If **yes to either**, treat yue as ASR noise, discard it for this sub, fall back to chi.
-   - The confidence tier doesn't settle this. Whisper can be HIGH-confident on garbled output; a LOW-tier sub that happens to make sense can still be useful. The reviewer's own read of yue's coherence is the final test.
-5. Where yue (passing the intelligibility gate) has a distinctly different word that is more vivid/specific/correct, use yue.
-6. Where yue just has a Cantonese phonological variant (e.g. 家散人亡 vs 家破人亡), keep chi.
-7. Where yue reveals an OCR error in chi, fix the error (already standard practice).
+### Rule A — Register / vividness override (the real Yue-Authority Rule)
+
+**When yue and chi agree semantically but yue is more vivid, more specific, more colloquial, or registers the emotional tone better than chi, yue overrides chi.** This is the narrow, original scope of the rule. The test: *yue's word and chi's word are synonyms* — they refer to the same thing, differing only in colour/register.
+
+Examples:
+- **古惑** (yue) overrides **鬼主意** (chi) — both = "cunning/crafty"; yue is the spicier street word
+- **淒涼** (yue) overrides **可憐** (chi) — both = "pitiable"; yue is emotionally stronger
+- **開心** (yue) overrides **瞑目** (chi) — both = "at peace"; yue is warmer, more colloquial
+- **好像** (yue) vs **非常** (chi) — yue preserves the correct certainty level ("seemed" vs "very")
+- **百世千孫** (yue) — yue adds obsequious detail chi omits
+- **老乞兒** (yue Cantonese) over **老叫化子** (chi Mandarin) — same referent, Cantonese form matches what's actually spoken
+
+For Rule A: **the synonym relationship is the gate.** If yue's word and chi's word aren't substitutable in a dictionary sense, Rule A doesn't apply.
+
+### Rule B — Semantic disagreement defaults to chi
+
+**When yue and chi disagree on *what word was said* (not how vividly the same thing is expressed), chi wins by default.** Yue only overrides chi semantically when there is independent evidence the chi is corrupted — e.g. the eng track confirms yue, or a **prior FULL-completed episode** has established the canonical form yue matches, or chi contains a visible OCR artefact.
+
+The cross-episode clause is strict: it requires a prior FULL episode where the form was actually rendered a specific way, not a form the reviewer expects ought to be canonical. Absent that concrete prior precedent, chi wins. (Ep24 小保 case study: a v2 attempt to "correct" 小保 → 小寶 on canonicality grounds was wrong because no prior FULL episode had established 小寶. When in doubt, chi wins — see `REFERENCE.md` §2.)
+
+The reasoning: yue reaches Claude via Whisper ASR and is subject to homophone errors (宮/功 both `gung1`; 保/寶 both `bou2`). Chi is a written translation — it doesn't have homophone errors. So when yue and chi produce different words that aren't synonyms, the presumption is that yue has an ASR error, not that chi is wrong.
+
+Examples of Rule B in action:
+- **推宮換血** (chi) vs **推功換血** (yue HIGH) — not synonyms; different compounds. 功/宮 are Cantonese homophones (`gung1`). Chi wins. (Ep24 sub 344.)
+- **四字成語 / named wuxia techniques** generally — these are fixed compounds; a yue variant is almost always a homophone of the real term, not a new term. Default to chi.
+
+Yue may semantically override chi when:
+- **Eng confirms yue** (Ep28 Sub 22: yue 每日用一隻毒蝎嚟養大 confirmed eng's "fed poisonous scorpions daily" against a garbled chi).
+- **Cross-episode canonicality confirms yue** (a name or term has been rendered consistently in prior FULL episodes and chi has slipped).
+- **Chi has a visible OCR artefact** in the specific sub (garbled glyph, clearly wrong homophone in a direction chi can't produce without OCR damage).
+
+### Rule C — The intelligibility gate (pre-requisite for either rule above)
+
+Before either Rule A or Rule B can fire, yue has to be **intelligible** — coherent syntax, parseable as something a character would plausibly say. If yue is garbled (broken syntax, missing particles, scrambled word order, non-words) or semantically incoherent (real words that don't form a sensible sentence), treat it as ASR noise and fall back to chi regardless of confidence tier.
+
+The confidence tier doesn't settle this. Whisper can be HIGH-confident on garbled output; a LOW-tier sub that happens to make sense can still be useful. The reviewer's own read of yue's coherence is the final test.
+
+### Decision procedure for each sub
+
+1. **Is yue intelligible?** (Rule C) No → chi wins, stop.
+2. **Does yue semantically agree with chi?**
+   - **Yes (same referent, possibly different register)** → go to step 3.
+   - **No (different word entirely)** → Rule B: chi wins unless there's independent corroboration for yue (eng, cross-episode, visible OCR). Stop.
+3. **Is yue more vivid / colloquial / register-appropriate than chi?** (Rule A)
+   - Yes → use yue.
+   - No → chi is already fine, keep chi.
+
+### Special cases
+
+- **臭要飯的** (chi OCR) → actual Cantonese is **死乞兒** (damned/stupid beggar). Both chi and yue ASR transcribe this incorrectly. Render as **"stupid beggar"** in all three variants (not CJK in hybrid).
+- **Cantonese phonological/dialect variant** (e.g. 家散人亡 vs 家破人亡) — yue's form is the actually-spoken Cantonese variant of the same idiom. Keep yue. This is Rule A applied at the dialect-form level: same referent, yue matches what the character actually said. (Parallels 老乞兒 over 老叫化子: when chi and yue are the same thing in different dialect clothing, yue wins.)
+- **抵死** (yue: deserve to die, Cantonese colloquial) — Rule A applies when chi flattens this to a tamer form. Render the register in English ("damn well deserves it", "serves him right", depending on context); **do not** use CJK-with-gloss. The CJK+gloss format is reserved for 四字成語, poetic couplets, and literary phrases — not for colloquial slang where English can carry the register alone. (See §9.)
 
 ### Cross-check Mandarin ALWAYS
 - Original English often flattens nuance from the Chinese.
@@ -88,9 +121,10 @@ The English phrasing should mirror the Cantonese spoken dialogue — its registe
 - Example: Ep20 sub 6 — English missed an entire clause present in Mandarin.
 
 ### Use Cantonese (yue) for register/tone
-- Yue track guides emotional register, colloquial vs formal tone.
+- Yue track guides emotional register, colloquial vs formal tone (Rule A territory).
 - If yue sounds blunt/casual, English should match.
 - If yue sounds formal/poetic, English should elevate.
+- But **not** for semantic arbitration — that's Rule B's domain, and chi wins there.
 
 ---
 
@@ -126,9 +160,8 @@ The English phrasing should mirror the Cantonese spoken dialogue — its registe
 ## 4. Kinship & Address Terms
 
 ### 娘親 rule
-- Hybrid uses **娘親** (not 娘) — Cantonese-preferred form.
-- "my 娘親" is WRONG (doubles possessive) — use bare 娘親 for address.
-- Object context: just "娘親" or descriptive "mother".
+- Hybrid uses **娘親** (not 娘) — Cantonese-preferred form. Renders as "mother" in romanised.
+- Use bare 娘親 as vocative: "娘親!" "娘親, I'm home." English possessives ("my 娘親", "his 娘親") are fine in descriptive contexts — 娘親 is "mother", not "my mother", so there's no doubled possessive.
 
 ### Descriptive kinship terms
 - **養父 / 義父** → "foster father" ALWAYS in all three variants.
@@ -292,6 +325,16 @@ All 四字成語 found in chi must appear as CJK in hybrid. See §10 for the cat
 ### Standalone idioms
 大開殺戒 · 亡國奴 · 劫數難逃 · 各安天命 · 好自為之
 
+### What does NOT get CJK in hybrid
+
+The CJK requirements above are exhaustive — if a phrase isn't on one of these lists, it stays in English. Specifically:
+
+- **Colloquial slang and intensifiers** (抵死, 好彩, 乜嘢, etc.) — render the register in English, no CJK.
+- **Everyday vocabulary** that differs between Cantonese and Mandarin but isn't a proper noun, title, idiom, or term-of-art — Rule A in §2 picks which form to use, but the rendering is English.
+- **Emotional interjections** — match the tone in English.
+
+Rule of thumb: CJK in hybrid is for content the English *can't* fully carry — names, titles, places, idioms with cultural weight, literary phrases. For everything else English does the job alone. See §9 for the CJK+gloss format's scope.
+
 ---
 
 ## 8. Key Translation Conventions
@@ -338,14 +381,20 @@ Rule of thumb: use a Western equivalent only when the *meaning* maps 1:1; keep C
 
 **Preferred format: `English gloss — 中文成語.`** (English first, em-dash, then the Chinese idiom.)
 
+**Scope of the CJK+gloss format.** Reserve this format for 四字成語, poetic couplets, classical allusions, and literary phrases where the Chinese form carries meaning the English gloss alone can't fully convey. **Do not** use it for:
+- Colloquial slang or intensifiers (抵死, 好彩, 乜嘢) — render the register in English
+- Everyday vocabulary that happens to differ between Cantonese and Mandarin — use Rule A to pick the form, render in English
+- Emotional interjections — match the tone in English
+
+The CJK+gloss format's job is to preserve cultural/literary content the English can only approximate. When English can do the full job on its own (as it can for most colloquial register), skip the CJK and just render cleanly in English. CJK-inclusion is not a badge of fidelity — over-using it clutters the hybrid and trains the reader to skim past the Chinese.
+
 | RIGHT | WRONG |
 |-------|-------|
 | Who told him to look down on us — 狗眼看人低! | He looked down on us. 狗眼看人低. |
 | Think it over carefully — 好自為之. | Think it over. 好自為之. |
 | Looks like a major battle — 大開殺戒. | Looks like there's going to be a huge slaughter. |
 | I fear my time has come — 劫數難逃. | I fear this is my fate — I won't escape it. |
-
-Alternative inline format also accepted: `後生可畏. Young people are getting capable.` / `別再裝瘋賣傻. Stop playing the fool.`
+| He damn well deserves it | He deserves it — 抵死 |
 
 **Rules:**
 - **Never gloss an idiom twice** (once in Chinese AND as a separate English expansion). The English before the dash IS the gloss.
@@ -442,7 +491,7 @@ Settled English renderings for idioms encountered across Eps 1–29 (especially 
 - **以牙還牙** — "an eye for an eye"
 - **大開殺戒** — "a major battle / huge slaughter"
 - **豈有此理** — "outrageous / how can this be!"
-- **邪中有三分正, 正中帶七分邪** — "three parts righteous in the heresy, seven parts heretical in the righteous" (黃藥師's couplet about 蓉兒). **Keep Chinese in hybrid; English translation only in romanised. Do NOT double-print Chinese + English in romanised.**
+- **邪中有三分正, 正中帶七分邪** — "The heretical are three parts righteous; the righteous are seven parts heretical!" (黃藥師's couplet about 蓉兒). **Keep Chinese in hybrid; English translation only in romanised. Do NOT double-print Chinese + English in romanised.**
 - **有失遠迎** — "forgive us for not welcoming you sooner" (standard courtesy)
 
 ### 內功 / 內力 / 內傷 family
@@ -586,7 +635,7 @@ Example of why it matters: **梅師姊** must be converted to "Senior Sister Mui
 - Full SRT format
 - UTF-8 encoding
 - Saved to `/mnt/user-data/outputs/`
-- Naming: `{episode}-eng-{variant}.srt`
+- Naming: `{episode}-eng-{variant}-v{VERSION}.srt` (e.g. `24-eng-hybrid-v9.srt`). The `{VERSION}` suffix comes from the `VERSION` file shipped in the handoff bundle and is stamped in by `build.py` and consumed by `cjk_fix_v2.py`. Every delivered SRT is thus traceable to the rule-set that produced it; a bundle with missing/malformed VERSION fails loudly rather than shipping unstamped files.
 
 ---
 

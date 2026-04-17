@@ -83,7 +83,7 @@ This document is lookup material — consult when you hit a specific name, idiom
 - Hybrid: Chinese + English on same line.
 
 ### 邪中有三分正, 正中帶七分邪 (Ep23)
-- 黃藥師 describing his daughter: "three parts righteous in the heresy, seven parts heretical in the righteous".
+- 黃藥師 describing his daughter: "The heretical are three parts righteous; the righteous are seven parts heretical!"
 - Kept Chinese in hybrid; translated in romanised.
 - **Do NOT double-print Chinese + English in romanised.**
 
@@ -94,6 +94,18 @@ This document is lookup material — consult when you hit a specific name, idiom
 ### 臭要飯的 → 死乞兒
 - chi (OCR) says 臭要飯的 "stinking beggar"; actual Cantonese is **死乞兒** "damned/stupid beggar". Both chi and yue ASR transcribe incorrectly.
 - Render as **"stupid beggar"** in all three variants; **not CJK in hybrid** (because the chi is wrong and 死乞兒 never actually appears cleanly).
+
+### 推宮換血 vs 推功換血 (Ep24 session — Rule B case study)
+- Chi: **推宮換血** — the canonical wuxia technique for transfusing internal energy and exchanging blood. 宮 = the body's twelve main acupoints/palaces.
+- Yue (HIGH): **推功換血** — a phonological ghost. 功 and 宮 are both `gung1` in Cantonese; Whisper heard the homophone.
+- **Decision: chi wins.** These are different compounds, not register variants — Rule A doesn't apply. Rule B says chi wins semantic disagreements by default, and there's no independent corroboration (eng, cross-episode, visible OCR) for yue here.
+- This is the prototypical Rule B case: a HIGH-confidence yue homophone of a fixed 四字成語. Named wuxia techniques are especially prone to this because they're fixed compounds where any one-character variation is almost certainly an ASR slip, not a real alternate reading.
+
+### 小保 (Ep24 — cautionary note on cross-episode canonicality)
+- Chi (Ep24 subs 155, 161): **小保** — this is the correct name of the boy whose cakes 楊康 stole.
+- **The v2 attempt to "correct" this to 小寶 via cross-episode canonicality was wrong.** There was no prior FULL episode establishing 小寶 as this character's name; the reasoning appealed to a canonical form that didn't actually exist.
+- Takeaway: the cross-episode-canonicality backstop (see Rule B in `STYLE.md` §2) is only valid when a prior FULL episode has actually established the canonical form. It is not a license to substitute a form the reviewer thinks ought to be canonical. If in doubt, chi wins — that's what Rule B defaults to, and Rule B got the right answer here before the spurious override.
+- Use **小保** / **Siu-bou**.
 
 ---
 
@@ -237,7 +249,7 @@ Based on 464 differences across 538 subs in Episode 28 — concrete examples of 
 
 | Category | Count | Severity |
 |----------|-------|----------|
-| FABRICATION | 2 | CRITICAL — invented content |
+| FABRICATION | 0 (audited) | CRITICAL — invented content. Original Ep28 taxonomy flagged 2, both were re-examined and neither was a true fabrication (Sub 22 confirmed by yue; Sub 316 was a reflow duplication, not invented content). Category retained because the error class is real and the pipeline must guard against it — see below. |
 | CHI_MEANING_LOST | 159 | HIGH — original English kept when Chinese has richer/different meaning |
 | NAME_TITLE_LEAK | 63 | HIGH — English names/titles where hybrid needs Chinese |
 | IDIOM_MISSING | 18 | MEDIUM — Chinese idioms omitted from hybrid |
@@ -248,18 +260,15 @@ Based on 464 differences across 538 subs in Episode 28 — concrete examples of 
 
 ### CATEGORY 1 — FABRICATION (CRITICAL)
 
-The English track sometimes contains content NOT present in the Mandarin source. Cross-check and remove fabricated content.
+The English track sometimes contains content that is NOT supported by either the Mandarin source *or* the yue track. Cross-check against both and remove fabricated content.
 
-**Rule:** The Mandarin (chi) is the authority text. If the English says something the Chinese doesn't, **delete it**.
+**Rule:** If the English says something that appears in neither chi nor yue, delete it. Verify against **both** tracks before deleting — chi alone is not sufficient evidence.
 
-> **IMPORTANT — Ep28 Sub 22 correction (from the Ep28 session):**
-> The original taxonomy flagged Sub 22 as a fabrication: *"But these are snakes from 白駝山 that are fed poisonous scorpions daily"* was said to invent "poisonous scorpions". **This flag was wrong.** The yue track (HIGH confidence) confirms 每日用一隻毒蝎嚟養大. The eng was right; the taxonomy was wrong on this specific sub. When yue confirms eng, trust yue.
->
-> Treat Sub 22 as a reminder that fabrications must be verified against **both** chi and yue before deletion, not chi alone.
+**Ep28 Sub 22 case study (how this rule works correctly):** An earlier taxonomy flagged Sub 22 as a fabrication — *"But these are snakes from 白駝山 that are fed poisonous scorpions daily"* — on the basis that "poisonous scorpions" wasn't in chi. **But yue (HIGH confidence) had 每日用一隻毒蝎嚟養大.** Eng was right; chi had an OCR error or gap. Single-track (chi-only) comparison would have deleted correct content. Three-track comparison catches the OCR case and preserves what's real.
 
-**Example — Sub 316:**
-- WRONG: duplicates content already in Sub 315
-- RIGHT: empty (content already covered)
+Two takeaways:
+- **Yue is the witness when eng and chi disagree.** If yue confirms eng, treat chi as corrupted and keep eng.
+- **The bar for "fabrication" is high.** If *any* source supports the content, it's not a fabrication — it may be a register mismatch or meaning shift (Category 2), but not an invention to be deleted.
 
 ---
 
@@ -370,4 +379,4 @@ Small preference differences like "Don't worry. They won't fight" vs "Don't worr
 
 6. **Preserve Step 3's output for empty/bare-name chi subs.** Don't project speakers when chi gives you nothing — see `PIPELINE.md` Step 4 (name-swap bug).
 
-7. **Trust yue for register — when yue is intelligible.** When yue diverges from chi with a more vivid/colloquial word and parses as coherent speech, yue wins. When yue diverges but reads as ASR garble (broken syntax or semantic nonsense), ignore yue for that sub and trust chi. See `STYLE.md` §2 (Yue-Authority Rule + intelligibility gate).
+7. **Trust yue for register (Rule A), not for semantic arbitration (Rule B).** Yue wins when yue and chi are *synonyms* but yue is more vivid/colloquial (古惑 over 鬼主意, 淒涼 over 可憐). Yue does **not** win when yue and chi are *different words* — that's a semantic disagreement, and chi (the written semantic authority) wins by default, because yue reaches us through ASR and is subject to homophone errors (功/宮 both `gung1`; 保/寶 both `bou2`). Override chi semantically only when eng, cross-episode canonicality, or a visible chi OCR artefact corroborates yue. The intelligibility gate still gates both rules: if yue is garbled, ignore yue regardless of tier. See `STYLE.md` §2 for the full decision procedure.

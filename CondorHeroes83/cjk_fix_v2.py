@@ -1,5 +1,26 @@
-import re, sys
+import re, sys, os
 ep = sys.argv[1]
+
+# Handoff version — must match the suffix build.py wrote to the SRT filenames.
+# See build.py for the rationale. Missing/malformed VERSION is a hard error.
+def _load_version():
+    vpath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'VERSION')
+    try:
+        with open(vpath, 'r', encoding='utf-8') as f:
+            v = f.read().strip()
+    except FileNotFoundError:
+        raise SystemExit(
+            f"ERROR: VERSION file not found at {vpath}. "
+            "cjk_fix_v2.py reads SRTs named {EP}-eng-{variant}-v{VERSION}.srt; "
+            "the VERSION file is required to locate them."
+        )
+    if not re.fullmatch(r'\d+', v):
+        raise SystemExit(
+            f"ERROR: VERSION file at {vpath} contains '{v}', expected a bare integer."
+        )
+    return v
+
+VERSION = _load_version()
 
 # Comprehensive CJK→romanised fix table
 fixes = {
@@ -119,7 +140,7 @@ yale_fixes = {
 }
 
 for variant in ["jyutping", "yale"]:
-    fp = f"/mnt/user-data/outputs/{ep}-eng-{variant}.srt"
+    fp = f"/mnt/user-data/outputs/{ep}-eng-{variant}-v{VERSION}.srt"
     with open(fp, "r", encoding="utf-8") as f:
         content = f.read()
     lookup = dict(fixes)
@@ -160,7 +181,7 @@ for variant in ["jyutping", "yale"]:
         f.write(content)
 
 for variant in ["hybrid", "jyutping", "yale"]:
-    fp = f"/mnt/user-data/outputs/{ep}-eng-{variant}.srt"
+    fp = f"/mnt/user-data/outputs/{ep}-eng-{variant}-v{VERSION}.srt"
     with open(fp, "r", encoding="utf-8") as f:
         content = f.read()
     cjk = [ch for ch in content if chr(0x4e00) <= ch <= chr(0x9fff)]

@@ -54,9 +54,11 @@ FULL is the only acceptable quality target. PARTIAL and MECHANICAL-ONLY are name
 
 Producing three SRT subtitle variants per episode from three source tracks (eng CSV, chi_tra CSV, yue Whisper JSON):
 
-- `{N}-eng-hybrid.srt` — English prose with CJK for names/titles/idioms/places
-- `{N}-eng-jyutping.srt` — Full Jyutping romanisation
-- `{N}-eng-yale.srt` — Full Yale romanisation
+- `{N}-eng-hybrid-v{VERSION}.srt` — English prose with CJK for names/titles/idioms/places
+- `{N}-eng-jyutping-v{VERSION}.srt` — Full Jyutping romanisation
+- `{N}-eng-yale-v{VERSION}.srt` — Full Yale romanisation
+
+`{VERSION}` is read from the `VERSION` file in the handoff bundle (see [Handoff Files Checklist](#handoff-files-checklist) below). Example with v9: `24-eng-hybrid-v9.srt`.
 
 Source files:
 - `/mnt/user-data/uploads/{N}-eng.csv`
@@ -169,10 +171,11 @@ Read `ep{N}_h_all.json` (now populated with Step 3's CJK substitutions) alongsid
 
 For a fuller treatment of the priority chain and the Yue-Authority Rule, see `STYLE.md` §2. The short version as it applies here:
 
-- **Yue HIGH** — yue is the actual spoken dialogue at HIGH confidence. When yue diverges from chi, apply the **intelligibility gate**: if yue is coherent on its own terms (parses as something a character would say), yue wins on wording/register; if yue is garbled — broken syntax or semantically incoherent — treat as ASR noise and fall back to chi. Confidence tier doesn't settle this; Whisper can be HIGH-confident on nonsense. Examples of legitimate yue-override: 古惑 over 鬼主意; 淒涼 over 可憐.
+- **Yue HIGH, semantically agrees with chi** — yue is the actual spoken dialogue at HIGH confidence. Apply the **intelligibility gate**: if yue is coherent on its own terms (parses as something a character would say), yue wins on register/wording nuance (Rule A); if yue is garbled — broken syntax or semantically incoherent — treat as ASR noise and fall back to chi. Confidence tier doesn't settle this; Whisper can be HIGH-confident on nonsense. Examples of legitimate yue-override (Rule A): 古惑 over 鬼主意; 淒涼 over 可憐. These are all cases where chi and yue are *synonyms differing in register*.
+- **Yue HIGH, semantically disagrees with chi (different word, not a register variant)** — chi wins by default (Rule B). Yue reaches Claude via ASR and is subject to homophone errors (功/宮 both `gung1`; 保/寶 both `bou2`). Chi, being a written translation, doesn't have homophone errors. Override chi only when there's independent corroboration for yue: eng confirms yue (Ep28 Sub 22), or a **prior FULL-completed episode** has established the form yue matches, or chi has a visible OCR artefact. The cross-episode clause is strict — the prior episode must actually have been completed and rendered the form a specific way; it's not a license to substitute what the reviewer expects ought to be canonical. Named wuxia techniques and 四字成語 are especially prone to this failure mode — a yue variant of a fixed compound is almost always a homophone of the real term, not a new term.
 - **Yue MEDIUM** — chi drives meaning; yue is consulted for tone, register, and emotional nuance.
 - **Yue LOW** — yue discarded; chi-only processing.
-- **Yue reveals OCR errors in chi** — fix the error; yue is the witness.
+- **Yue reveals OCR errors in chi** — fix the error; yue is the witness (but only when yue is genuinely the witness, per the rules above).
 
 For every sub, walk this checklist:
 
@@ -181,8 +184,10 @@ For every sub, walk this checklist:
 3. Compare against the Step 3 output.
 4. If eng says something neither chi nor yue supports → **DELETE** the fabrication. (But if yue confirms what eng says and chi diverges, treat it as an OCR error in chi — see Ep28 Sub 22 in `REFERENCE.md` §8.)
 5. If chi has nuance eng lacks → **REWRITE** to capture it.
-6. If yue is HIGH and diverges from chi with a more vivid/specific word → first check yue is intelligible (coherent syntax, parseable as real speech). If intelligible, **REWRITE** to match yue (Yue-Authority Rule). If garbled or semantically incoherent, treat yue as ASR noise and fall back to chi.
-7. If yue's emotional register is sharper, warmer, more colloquial, or more formal than the draft → **REWRITE** to match yue's register even if chi semantics are preserved.
+6. If yue is HIGH and diverges from chi, first check yue is intelligible (coherent syntax, parseable as real speech). If garbled → fall back to chi, stop. Then ask: **are yue's word and chi's word synonyms, or different words entirely?**
+   - **Synonyms, yue more vivid/colloquial/register-appropriate** → Rule A: **REWRITE** to match yue.
+   - **Different words** → Rule B: chi wins by default. Only override chi if eng or cross-episode evidence corroborates yue, or chi has a visible OCR artefact.
+7. If yue's emotional register is sharper, warmer, more colloquial, or more formal than the draft → **REWRITE** to match yue's register even if chi semantics are preserved (this is Rule A applied to a register-only difference).
 8. If chi or yue has an address term Step 3 didn't catch → ensure it's **CJK in hybrid**.
 9. If chi or yue has an idiom Step 3 didn't catch → ensure it's **in the hybrid sub**.
 10. If none of the above apply → **leave the sub alone**; the draft is faithful.
@@ -340,27 +345,30 @@ Upload ALL of these to start a new session:
 3. `REFERENCE.md` — context-dependent judgment calls, error taxonomy, Five Greats framework
 4. `SESSION-NOTES.md` — episode completion status, pending-episode previews, watch list of names/terms/oddities
 
+### Version file
+5. `VERSION` — single line containing the handoff bundle version (e.g. `9`). `build.py` and `cjk_fix_v2.py` read this at runtime and stamp it into output SRT filenames (`{EP}-eng-{variant}-v{VERSION}.srt`) so every delivered subtitle file is traceable to the rule-set that produced it. A bundle with missing or malformed VERSION will fail loudly rather than ship unstamped SRTs.
+
 ### Data file
-5. `PersonalNamesUpdated.csv` — name lookup (copy to `/home/claude/` first)
+6. `PersonalNamesUpdated.csv` — name lookup (copy to `/home/claude/` first)
 
 ### Pipeline scripts (5 files)
-6. `pipeline.py` — CSV/JSON parser and chi-spine alignment (v6: Whisper preprocessing, chi-as-entry-spine). Importable module with `run()` and `main()`.
-7. `auto_override_v2.py` — deep override with CJK injection + idioms (v2.1: confidence-tier aware)
-8. `shared_extras.py` — episode extras generator
-9. `build.py` — builder with all conversion tables. Fix path: `PersonalNamesUpdated.csv` → `/home/claude/PersonalNamesUpdated.csv`.
-10. `cjk_fix_v2.py` — comprehensive CJK cleanup for romanised files
+7. `pipeline.py` — CSV/JSON parser and chi-spine alignment (v6: Whisper preprocessing, chi-as-entry-spine). Importable module with `run()` and `main()`.
+8. `auto_override_v2.py` — deep override with CJK injection + idioms (v2.1: confidence-tier aware)
+9. `shared_extras.py` — episode extras generator
+10. `build.py` — builder with all conversion tables. Fix path: `PersonalNamesUpdated.csv` → `/home/claude/PersonalNamesUpdated.csv`. Reads `VERSION` adjacent to itself for output filename stamping.
+11. `cjk_fix_v2.py` — comprehensive CJK cleanup for romanised files. Reads `VERSION` to locate the SRTs build.py wrote.
 
 ### Tests (1 file)
-11. `test_pipeline.py` — unittest suite covering synthetic reflow cases and a 17-row Ep24 real-data slice. Run with `python3 -m unittest test_pipeline.py -v`. Not required for sub generation, but verifies pipeline.py still works correctly after any edits.
+12. `test_pipeline.py` — unittest suite covering synthetic reflow cases and a 17-row Ep24 real-data slice. Run with `python3 -m unittest test_pipeline.py -v`. Not required for sub generation, but verifies pipeline.py still works correctly after any edits.
 
 ### Per-episode inputs
-12. `{N}-eng.csv`, `{N}-chi_tra.csv`, `{N}-yue.json`
+13. `{N}-eng.csv`, `{N}-chi_tra.csv`, `{N}-yue.json`
 
 ---
 
 ## Quick-Start for New Chat
 
-1. Upload the handoff bundle — **4 reference docs + 1 data file + 5 scripts + 1 test file = 11 files** (see [Handoff Files Checklist](#handoff-files-checklist) above) — plus the episode sources `{N}-eng.csv`, `{N}-chi_tra.csv`, `{N}-yue.json`.
+1. Upload the handoff bundle — **4 reference docs + 1 VERSION file + 1 data file + 5 scripts + 1 test file = 12 files** (see [Handoff Files Checklist](#handoff-files-checklist) above) — plus the episode sources `{N}-eng.csv`, `{N}-chi_tra.csv`, `{N}-yue.json`.
 2. Say: *"Process episode N with full source-authority rewriting (FULL standard)"* — i.e. examine every sub against chi and yue per the priority chain in `STYLE.md` §2.
 3. The assistant MUST:
    - **Report Step 0 context baseline** before doing anything else

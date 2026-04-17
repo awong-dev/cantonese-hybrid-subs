@@ -21,7 +21,8 @@ Every sub examined against sources, overridden where needed.
 | 17 | 409 | 楊康/包惜弱 escape, 楊康 boat betrayal, 完顏洪烈 despair, 段天德 confession, 楊康 birthday speech, 穆念慈 fireball |
 | 18 | 515 | 包惜弱 poison wine, suicide attempt, becoming nun, 丘處機 captures 楊康, 楊康 oath, 九陰白骨爪 trail, family reunion |
 | 19 | 490 | 楊康 final betrayal, 楊鐵心 suicide (滿江紅), 包惜弱 death, 全真教 scenes, 丘處機 teaches internal skills, duel, 問世間情為何物 |
-| 21–26 | — | Style decisions from these episodes are catalogued in `STYLE.md` §§5, 10, 11, 12 and `REFERENCE.md` §§2, 3 |
+| 21–23, 25–26 | — | Style decisions from these episodes are catalogued in `STYLE.md` §§5, 10, 11, 12 and `REFERENCE.md` §§2, 3. Not re-processed to current FULL standard. |
+| 24 | 364 | 黃蓉 departure, 楊康 repentance arc with 穆念慈, 楊康 Mongolian poisoning, 拖雷 seizes 郭靖, 黃帝內經 antidote consultation. Produced the Rule A / Rule B / Rule C split in `STYLE.md` §2 via the 推宮換血 / 推功 homophone case study; also the 小保 cross-episode-canonicality cautionary note and the FABRICATION category rewrite in `REFERENCE.md` §8. |
 | 28 | 538 | Produced the error taxonomy in `REFERENCE.md` §8 via comparison against an earlier version |
 | 29 | 404 | 郭靖 at 桃花島, 周伯通 brotherhood, 黃藥師 / 黃蓉, 歐陽峰 proposal |
 
