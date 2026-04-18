@@ -206,6 +206,9 @@ Canonical renderings for recurring name/nickname forms. Personal names proper li
 | 阿衡 | 阿衡 | Aa-Hang | Aa-Hahng |
 | 歐陽世兄 | 歐陽世兄 | Brother Au-Joeng | Brother Au-Yeung |
 | 歐陽兄 | 歐陽兄 | Brother Au-Joeng | Brother Au-Yeung |
+| 歐陽先生 | 歐陽先生 | Mister Au-Joeng | Mister Au-Yeung |
+| 歐陽公子 | 歐陽公子 | Young Master Au-Joeng | Young Master Au-Yeung |
+| 歐陽叔叔 | 歐陽叔叔 | Uncle Au-Joeng | Uncle Au-Yeung |
 | 父王 | 父王 | Royal Father | Royal Father |
 | 閻王爺 | 閻王爺 | King of Hell | King of Hell |
 | 梅師姊 | 梅師姊 | Senior Sister Mui | Senior Sister Mui |
@@ -309,10 +312,14 @@ All character names from `PersonalNamesUpdated.csv`.
 大宋 · 宋 · 金 · 金國 · 蒙古
 
 ### Terms
-九陰真經 · 武穆遺書 · 降龍十八掌 · 蛤蟆功 · 左右互搏 · 空明拳 · 九陰白骨爪 · 輕功 · 江湖 · 武林 · etc.
+九陰真經 · 武穆遺書 · 降龍十八掌 · 蛤蟆功 · 左右互搏 · 空明拳 · 九陰白骨爪 · 打狗棒法 · 易筋鍛骨篇 · etc.
+
+Note: named techniques and canonical texts stay CJK. **Generic wuxia vocabulary — 武功 · 武林 · 江湖 · 內力 · 內功 · 輕功 · 功力 — stays English** (see "What does NOT get CJK" below).
 
 ### Nicknames
-老頑童 · 老毒物 · 賴蛤蟆 · 黃老邪 · 老叫化子 · etc.
+老頑童 · 老毒物 · 賴蛤蟆 · 黃老邪 · 老乞兒 · etc.
+
+Note: use the Cantonese **老乞兒** in hybrid, not the Mandarin **老叫化子**. If the chi track transcribes as 叫化子, override to 乞兒 (Rule A — matches what the Cantonese speaker actually says). See §11 and REFERENCE §2.
 
 ### Idioms
 All 四字成語 found in chi must appear as CJK in hybrid. See §10 for the catalogue.
@@ -333,17 +340,35 @@ All 四字成語 found in chi must appear as CJK in hybrid. See §10 for the cat
 
 The CJK requirements above are exhaustive — if a phrase isn't on one of these lists, it stays in English. Specifically:
 
-- **Colloquial slang and intensifiers** (抵死, 好彩, 乜嘢, etc.) — render the register in English, no CJK.
+- **Generic wuxia vocabulary** — **武功** (martial arts), **武林** (the martial world), **江湖** (the martial world), **內力** (internal strength), **內功** (internal energy), **輕功** (qinggong / lightness skill), **功力** (internal force). These are common-noun wuxia-domain vocabulary that English carries cleanly; CJK here clutters without adding cultural weight. **Named techniques and canonical texts** (九陰真經, 降龍十八掌, 空明拳, 打狗棒法, etc.) remain CJK — they're proper-noun-like. Rule of thumb: if the term is "a martial art" rather than "*the* such-and-such martial art", it goes English.
+- **Common-noun references using 俗 beggar-terms** — render as English:
+  - **叫化子 / 乞兒 / 乞丐** → "beggar(s)". When keeping CJK in hybrid is warranted (e.g. 洪七公 self-naming), use the Cantonese **乞兒**, never 叫化子. The chi track often transcribes the Mandarin form; override to 乞兒 per Rule A.
+  - **禁宮** → "the palace" / "the forbidden palace" (common-noun reference to imperial quarters).
+- **Colloquial insult compounds** (intensifier + common noun) — render as English:
+  - **臭丫頭** → "stinking girl" / "damned girl"
+  - **死丫頭** → "damned girl"
+  - **死乞兒** → "damned beggar" / "stupid beggar"
+  - **臭乞兒** → "stinking beggar"
+  - **臭要飯的** (chi OCR for 死乞兒) → "stupid beggar" (see §2 special cases)
+  - **王八蛋** → "bastard" / "scoundrel"
+  - Rule: **intensifier + common-noun-insult** (臭X / 死X / 老X where X is a common noun) goes English. Contrast with intensifier + proper-nickname (**死老邪**, **老毒物**, **老頑童**) which stays CJK because X is a proper nickname.
+- **Colloquial slang and intensifiers** (抵死, 好彩, 乜嘢, 放肆, etc.) — render the register in English, no CJK.
 - **Everyday vocabulary** that differs between Cantonese and Mandarin but isn't a proper noun, title, idiom, or term-of-art — Rule A in §2 picks which form to use, but the rendering is English.
+- **Descriptive common-noun metaphors that sound idiomatic** — phrases that are Chinese-literary-sounding but are actually common-noun descriptors, not fixed compounds. Test: does the English rendering work as a plain English noun phrase? If yes, it's a descriptor, not an idiom.
+  - **情蛇** ("love snake") — metaphor for a lecherous man; render as English ("lecher" / "that snake").
+  - **一流高手** / **一流絕頂高手** ("first-rate expert" / "supreme master") — rank descriptors; render in English.
+  - General **X+高手** / **X+高人** / **X+蛇** / **X+獸** / **X+物** compounds where X is an adjective rather than a proper qualifier. Contrast with **塞外高人** (CJK OK — 塞外 is a specific geographic qualifier, fixed phrase) and **老毒物** (CJK OK — it's a nickname for 歐陽峰). See §10's admission gate.
 - **Emotional interjections** — match the tone in English.
 
-Rule of thumb: CJK in hybrid is for content the English *can't* fully carry — names, titles, places, idioms with cultural weight, literary phrases. For everything else English does the job alone. See §9 for the CJK+gloss format's scope.
+Rule of thumb: CJK in hybrid is for content the English *can't* fully carry — proper names, titles of address, specific places, fixed idioms with cultural weight, classical allusions, literary phrases, named techniques. **Generic descriptors rendered in Chinese are not "more faithful"; they're noise.** When English does the job, use English. See §9 for the CJK+gloss format's scope, and §10's admission gate for what counts as a catalogue-worthy idiom.
 
 ---
 
 ## 8. Key Translation Conventions
 
-Canonical English renderings for high-frequency terms:
+Canonical English renderings for high-frequency terms. **This table gives the romanised rendering.** For hybrid, consult §7:
+- **CJK in hybrid** for the named-technique / canonical-text / proper-noun entries (九陰真經, 降龍十八掌, 桃花島, etc.)
+- **English in hybrid** for the generic wuxia vocabulary at the bottom of the table (武功, 武林, 江湖, 內力, 內功, 輕功, 功力) — see §7 "What does NOT get CJK".
 
 | Chinese | Romanised English |
 |---------|-------------------|
@@ -351,13 +376,16 @@ Canonical English renderings for high-frequency terms:
 | 九陰白骨爪 | the Jiuyin Baigu Claw |
 | 武穆遺書 | the Book of Wu Mu |
 | 降龍十八掌 | the Eighteen Dragon-Subduing Palms |
+| 空明拳 | the Hollow Fist |
+| 七十二路空明拳 | the 72 Forms of the Hollow Fist |
+| 打狗棒 | the Dog-Beating Staff |
+| 打狗棒法 | the Dog-Beating Staff Technique |
+| 三十六路打狗棒法 | the 36 Forms of the Dog-Beating Staff |
+| 易筋鍛骨篇 | the Muscle-Forging Bone-Tempering Chapter |
 | 桃花島 | Peach Blossom Island |
 | 全真教 | the Quanzhen Sect |
 | 丐幫 | the Beggar Sect |
 | 白駝山 | White Camel Mountain |
-| 江湖 | the martial world |
-| 武林 | the martial world |
-| 武功 | martial arts |
 | 蒙古 | Mongolia |
 | 金國 | Jin |
 | 大宋 / 宋 | the Song |
@@ -421,16 +449,30 @@ The CJK+gloss format's job is to preserve cultural/literary content the English 
 - The idiom becomes its English rendering.
 
 ### Wuxia terms in hybrid
-- **輕功** stays as 輕功 (qinggong in romanised).
-- **降龍十八掌** stays Chinese in hybrid / "the Eighteen Dragon-Subduing Palms" in romanised.
-- **九陰白骨爪** stays Chinese in hybrid / "the Jiuyin Baigu Claw" in romanised.
-- **武林** stays Chinese in hybrid / "the martial world" in romanised.
+- **Named techniques** stay Chinese in hybrid: **降龍十八掌** / "the Eighteen Dragon-Subduing Palms" · **九陰白骨爪** / "the Jiuyin Baigu Claw" · **空明拳** / "the Hollow Fist" · **打狗棒法** / "the Dog-Beating Staff Technique" · **九陰真經** / "the Jiuyin Manual".
+- **Generic wuxia nouns go English in hybrid** (see §7): 武功 ("martial arts") · 武林 ("the martial world") · 江湖 ("the martial world") · 內力 ("internal strength") · 內功 ("internal energy") · 輕功 ("qinggong") · 功力 ("internal force").
 
 ---
 
 ## 10. Idioms Encountered (Full Catalogue)
 
 Settled English renderings for idioms encountered across Eps 1–29 (especially the Ep22/23 FULL session). In hybrid, keep the Chinese; in romanised, use the rendering below.
+
+### What qualifies for this catalogue (admission gate)
+
+Not every four-character Chinese phrase is a catalogue-worthy idiom. **Before adding a new entry, check that the phrase meets at least one of these criteria:**
+
+1. **Fixed 四字成語** — a classical compound listed in standard idiom dictionaries, with a stable English rendering that preserves imagery the English can only approximate (e.g. **投鼠忌器**, **不見棺材不流淚**, **打草驚蛇**).
+2. **Classical allusion** — references a specific classical source (e.g. **秦晉之好** from 左傳, **泰山北斗** from 史記, **人之將死, 其言也善** from 論語).
+3. **Named proverb or 俗語** with cultural weight the English can't fully carry (e.g. **狗咬呂洞賓**, **好心遭雷劈**).
+4. **Poetic / elegiac couplet** from an identifiable literary tradition (e.g. 曹操 短歌行 couplets, the Dragon-chant quartet).
+
+**Descriptive common-noun phrases are NOT catalogue-worthy, even if they sound literary.** Test: strip the CJK and read the English rendering. If it works as a plain English noun phrase ("love snake" / "a first-rate expert" / "a top master" / "a strange creature"), it's a descriptor, not an idiom — render in English, no CJK in hybrid. Examples of what fails the admission gate:
+- **情蛇** ("love snake" — descriptive metaphor, not a named creature or fixed compound)
+- **一流高手** / **一流絕頂高手** ("first-rate expert" — rank descriptor; use "a top master", "a supreme master" in English)
+- General X+高手 / X+高人 compounds where X is an adjective rather than a proper-noun qualifier
+
+Phrases that **do** pass the gate (for reference): **塞外高人** passes as a set classical phrase meaning specifically "masters from beyond the frontier" (the 塞外 qualifier is geographic, not a general adjective); **一代宗師** passes as a fixed four-character compound with specific wuxia-world meaning ("master of a generation"). When in doubt, err toward English — the catalogue should stay tight.
 
 ### Military / warfare register
 - **投鼠忌器** — "afraid to strike the rat for fear of breaking the vase"
@@ -511,11 +553,12 @@ Settled English renderings for idioms encountered across Eps 1–29 (especially 
 
 ### Marriage alliance / classical references
 - **秦晉之好** — "the bond of 秦晉" (hybrid) / "the bond of Chun-Zeon" (jy) / "the bond of Chun-Jeun" (yl). Classical allusion to the marriage alliance between the states of 秦 and 晉. These are idiom-of-reference, not modern place names.
-- **泰山北斗** — "the 泰山北斗 of 武林" (hybrid) / "the Mount Tai of the Northern Dipper of the martial world" (romanised). Classical allusion: the authoritative figures in a field.
+- **泰山北斗** — "the authority of the martial world" (standard rendering). Classical allusion: the authoritative figures in a field. **Pairing note:** do not write "泰山北斗 of 武林" in hybrid — 武林 goes English ("the martial world") per §7, and because 泰山北斗's rendering already contains "martial world", combining them in the same phrase produces "of the martial world of the martial world" duplicate in romanised. Drop 武林, rewrite (e.g. "...of our age", "...of our time"), or use an alternative rendering ("the Mount Tai of the Northern Dipper"). Observed twice: Ep30, Ep33 sub 356.
 - **天作之合** — "a match made in Heaven". English idiom maps cleanly; no CJK+gloss needed.
 
 ### Classical laments / elegiac verse
 - **想逝者之不罪兮, 惜形中之載道** / **天蓋高而無階, 懷此恨其最苦** (Ep28) — 陸乘風's lament for 瑤迦. Format as CJK + em-dash + English gloss on the next line (Dragon-chant quartet pattern). Glosses: "my love runs deep, the dead beyond recall" / "Heaven is high but has no stair; this sorrow cuts deepest".
+- **天長地久, 人生幾何** / **譬如朝露, 去日苦短** (Ep33 subs 173–174) — 黃藥師's lament for the supposedly-dead 蓉兒. Adapted from 曹操 短歌行. Format as CJK + em-dash + English gloss on same line. Glosses: "Heaven and Earth endure; how brief a human life" / "like morning dew, the days gone are bitter and short".
 
 ### 九陰真經 quotations (from 周伯通's slap-memorise teaching, Ep29+)
 - **天之道, 損有餘而補不足** — "Heaven's way: take from the surplus and replenish the lack". Adapted from 道德經 77. Hybrid: CJK + em-dash + English on next line; romanised: English only.
@@ -678,6 +721,9 @@ Sweep hybrid and romanised outputs for these. All must be fixed before present:
 - **"Guo Jing"** → 郭靖 in hybrid — never bare Pinyin
 - **"Huang Rong"** → 黃蓉 in hybrid — never bare Pinyin
 - Any other **Pinyin** (e.g. "Huang Yaoshi", "Mei Chaofeng") in hybrid — use CJK or Jyutping/Yale per variant
+- **CJK for common wuxia vocabulary in hybrid** — any of 武功 · 武林 · 江湖 · 內力 · 內功 · 輕功 · 功力 left as CJK in hybrid. These must be English ("martial arts" / "the martial world" / "internal strength" / "internal energy" / "qinggong" / "internal force"). See §7 "What does NOT get CJK".
+- **叫化子 in hybrid** — use Cantonese 乞兒 instead (or render as English "beggar"). The Mandarin form should never appear in our hybrid.
+- **CJK for common-noun insults** in hybrid — any of 臭丫頭 · 死丫頭 · 死乞兒 · 臭乞兒 · 王八蛋 · 禁宮 left as CJK. These must be English.
 
 ---
 
@@ -762,3 +808,5 @@ Also scan for `"the the "` (double article) and `"my the "` / `"your the "` — 
 6. **Don't treat Step 3's output as a translation.** It's a mechanical preprocessing pass — CJK substitutions, address-term injection, idiom injection. You must still examine each sub against chi and yue for meaning and register per `PIPELINE.md` Step 4.
 7. **Don't gloss an idiom twice** in hybrid (once in Chinese AND as a separate English expansion — see §9).
 8. **Don't treat the original English as untouchable, and don't treat it as disposable either.** The priority chain is yue (HIGH) > chi > eng: examine every sub against both chi and yue, and override when content or register mismatches. When the draft is already faithful to both sources, leave it alone.
+9. **Don't keep CJK for common wuxia vocabulary or colloquial insults.** 武功, 武林, 江湖, 內力, 內功, 輕功, 功力 go English in hybrid. Colloquial insults like 臭丫頭, 死乞兒, 王八蛋 also go English. CJK in hybrid is reserved for proper-noun-like content — named techniques, characters, places, titles, idioms with cultural weight. See §7.
+10. **Don't use 叫化子 in hybrid.** If chi gives you 叫化子, either use the Cantonese 乞兒 form (when CJK is warranted) or render as English "beggar" — never leave the Mandarin 叫化子 in the hybrid.

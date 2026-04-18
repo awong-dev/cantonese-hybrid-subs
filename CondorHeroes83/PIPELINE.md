@@ -272,8 +272,14 @@ For every sub, walk this checklist:
 7. If yue's emotional register is sharper, warmer, more colloquial, or more formal than the draft → **REWRITE** to match yue's register even if chi semantics are preserved (this is Rule A applied to a register-only difference).
 8. If chi or yue has an address term Step 3 didn't catch → ensure it's **CJK in hybrid**.
 9. If chi or yue has an idiom Step 3 didn't catch → ensure it's **in the hybrid sub**.
-10. If none of the above apply → **leave the sub alone**; the draft is faithful.
-11. Collect your corrections into `ep{N}_overrides.tsv` (see below) and apply with `apply_overrides.py`.
+10. **Common-noun CJK sweep (v14 Ep33 rule).** Before finalising the hybrid entry, check that none of the following have been left as CJK in hybrid — they must all be English (see `STYLE.md` §7 "What does NOT get CJK"):
+    - **Generic wuxia vocabulary** — 武功 / 武林 / 江湖 / 內力 / 內功 / 輕功 / 功力. These are common nouns; CJK here clutters without adding cultural weight. Named techniques (九陰真經, 降龍十八掌, 空明拳, 打狗棒法, etc.) remain CJK.
+    - **Colloquial insult compounds** — 臭丫頭 / 死丫頭 / 死乞兒 / 臭乞兒 / 王八蛋 / 禁宮. Intensifier + common-noun-insult goes English. Contrast with intensifier + proper-nickname (死老邪, 老毒物) which stays CJK.
+    - **叫化子** — render as Cantonese 乞兒 if CJK is warranted, otherwise English "beggar"; never leave the Mandarin 叫化子 in hybrid.
+    - **Descriptive common-noun metaphors** — phrases like 情蛇, 一流高手, X+高人, X+蛇 where X is an adjective rather than a proper qualifier. Test: strip the CJK and read the English rendering alone. If it works as a plain English noun phrase ("a first-rate expert"), it's a descriptor, not an idiom — English in hybrid. See `STYLE.md` §10's admission gate for what qualifies as a catalogue-worthy idiom.
+    This check is what `lint_overrides.py`'s "common-noun-rendering heuristic" tries to catch automatically, but the reviewer's judgment is the final arbiter. Step 3 preprocessing does not strip these — they're a pure Step 4 discipline.
+11. If none of the above apply → **leave the sub alone**; the draft is faithful.
+12. Collect your corrections into `ep{N}_overrides.tsv` (see below) and apply with `apply_overrides.py`.
 
 **v10 — how to triage the examination.** `ep{N}_confidence.json` now carries an `auto_keep` flag per sub (see Step 3). Subs with `auto_keep: true` should still be read, but quickly — the heuristic has already checked for fabrication risk, idiom injection, address-term drops, and length divergence, and all of those gates passed. Treat AUTO-KEEP as "likely quick confirm". Subs with `auto_keep: false` are where examination time earns its keep: fabrications, meaning flattening, yue-authority overrides, register drift, idiom injection all concentrate in the NEEDS REVIEW set.
 
@@ -371,8 +377,9 @@ Then apply targeted `sed` fixes for any remaining CJK in romanised files — see
 
 ### Step 8 — Banned-Term Sweep & Validate
 
-- Grep romanised files for all **banned terms** (see `STYLE.md`).
+- Grep romanised files for all **banned terms** (see `STYLE.md` §18).
 - Grep hybrid file for **Pinyin leakage** (Guo Jing, Huang Rong, Rong-er, etc.).
+- Grep hybrid file for **common-noun CJK** that should be English (v14 Ep33 rule, `STYLE.md` §18): 武功 · 武林 · 江湖 · 內力 · 內功 · 輕功 · 功力 · 叫化子 · 臭丫頭 · 死丫頭 · 死乞兒 · 臭乞兒 · 王八蛋 · 禁宮. Any of these as CJK in hybrid is a build-time error — fix the hybrid sub and rebuild.
 - Validate: zero CJK in romanised files; zero banned terms; zero overlapping timestamps; same subtitle count and indices as source `{N}-chi_tra.csv` (chi is the entry spine; see `STYLE.md` §16).
 - `present_files` with all three SRTs.
 
