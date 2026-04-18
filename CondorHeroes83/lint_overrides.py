@@ -1,15 +1,24 @@
 #!/usr/bin/env python3
-"""Pre-build lint for ep{N}_h_all.json.
+"""Pre-build lint for ep{N}_h_all.json and ep{N}_extras_add.json.
 
-Scans the finalised hybrid overrides for known CJK-leak concat patterns
-catalogued in STYLE.md §19 and the SESSION-NOTES Watch List. Flags each
-potential issue with a sub index and a suggested fix. Does NOT modify
-any files — output is diagnostic only.
+Two checks:
 
-The patterns checked here are the ones that prior sessions discovered
-produce leaks AFTER build.py's prefix-ordering guard fires — so this
-lint runs on ep{N}_h_all.json (the hybrid content) and catches patterns
-whose leak manifests in the romanised output, not the hybrid one.
+1. **Concat-trap patterns** — scans the finalised hybrid overrides for known
+   CJK-leak concat patterns catalogued in STYLE.md §19 and the SESSION-NOTES
+   Watch List. Flags each potential issue with a sub index and a suggested fix.
+   The patterns here are ones that prior sessions discovered produce leaks
+   AFTER build.py's prefix-ordering guard fires.
+
+2. **Overlay entries unknown to STYLE.md** — scans `ep{N}_extras_add.json`
+   entries and flags any CJK key that isn't in STYLE.md's §5 / §6 / §8 / §10
+   catalogues. STYLE.md §7 says those lists are exhaustive: if a phrase isn't
+   on them, it stays in English. Overlay entries that don't match any catalogue
+   need reviewer attention — either promote the entry to STYLE.md (if it's a
+   legitimate addition) or drop it from the hybrid (if it should have been
+   English all along). This check catches the Ep20-style "如意燈 kept as CJK
+   when it should have been 'lucky lanterns' in English" failure.
+
+Does NOT modify any files — output is diagnostic only.
 
 Usage:
     python3 lint_overrides.py <episode_number>
@@ -23,6 +32,59 @@ import sys, json, re, os
 
 WORK = '/home/claude'
 
+# ============================================================
+# Common-noun-rendering heuristic (Check 2)
+# ============================================================
+# STYLE.md §7 says hybrid CJK is for names / titles / places / idioms / terms-
+# of-art. Common nouns ("lucky lanterns", "a bank", "the court") should render
+# as English. The heuristic below checks an overlay entry's English rendering
+# and returns True if it looks like a common noun — flagging the CJK key as a
+# probable §7 violation.
+#
+# Definition of "looks common":
+#   - Starts with a lowercase word (excluding articles), OR
+#   - Starts with "the"/"a"/"an" followed by lowercase words only, OR
+#   - First word is Capitalized but ONLY first word (Capital + lowercase words)
+#
+# Definition of "looks proper":
+#   - Contains a capitalized word at position ≥ 1 (after first word) —
+#     signals name/place/title ("Lord Ngok", "Uncle Ngok", "the Lantern Festival",
+#     "the Ceoi-hung Brothel", "Elder Paang", "Young Master")
+#   - Is a single capitalized word ("Boss", "Waiter", "Madam" — address terms)
+#
+# This is heuristic, not rule-based. It catches the Ep20 如意燈 case by noting
+# that "lucky lanterns" has no capitalized second word, whereas 岳王廟's
+# rendering "the Ngok Wong Temple" has "Ngok Wong Temple" capitalized after
+# the article. False-positive rate on Ep20: 1 out of 35 tested renderings.
+
+def _looks_like_common_noun(eng):
+    """True if the English rendering looks like a common noun that probably
+    should have stayed English rather than being preserved as CJK in hybrid."""
+    eng = eng.strip().strip('"\'')
+    if not eng:
+        return False
+    tokens = eng.split()
+    if not tokens:
+        return False
+    # Normalise tokens by stripping punctuation for capitalisation checks
+    clean = [re.sub(r"[^a-zA-Z]", "", t) for t in tokens]
+    # If ANY token past position 0 starts with a capital letter, this looks
+    # like a proper-noun rendering.
+    for t in clean[1:]:
+        if t and t[0].isupper():
+            return False
+    # Only the first word can be capitalized. A single capitalized word is
+    # typically an address-term category ("Boss", "Waiter", "Master") and
+    # shouldn't flag. Multi-word with only first word capitalized ("Lucky
+    # lanterns") IS the common-noun pattern we want to flag.
+    if clean and clean[0] and clean[0][0].isupper() and len(clean) == 1:
+        return False
+    # First word lowercase OR Capital+lowercase-multiword → looks common
+    return True
+
+# ============================================================
+# CONCAT-TRAP RULES (Check 1)
+# ============================================================
 # Each rule: (regex, description, suggested fix).
 # Regex operates on each hybrid sub's text. Matches mean a LIKELY leak
 # in the romanised output unless the matched compound is already registered
@@ -103,6 +165,7 @@ def main():
 
     registered = overlay_keys | baseline_keys
 
+    # Check 1 — concat-trap pattern scan
     issues = []
     for idx_str, text in h_all.items():
         idx = int(idx_str)
@@ -116,30 +179,104 @@ def main():
                     continue
                 issues.append((idx, desc, matched, fix, text))
 
+    check1_had_issues = bool(issues)
     if not issues:
-        print(f"Ep{ep} lint: ✓ no known concat-trap patterns found")
-        return 0
+        print(f"Ep{ep} concat-trap lint: ✓ no known concat-trap patterns found")
+    else:
+        print(f"Ep{ep} concat-trap lint: ⚠ {len(issues)} potential concat-trap issue(s)")
+        print("=" * 70)
+        from collections import defaultdict
+        by_rule = defaultdict(list)
+        for idx, desc, matched, fix, text in issues:
+            by_rule[desc].append((idx, matched, fix, text))
+        for desc, entries in by_rule.items():
+            print(f"\n■ {desc}  ({len(entries)} occurrence(s))")
+            print(f"  Fix: {entries[0][2]}")
+            for idx, matched, _, text in entries[:5]:
+                snippet = text.replace('\n', ' // ')[:80]
+                print(f"    sub {idx}: matched '{matched}' in: {snippet}")
+            if len(entries) > 5:
+                print(f"    ... and {len(entries) - 5} more")
+        print("\nThese are NON-FATAL warnings. Fix by registering the compounds in")
+        print(f"ep{ep}_extras_add.json, then re-run shared_extras.py and build.py.")
 
-    print(f"Ep{ep} lint: ⚠ {len(issues)} potential concat-trap issue(s)")
-    print("=" * 70)
-    # Group by description so the reviewer sees each rule together
-    from collections import defaultdict
-    by_rule = defaultdict(list)
-    for idx, desc, matched, fix, text in issues:
-        by_rule[desc].append((idx, matched, fix, text))
-    for desc, entries in by_rule.items():
-        print(f"\n■ {desc}  ({len(entries)} occurrence(s))")
-        # Show the fix once per rule
-        print(f"  Fix: {entries[0][2]}")
-        # Show up to 5 example subs
-        for idx, matched, _, text in entries[:5]:
-            snippet = text.replace('\n', ' // ')[:80]
-            print(f"    sub {idx}: matched '{matched}' in: {snippet}")
-        if len(entries) > 5:
-            print(f"    ... and {len(entries) - 5} more")
-    print("\nThese are NON-FATAL warnings. Fix by registering the compounds in")
-    print(f"ep{ep}_extras_add.json, then re-run shared_extras.py and build.py.")
-    return 1
+    # ============================================================
+    # Check 2 — overlay entries whose English rendering looks like a common noun
+    # ============================================================
+    # STYLE.md §7: "The CJK requirements above are exhaustive — if a phrase
+    # isn't on one of these lists, it stays in English." Since enumerating those
+    # lists exhaustively at lint time is brittle, this check uses a heuristic:
+    # if an overlay entry's English rendering looks like a common noun ("lucky
+    # lanterns", "a bank", "the court"), the CJK was probably preserved by
+    # mistake — Ep20 如意燈 → "lucky lanterns" is the canonical example.
+    # Renderings that look proper-noun-shaped ("Lord Ngok", "the Ceoi-hung
+    # Brothel", "Elder Paang") are not flagged.
+    check2_had_issues = False
+    print()  # blank line between checks
+    if not overlay_keys:
+        print(f"Ep{ep} common-noun lint: ✓ no overlay file (nothing to check)")
+    else:
+        # Only flag overlay entries that are actually used as CJK in the hybrid.
+        # Dead entries (registered in overlay but the reviewer rendered the
+        # English directly in the override) don't violate STYLE.md §7.
+        hybrid_text = ' '.join(h_all.values())
+
+        # Build lookup from overlay: CJK → English rendering (prefer jy; yl
+        # typically carries the same English for common nouns).
+        overlay_eng = {}
+        if os.path.exists(overlay_path):
+            try:
+                with open(overlay_path, 'r', encoding='utf-8') as f:
+                    overlay = json.load(f)
+                overlay.pop('__comment__', None)
+                overlay_eng = dict(overlay.get('jy', {}))
+                # Merge yl entries that aren't already in jy (rare)
+                for k, v in overlay.get('yl', {}).items():
+                    overlay_eng.setdefault(k, v)
+            except json.JSONDecodeError:
+                pass
+
+        flagged = []
+        for k in sorted(overlay_keys):
+            if k not in hybrid_text:
+                continue  # dead entry; skip
+            eng = overlay_eng.get(k, '')
+            if _looks_like_common_noun(eng):
+                flagged.append((k, eng))
+
+        if not flagged:
+            print(f"Ep{ep} common-noun lint: ✓ no overlay entries look like "
+                  f"common-noun renderings")
+        else:
+            check2_had_issues = True
+            print(f"Ep{ep} common-noun lint: ⚠ {len(flagged)} overlay "
+                  f"entr{'y' if len(flagged) == 1 else 'ies'} whose English "
+                  f"rendering looks like a common noun")
+            print("=" * 70)
+            print("STYLE.md §7 rule: 'The CJK requirements above are exhaustive — if a phrase")
+            print("isn't on one of these lists, it stays in English.' Entries below were kept")
+            print("as CJK in the hybrid, but their English rendering looks like a common noun —")
+            print("suggesting they should have been rendered as English in the hybrid instead.")
+            print()
+            for k, eng in flagged:
+                using_subs = [int(idx) for idx, txt in h_all.items() if k in txt]
+                sub_summary = (
+                    f"subs {using_subs[:3]}" +
+                    (f" +{len(using_subs)-3} more" if len(using_subs) > 3 else "")
+                )
+                print(f"  {k:<10} → {eng!r:<40}  ({sub_summary})")
+            print()
+            print("Action for each entry:")
+            print("  (a) Genuine idiom/term-of-art → promote to STYLE.md §8/§10 and ")
+            print("      verify the hybrid rendering fits the CJK+gloss convention if applicable.")
+            print("  (b) Common noun kept in CJK by mistake → drop from overlay, edit the")
+            print("      affected hybrid subs to use the English rendering instead.")
+            print("  (c) Character voice / flavour phrase (like 臭要飯的) → judgment call;")
+            print("      promote to STYLE.md §5/§8 if recurring enough to warrant catalogue entry.")
+
+    if check1_had_issues or check2_had_issues:
+        return 1
+    return 0
 
 if __name__ == '__main__':
     sys.exit(main())

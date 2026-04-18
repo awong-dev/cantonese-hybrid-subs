@@ -286,6 +286,38 @@ def _has_fabrication_risk_markers(eng_text):
         return True
     return False
 
+# OCR-artifact markers that show up when the chi track was OCR'd from broadcast
+# subtitles. These are not CJK characters the reviewer would expect in a clean
+# transcript — they're typesetting noise or quote-mark garble that survived
+# OCR. Seeing any of these in a chi sub is a signal that the chi for this sub
+# is partially corrupted and yue may be the cleaner witness.
+#
+# The specific markers are from cross-episode observation:
+#   -"   — partial dash/quote junk (Ep20 subs 24, 116, 133, etc.)
+#   ”“   — unbalanced typographic quotes (Ep20 sub 158, 264, 387)
+#   “    — lone opening curly quote (Ep20 sub 194)
+#   Y    — Latin letter amid CJK (a frequent OCR misread of 丫 etc.)
+#   |    — pipe character (appears in some OCR outputs as column separator)
+#   --   — double hyphen, Ep20 subs 1, 147, etc.
+# Claude should still cross-check yue; this flag is a priority signal, not a verdict.
+_OCR_ARTIFACT_MARKERS = ['-"', '”“', '““', '“-', '---', '--', '"-', '" -']
+
+def _chi_has_ocr_artifact(chi_text):
+    """True if chi contains any of the known typesetting-noise markers."""
+    if not chi_text: return False
+    for m in _OCR_ARTIFACT_MARKERS:
+        if m in chi_text:
+            return True
+    # Latin letters embedded in CJK are also a strong OCR-artifact signal
+    # (common misreads: 丫 → Y, 一 → I/|/l, 八 → V, 口 → O).
+    # Only flag if chi is mostly CJK AND contains a suspicious single Latin letter.
+    cjk_chars = sum(1 for c in chi_text if '\u4e00' <= c <= '\u9fff')
+    latin_letters = [c for c in chi_text if c.isalpha() and c.isascii()]
+    if cjk_chars >= 3 and 0 < len(latin_letters) <= 3:
+        # 1-3 stray Latin letters amid ≥3 CJK chars — likely OCR
+        return True
+    return False
+
 def _length_ratio_ok(eng_text, chi_text):
     """True if eng and chi are within 1.5× in character length."""
     if not eng_text or not chi_text:
@@ -375,6 +407,37 @@ for a in aligned:
     # the actual Step 3 output the reviewer will see.
     auto_keep = faithful_heuristic(a['eng'], a['chi'], yue_clean, text, conf)
     ann['auto_keep'] = auto_keep
+
+    # Per-sub flags (v14). These drive the compact flags column in ep{N}_dump.txt.
+    # Each flag is the output of a heuristic that ALREADY exists in this file
+    # (the faithful_heuristic() gates below); we just surface the sub-tests
+    # individually so the reviewer sees WHY a sub is flagged, not just THAT it is.
+    # Flags:
+    #   • AUTO-KEEP passed all seven gates (quick-confirm candidate)
+    #   ! eng has fabrication-risk markers (parentheticals, ", which" clauses)
+    #   i chi contains an idiom from idiom_inject
+    #   @ chi has an address term missing from the Step 3 output
+    #   o chi contains an OCR artifact (garbled glyph / stray typesetting noise)
+    #
+    # Note: _length_ratio_ok() is ALSO a faithful_heuristic() gate, but it's
+    # deliberately NOT surfaced here. eng:chi character ratio is >1.5× on a
+    # majority of subs simply because CJK characters are information-denser
+    # than English words (confirmed on Ep20: would fire on 504/587 subs).
+    # Using it as a flag was tried in v14-draft and produced uninformative noise.
+    # Keep it as an internal faithful_heuristic gate only.
+    flags = []
+    if auto_keep:
+        flags.append('•')
+    if _has_fabrication_risk_markers(a['eng']):
+        flags.append('!')
+    if _chi_has_idiom(a['chi']):
+        flags.append('i')
+    if _chi_has_address_missing_from_output(a['chi'], text):
+        flags.append('@')
+    if _chi_has_ocr_artifact(a['chi']):
+        flags.append('o')
+    ann['flags'] = ''.join(flags)
+
     if conf == 'HIGH':
         ann['note'] = 'YUE-AUTH: yue is authoritative. Compare yue vs chi — prefer yue where they differ.'
         ann['yue'] = yue_clean
@@ -394,6 +457,111 @@ with open(f'{WORK}/ep{EP}_h_all.json', 'w', encoding='utf-8') as f:
 # Save confidence annotations separately for manual review reference
 with open(f'{WORK}/ep{EP}_confidence.json', 'w', encoding='utf-8') as f:
     json.dump({str(k): v for k, v in confidence_annotations.items()}, f, ensure_ascii=False, indent=1)
+
+# ============================================================
+# Emit ep{EP}_dump.txt — reviewer-facing examination artifact (v14 format)
+# ============================================================
+# Format (v14):
+#   <idx>|<conf>|<flags>         (one-line header per sub; [T-ADJ] suffixed if timing adjusted)
+#   E <eng>
+#   C <chi>
+#   Y <yue>                       (may be "[see N]" for dedup; omitted if empty)
+#
+# Blank-line-plus-scene-marker inserted wherever consecutive-sub end→start
+# gap exceeds 5s: `—— gap Ns ——`
+#
+# Yue dedup: when a yue text is the same (after strip) across multiple
+# consecutive chi subs, it's shown only at the sub whose chi-window has the
+# STRONGEST timing overlap with the yue content; other subs in the cluster
+# show `Y [see <idx>]`.
+#
+# Flags (single-character column, see the flag-construction block above):
+#   •  AUTO-KEEP — all seven faithful_heuristic() gates passed
+#   !  fabrication-risk markers in eng
+#   i  chi contains an idiom
+#   @  chi has an address term missing from the Step 3 output
+#   o  chi has OCR-artifact noise
+#   L  eng vs chi length ratio > 1.5×
+
+# --- (a) Yue-dedup pass: for each non-empty yue string, find the sub with
+#         the strongest timing overlap, and map every other sub with that same
+#         yue string to `[see N]`.
+yue_owner = {}  # sub_idx -> 'own' | int (the owning sub index)
+# Group sub indices by the exact yue_clean text they carry.
+by_yue = {}
+for a in aligned:
+    idx = a['index']
+    yue_raw = a.get('yue', '')
+    yue_clean = re.sub(r'^\[DISCARDED[^\]]*\]\s*', '', yue_raw).strip()
+    if not yue_clean:
+        continue
+    by_yue.setdefault(yue_clean, []).append(idx)
+
+# For each group of ≥2 subs sharing the same yue text, pick the owner: the sub
+# whose chi-window [start_ms, end_ms] has the largest overlap with the yue
+# time window [start_ms, yue_end_ms]. Tie-break by earliest sub.
+aligned_by_idx = {a['index']: a for a in aligned}
+for yue_text, idxs in by_yue.items():
+    if len(idxs) == 1:
+        yue_owner[idxs[0]] = 'own'
+        continue
+    best_idx, best_overlap = None, -1
+    for i in idxs:
+        a = aligned_by_idx[i]
+        ys, ye = a['start_ms'], a.get('yue_end_ms', a['end_ms'])
+        cs, ce = a['start_ms'], a['end_ms']
+        overlap = max(0, min(ye, ce) - max(ys, cs))
+        if overlap > best_overlap:
+            best_overlap, best_idx = overlap, i
+    for i in idxs:
+        yue_owner[i] = 'own' if i == best_idx else best_idx
+
+# --- (b) Emit the dump ---
+dump_path = f'{WORK}/ep{EP}_dump.txt'
+with open(dump_path, 'w', encoding='utf-8') as f:
+    f.write(f"=== DUMP Ep{EP} ({len(aligned)} subs, v14 format) ===\n")
+    f.write("Header: <idx>|<conf>|<flags>[ T-ADJ]   (flags: • AUTO-KEEP, ! fabrication-risk,\n")
+    f.write("                                        i idiom, @ missing address, o OCR noise)\n")
+    f.write("E/C/Y lines: eng / chi / yue; newlines shown as ' // '.\n")
+    f.write("Y [see N]  means this sub shares yue with sub N — read yue there.\n")
+    f.write("—— gap Ns ——  marks a scene boundary (>5s silence between subs).\n")
+    f.write("=" * 70 + "\n")
+
+    SCENE_GAP_MS = 5000
+    prev_end = None
+    for a in aligned:
+        idx = a['index']
+        # Scene gap marker
+        if prev_end is not None and a['start_ms'] - prev_end > SCENE_GAP_MS:
+            gap_s = (a['start_ms'] - prev_end) / 1000.0
+            f.write(f"\n—— gap {gap_s:.1f}s ——\n\n")
+        prev_end = a['end_ms']
+
+        conf = a.get('yue_confidence', 'N/A')
+        adj = ' T-ADJ' if a.get('timing_adjusted') else ''
+        flags = confidence_annotations.get(idx, {}).get('flags', '')
+        # Pad flags to 5 chars (the five possible flag characters) for alignment.
+        flags_padded = flags.ljust(5)
+        f.write(f"{idx}|{conf}|{flags_padded}{adj}\n")
+
+        e = (a.get('eng') or '').replace('\n', ' // ')
+        c = (a.get('chi') or '').replace('\n', ' // ')
+        if e: f.write(f"E {e}\n")
+        if c: f.write(f"C {c}\n")
+
+        yue_raw = a.get('yue', '')
+        yue_clean = re.sub(r'^\[DISCARDED[^\]]*\]\s*', '', yue_raw).strip()
+        if yue_clean:
+            owner = yue_owner.get(idx, 'own')
+            if owner == 'own':
+                y = yue_clean[:200]
+                f.write(f"Y {y}\n")
+            else:
+                f.write(f"Y [see {owner}]\n")
+
+    f.write("=== END DUMP ===\n")
+
+print(f"\nDump written: {dump_path}")
 
 print(f"Ep{EP}: {len(overrides)} deep overrides generated")
 

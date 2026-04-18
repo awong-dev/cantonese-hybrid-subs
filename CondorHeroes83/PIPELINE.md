@@ -28,19 +28,18 @@ Every subtitle must be read against both chi and yue. The English track frequent
 
 ## Quality Control — MANDATORY
 
-**One episode per request. FULL quality requires a fresh chat and the full dump read.** Batching is not a supported mode.
+**One episode per request.** Batching is not a supported mode.
 
-Before beginning work on any episode, the assistant MUST assess feasibility:
-- Use the Step 0 context estimate together with the conservative sub-count defaults below to judge whether there's enough remaining budget to run Step 4 to completion.
-- If the budget likely won't cover full Step 4 examination for this episode's sub count, **STOP and ask the user for instructions** rather than silently producing a PARTIAL or MECHANICAL-ONLY outcome.
-- Say explicitly: "My context estimate is ~ZZ%, and Episode N has XXX subs. Step 4 would likely abort partway and produce PARTIAL rather than FULL quality. I recommend starting a fresh chat. Shall I proceed anyway, or would you prefer a new session?"
-- If multiple episodes are requested in a single message, stop and ask the user to confirm which single episode to process first.
+Before beginning work on any episode, the assistant reports the context state:
+- Use the Step 0 context estimate together with the conservative sub-count defaults below to judge likely completion.
+- Say explicitly: "My context estimate is ~ZZ%, and Episode N has XXX subs."
+- If multiple episodes are requested in a single message, pick one and state the choice rather than asking.
 
 **Thresholds are not fixed.** A session at ~70% baseline that has processed smaller episodes can often still handle another small one; a session at ~40% starting fresh with a 600-sub episode might still be tight. Judge from the delta data, not a hard percentage.
 
 ### Quality Outcomes (Diagnostic)
 
-FULL is the only acceptable quality target. PARTIAL and MECHANICAL-ONLY are named failure modes — they exist so a degraded delivery can be honestly labelled, not so they can be aimed for. Always aim for FULL; if PARTIAL or MECHANICAL-ONLY is the realistic outcome, stop and ask rather than proceeding silently.
+FULL is the target quality. PARTIAL and MECHANICAL-ONLY are named failure modes — they exist so a degraded delivery can be honestly labelled. Always aim for FULL; if the realistic outcome is PARTIAL or MECHANICAL-ONLY, say so in the Step 0 report so the user can decide how to proceed.
 
 | Outcome | Description | When it happens |
 |---------|-------------|-----------------|
@@ -55,10 +54,9 @@ FULL is the only acceptable quality target. PARTIAL and MECHANICAL-ONLY are name
 Status output has a context cost. Long conversational summaries between tool calls — "Here's what I've done so far", "Summary of Step 4 work", "Candidates to promote", "Watch List additions" — consume roughly 15–25% of the session's budget during a FULL pass and largely repeat information the user already sees in tool output and the delivered SRTs. Keep conversational output minimal.
 
 ### Required output (keep)
-- **Step 0 context baseline report.** Required before any tool call for the Quality Control gate. Format per Step 0.
+- **Step 0 context baseline report.** Required before any tool call. Format per Step 0.
 - **Step 8.5 SESSION-NOTES update and present.** Required after the three SRTs are presented. Format per Step 8.5.
 - **Step 9 ending context report.** Required after the SESSION-NOTES `present_files`. Format per Step 9.
-- **Stop-and-ask prompt** when the context budget is insufficient (see Fallback Protocol).
 - **User-directed questions** when a genuine ambiguity requires a decision (rare in a FULL pass).
 - **The final `present_files` call** with the three SRTs.
 
@@ -143,10 +141,10 @@ Context baseline — Episode N
 • Estimated context use: ~ZZ%
 • Episode size: XXX subs (from {N}-chi_tra.csv — chi is the entry spine)
 • Expected delta for this episode: ~ΔΔ% (see "How to make the call" below)
-• Assessment: feasible / borderline / should stop-and-ask
+• Projected quality at current context: FULL / borderline (may end PARTIAL) / likely MECHANICAL-ONLY
 ```
 
-**How to make the call (v10):** with the v10 efficiency changes (file-based dump, AUTO-KEEP pre-filter, TSV override format, overlay-based extras, pre-build lint), the conservative sub-count estimates are roughly ~25% of context for a 400-sub episode during Step 4, and ~40% for a 600-sub episode — down from ~35% / ~50% in v9. Stop-and-ask if `baseline + expected delta` would exceed ~90%. These remain deliberately conservative; actual usage varies with episode density, and the efficiency gains depend on the reviewer actually using the file-based flow (reading `ep{N}_dump.txt` via `view` ranges rather than re-dumping via `python3 -c`).
+**How to make the call (v10):** with the v10 efficiency changes (file-based dump, AUTO-KEEP pre-filter, TSV override format, overlay-based extras, pre-build lint), the conservative sub-count estimates are roughly ~25% of context for a 400-sub episode during Step 4, and ~40% for a 600-sub episode — down from ~35% / ~50% in v9. If `baseline + expected delta` exceeds ~90%, project the outcome as borderline or likely-degraded. These remain deliberately conservative; actual usage varies with episode density, and the efficiency gains depend on the reviewer actually using the file-based flow (reading `ep{N}_dump.txt` via `view` ranges rather than re-dumping via `python3 -c`).
 
 ### Step 1 — Parse & Align
 
@@ -155,9 +153,11 @@ cp /mnt/user-data/uploads/PersonalNamesUpdated.csv /home/claude/
 python3 pipeline.py <N>
 ```
 
-Parses the three source tracks and aligns them onto a **chi-spine skeleton**: the output's entry count and timestamps are taken from chi, not eng. Outputs `ep{N}_aligned.json`, `ep{N}_dump.txt`, plus a compact summary to stdout.
+Parses the three source tracks and aligns them onto a **chi-spine skeleton**: the output's entry count and timestamps are taken from chi, not eng. Outputs `ep{N}_aligned.json` plus a compact summary to stdout.
 
-**v10 change — dump goes to file, not stdout.** In prior bundles, the full alignment dump was printed to stdout and a reviewer session would re-read it by echoing through `python3 -c` commands. Every echo cost context. In v10, `pipeline.py` writes the dump once to `/home/claude/ep{N}_dump.txt` and prints only a compact summary (sub count, confidence distribution, timing-adjustment count) to stdout. The reviewer consumes the dump by `view`ing line ranges of `ep{N}_dump.txt` in Step 2 — cheaper than regenerating it, and stable (doesn't shift under the reviewer mid-examination).
+**v14 change — the dump moves to Step 3.** Prior bundles (v10–v13) had `pipeline.py` write `ep{N}_dump.txt` alongside `ep{N}_aligned.json`. The dump now comes out of `auto_override_v2.py` instead, because the dump format carries per-sub flags (`•` AUTO-KEEP, `!` fabrication risk, `i` idiom, `@` missing address, `o` OCR noise) that depend on `auto_override_v2.py`'s heuristics. Colocating dump-writing with flag-computation avoids re-reading `aligned.json` in a separate pass. `pipeline.py`'s sole output is now the structural alignment.
+
+**v10 precursor — file-based dump** (still applies): the dump is written once to disk and consumed by `view`ing line ranges in Step 2. In pre-v10 bundles it was printed to stdout and re-echoed via `python3 -c`, which cost context. That's still the rule — only the script that emits it has changed.
 
 **Chi as entry spine (pipeline.py v6):**
 - Output entry count = chi entry count (not eng). See `STYLE.md` §16.
@@ -184,7 +184,30 @@ Each sub in the dump is annotated `[HIGH]` / `[MEDIUM]` / `[LOW]`, and `[T-ADJ]`
 
 ### Step 2 — Read the Full Dump (MANDATORY)
 
-Read EVERY line of `ep{N}_dump.txt` (written by Step 1). Use `view` with line ranges — typically 100–200 subs per range — rather than `cat` or `python3 -c` round-trips.
+Read EVERY line of `ep{N}_dump.txt` (written by Step 3 under v14). Use `view` with line ranges — typically 100–200 subs per range — rather than `cat` or `python3 -c` round-trips.
+
+**v14 dump format.** Each sub occupies 3–4 lines:
+
+```
+<idx>|<conf>|<flags>[ T-ADJ]
+E <eng>
+C <chi>
+Y <yue>                      (omitted if empty; may be "[see N]" for dedup)
+```
+
+The `<flags>` column is a 5-character padded string carrying per-sub priority signals computed by `auto_override_v2.py`:
+
+- `•` — AUTO-KEEP (passed all seven faithful_heuristic gates; likely quick-confirm)
+- `!` — eng has fabrication-risk markers (long parenthetical, `", which"` clause)
+- `i` — chi contains an idiom from the injection set
+- `@` — chi has an address term (師父, 前輩, 老伯…) missing from the Step 3 output
+- `o` — chi contains an OCR artifact (garbled quote marks, stray Latin letters amid CJK)
+
+A blank flags column means "no priority signal" — scan quickly unless something else jumps out. Flags are priority signals, not gates: every sub must still be read, but time concentrates on non-blank flags.
+
+**Scene markers.** Lines of the form `—— gap N.Ns ——` mark a timestamp gap > 5s between consecutive subs. These correlate with scene transitions and let the reviewer navigate by scene when re-reading a section (useful after a plot correction).
+
+**Yue deduplication.** When a Whisper segment's yue text is identical across multiple consecutive chi subs (common — one 10-second yue span covers many short chi subs), the full text appears only at the sub with the strongest timing overlap. Other subs in the group show `Y [see N]`. If you need the yue context, scroll to sub N.
 
 For each sub, compare the three columns:
 - Column E (eng) — the rough draft
@@ -313,15 +336,24 @@ Cross-reference against `extras_baseline.json` and `PersonalNamesUpdated.csv`; a
 
 **Promotion path.** If an overlay term proves stable across 2+ episodes (same CJK always rendered the same way), promote it into `extras_baseline.json` and drop it from the episode overlays. This is what the `extras_baseline.json` + overlay split exists to support.
 
-### Step 5.5 — Pre-build Lint (v10)
+### Step 5.5 — Pre-build Lint
 
 ```bash
 python3 lint_overrides.py <N>
 ```
 
-Scans `ep{N}_h_all.json` for known CJK-leak concat traps catalogued in `STYLE.md` §19 and the `SESSION-NOTES.md` Watch List. Reports each potential issue by sub index with a suggested fix. **Non-fatal** — the reviewer inspects each warning and decides whether to register the compound in the overlay (usually yes) or leave it (occasionally the pattern is intended).
+Runs two diagnostic checks on `ep{N}_h_all.json` and `ep{N}_extras_add.json`:
 
-The catalogued concat patterns include: `裘老前輩` / `裘前輩` (surname+title), `X大哥` (surname+Brother), `我爹` / `你爹` (possessive+kinship), `大金國` / `大宋` (dynasty prefix), `我<FullName>` (emphatic self-reference), `大師父`. Running this before `build.py` lets the reviewer add the missing compound entries to the overlay once, rather than iterating after build.
+**Check 1 — concat-trap patterns** (v10). Scans the hybrid for known CJK-leak concat patterns catalogued in `STYLE.md` §19 and the `SESSION-NOTES.md` Watch List. Catalogued patterns include `裘老前輩` / `裘前輩` (surname+title), `X大哥` (surname+Brother), `我爹` / `你爹` (possessive+kinship), `大金國` / `大宋` (dynasty prefix), `我<FullName>` (emphatic self-reference), `大師父`. Running this before `build.py` lets the reviewer register missing compounds in the overlay once rather than iterating after build.
+
+**Check 2 — common-noun-rendering heuristic** (v14). Scans overlay entries (`ep{N}_extras_add.json`) and flags any whose English rendering looks like a common noun (lowercase-starting, or article-plus-lowercase, or Capital-plus-lowercase-words). Enforces STYLE.md §7's exhaustive-lists rule: hybrid CJK is for names/titles/places/idioms/terms-of-art, not common nouns. Catches the Ep20-style "如意燈 kept as CJK when it should have been 'lucky lanterns' in English" failure.
+
+The heuristic has three action buckets:
+- **(a) Genuine idiom/term-of-art** → promote to STYLE.md §8/§10.
+- **(b) Common noun kept in CJK by mistake** → drop from overlay, rewrite affected hybrid subs in English.
+- **(c) Character voice / flavour phrase** (like 臭要飯的) → judgment call; promote to STYLE.md only if recurring.
+
+Both checks are **non-fatal** — the reviewer inspects each warning and decides. The lint exits 1 if either check surfaces issues, 0 only if both are clean.
 
 ### Step 6 — Build 3 Variants
 
@@ -350,7 +382,23 @@ After the three SRTs are presented, update `SESSION-NOTES.md` and present the up
 
 What to update, in order:
 
-1. **Move the episode's status entry.** If the episode completed FULL under the current bundle version, move its row out of the "Pending — Needs FULL Processing" table and into the "Completed under v{VERSION} (FULL)" table. Replace any prior-session content preview with a one-to-two-sentence summary of what actually happened in the episode (major plot beats, any canonical case studies this episode produced). If the outcome was PARTIAL or MECHANICAL-ONLY, leave the row in Pending and annotate the outcome honestly — don't promote a degraded delivery.
+1. **Move the episode's status entry.** If the episode completed FULL under the current bundle version, move its row out of the "Pending — Needs FULL Processing" table and into the "Completed under v{VERSION} (FULL)" table. Replace any prior-session content preview with a row body in the format specified below. If the outcome was PARTIAL or MECHANICAL-ONLY, leave the row in Pending and annotate the outcome honestly — don't promote a degraded delivery.
+
+   **Completed-table row body format.** The body must contain, in this order, and nothing else:
+
+   a. **Arc label** — one sentence naming the location or plot driver AND the key characters. Example: "臨安 / 元宵 arc with 岳文 and 武穆遺書 plot." Not "Opens with 郭靖/黃蓉 at an inn where 蓉兒's silver-note grift..." The label pins the episode for future precedent lookups; it is not a plot synopsis. No more than ~15 words.
+
+   b. **"First FULL firing for:"** — flat comma-separated list of terms, idioms, classical references, and names that this episode is the first FULL-processed instance of. This is the load-bearing content that future sessions consult for cross-episode precedent.
+
+   c. **Cross-episode precedents established or revised** — short callouts only when relevant: "first on-screen use of X", "first scene naming all four 五絕 together", "Ep21 summary previously said X fired first; Ep20 corrects that to Ep20 first." Omit this entire element if the episode established no such precedent.
+
+   d. **Chi-OCR variants encountered** — flat list like `匡文/策老伯/品王爺→岳文/岳老伯/岳王爺`. Feeds future `cjk_fix_v2.py` `OCR_NAME_COLLAPSE` promotions. Omit if the episode had no notable OCR damage.
+
+   e. **Promotion flags** — short pointers to Watch List items that fired here and are candidates for promotion on next firing (e.g. "岳王爺 and 本姑娘 cross-stage traps need promotion to `cjk_fix_v2.py` `shared_concat_fixes` on next firing"). Omit if none.
+
+   **Narrative plot detail does not belong in SESSION-NOTES.** Who said what to whom, scene-by-scene beats, character motivations, and dialogue color are all excluded. The SRTs carry the plot; SESSION-NOTES carries only what future sessions need for precedent continuity.
+
+   **Prior-session preview rows** in the Pending table follow the same constraint: location + arc-driver keywords only, no plot prose. These predate the current rule-set and do not count as established precedent — their only job is to let a future session know what the episode is about before processing it.
 
 2. **Add new Watch List entries.** Anything encountered during processing that doesn't yet have a settled rendering goes under a short descriptive heading in the Watch List. Skip things already covered by `STYLE.md` §5 (names), §6 (titles), §10 (idioms), or `REFERENCE.md`. Recurring CJK leaks, name-variant OCR drift, cross-stage concat traps, and classical allusions are typical additions. If a concat-trap fix needed a post-build `sed` pass (rather than overlay registration working cleanly), log the mechanism and the fix — that's what the Watch List's "Cross-stage concat traps" section exists for.
 
@@ -376,10 +424,9 @@ Context ending — Episode N
 • Ending estimate: ~WW%
 • Delta consumed by this episode: ~ΔΔ%
 • Episode size processed: XXX subs
-• Ready for another episode this session: yes / borderline / no — recommend fresh chat
 ```
 
-The delta is informational — useful for the user to judge whether to attempt another episode in the same session, but not persisted anywhere. Each session starts from the conservative defaults in Step 0.
+The delta is informational. Each session starts from the conservative defaults in Step 0.
 
 ---
 
@@ -463,17 +510,17 @@ WHY: 那個老賊 / 嗰個老賊 (that old scoundrel) — entire characterisatio
 
 ---
 
-## Fallback Protocol — Stop and Ask
+## Context Awareness
 
 There is no batch-processing shortcut. The examination loop in Step 4 is not optional and cannot be compressed. Step 3's preprocessing handles mechanical substitutions, but Error Taxonomy Categories 1 (FABRICATION) and 2 (CHI_MEANING_LOST) **always require reading against both chi and yue** — no mechanical pass can catch invented content or flattened nuance.
 
-When Step 4 examination is unlikely to complete for this episode in the current session — because context budget is tight relative to the expected delta, or the assistant is already mid-session with prior episode artifacts loaded — **stop and ask the user for instructions.** Do not silently drop to a degraded outcome. Honest phrasing:
+When context budget is tight relative to the expected delta, state the projected quality in the Step 0 report so the user can judge:
 
-> "My context estimate is ~ZZ%, and Episode N has XXX subs. Step 4 would likely abort partway and produce PARTIAL rather than FULL quality. I recommend starting a fresh chat. Shall I proceed anyway, or would you prefer a new session?"
+> "My context estimate is ~ZZ%, and Episode N has XXX subs. Projected quality at current context: borderline (may end PARTIAL)."
 
-The frequent case: a 70% baseline often still has room for one small episode. Don't refuse reflexively on a percentage — judge from the conservative sub-count estimates in Step 0.
+The user decides whether to proceed. A 70% baseline often still has room for one small episode; judge from the conservative sub-count estimates in Step 0.
 
-See the [Quality Control](#quality-control--mandatory) section for the full protocol.
+See the [Quality Control](#quality-control--mandatory) section for the full diagnostic framework.
 
 ---
 
@@ -519,10 +566,10 @@ Upload ALL of these to start a new session:
    - **Report Step 0 context baseline** before doing anything else
    - Copy `PersonalNamesUpdated.csv` to `/home/claude/`
    - Place/create all 7 scripts and `extras_baseline.json`
-   - Run `pipeline.py` → `ep{N}_dump.txt` + `ep{N}_aligned.json`; `view` the dump file in ranges
+   - Run `pipeline.py` → `ep{N}_aligned.json` (structural alignment only; dump comes from Step 3)
    - Run `shared_extras.py` → `ep{N}_extra.json` (baseline only, initially)
-   - Run `auto_override_v2.py` → `ep{N}_h_all.json` + `ep{N}_confidence.json` (with AUTO-KEEP flags)
-   - Examine every sub; concentrate effort on NEEDS REVIEW subs (not AUTO-KEEP)
+   - Run `auto_override_v2.py` → `ep{N}_h_all.json` + `ep{N}_confidence.json` + `ep{N}_dump.txt` (with per-sub flags); `view` the dump file in ranges
+   - Examine every sub; concentrate effort on subs whose flags column is non-blank
    - Collect corrections into `ep{N}_overrides.tsv`; run `apply_overrides.py <N>`
    - Write `ep{N}_extras_add.json` if new CJK terms introduced; re-run `shared_extras.py <N>` to merge
    - Run `lint_overrides.py <N>` — fix any concat-trap warnings by updating the overlay
@@ -530,5 +577,5 @@ Upload ALL of these to start a new session:
    - Present output files
    - **Update and present `SESSION-NOTES.md`** — move episode's row into Completed table, add new Watch List items, promote stable items out (see Step 8.5)
    - **Report Step 9 ending context** (informational)
-4. **ONE EPISODE PER REQUEST for FULL quality.** If context is getting full, **ASK** before proceeding.
+4. **ONE EPISODE PER REQUEST for FULL quality.** If context is tight, state the projected quality in Step 0 and let the user decide.
 5. **Follow Narration Discipline.** Run tools silently between the Step 0 and Step 9 reports; surface only actual issues (one line each) and the final `present_files`. Do not produce mid-turn progress recaps, interpretive commentary on tool output, or end-of-episode "candidates to promote" / "watch list" summaries — edits to `SESSION-NOTES.md` are where such findings go.
