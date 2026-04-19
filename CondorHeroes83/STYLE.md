@@ -420,6 +420,18 @@ Canonical English renderings for high-frequency terms. **This table gives the ro
 
 Rule of thumb: use a Western equivalent only when the *meaning* maps 1:1; keep Chinese when the *imagery* is the point.
 
+### Paired / couplet proverbs — render each half literally (v16 Ep1 rule)
+
+When chi carries a classical **paired proverb** (two balanced halves joined by a comma, typically 6+6 or 4+4 characters, each half a complete idiom-image), render **each half literally**; do not collapse both halves to a single abstract English equivalent.
+
+- **天有不測風雲, 人有旦夕禍福** → "the heavens hold unforeseen storms, fortunes shift in a day" — NOT "disaster strikes without warning" (the single-abstract collapse discards both halves' imagery in favour of the shared abstract moral).
+- **有福同享, 有難同當** → "share fortune together, share hardship together" — NOT "through thick and thin".
+- **不怕一萬, 只怕萬一** — already a STYLE §10 catalogue entry; keeps its imagery ("not afraid of the ten thousand, only the one-in-ten-thousand") rather than collapsing to "better safe than sorry" alone.
+
+Cue for this rule: chi presents two balanced halves separated by a comma where each half has its own imagery (storm/fortune, fortune/hardship, ten-thousand/one-in-ten-thousand). If either half would make sense on its own as an independent proverb, render both halves literally. The test: does the English rendering preserve the rhetorical parallelism that made the source a couplet? If it doesn't, the rendering is too abstract — rewrite to match the pair structure.
+
+This is the pattern-specific form of the general §9 rule above, called out because paired proverbs are easier to collapse-by-accident than standalone 四字成語 — the second half reads as "redundant elaboration" to an English-trained eye, which tempts the reviewer to drop it in favour of a single abstract gloss. Don't.
+
 ### Hybrid: keep Chinese characters inline
 
 **Preferred format: `English gloss — 中文成語.`** (English first, em-dash, then the Chinese idiom.)

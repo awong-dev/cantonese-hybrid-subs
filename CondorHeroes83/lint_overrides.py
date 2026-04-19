@@ -269,10 +269,23 @@ def main():
             print("Action for each entry:")
             print("  (a) Genuine idiom/term-of-art → promote to STYLE.md §8/§10 and ")
             print("      verify the hybrid rendering fits the CJK+gloss convention if applicable.")
+            print("      BEFORE choosing (a), confirm the phrase meets STYLE §10 admission-gate")
+            print("      criteria 1–4: fixed 四字成語 in standard idiom dictionaries; specific")
+            print("      classical-text source (論語, 左傳, 史記, etc.); named 俗語 with cultural")
+            print("      weight English can't carry; poetic/elegiac couplet from identifiable")
+            print("      literary tradition. Historical provenance alone does NOT qualify —")
+            print("      the Ep1 莫須有 slip was a phrase with historical pedigree (秦檜's")
+            print("      trumped-up charge against 岳飛) that nonetheless failed the admission")
+            print("      gate because its standard English rendering is a plain adjective")
+            print("      (\"trumped-up\"), not a culturally-weighted literary allusion.")
             print("  (b) Common noun kept in CJK by mistake → drop from overlay, edit the")
             print("      affected hybrid subs to use the English rendering instead.")
             print("  (c) Character voice / flavour phrase (like 臭要飯的) → judgment call;")
             print("      promote to STYLE.md §5/§8 if recurring enough to warrant catalogue entry.")
+            print()
+            print("  Default stance: when the rendering test suggests (b), choose (b).")
+            print("  The temptation to keep CJK-for-fidelity is real but over-using CJK trains")
+            print("  readers to skim past the Chinese (STYLE.md §7 rule of thumb).")
 
     if check1_had_issues or check2_had_issues:
         return 1

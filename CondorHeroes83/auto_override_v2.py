@@ -318,6 +318,125 @@ def _chi_has_ocr_artifact(chi_text):
         return True
     return False
 
+# Reflow-risk detector (v16 — Ep1 sub 18 lesson).
+#
+# Context: chi-spine alignment in pipeline.py reflows eng content onto chi
+# entries by timestamp overlap. When chi itself is very thin for a given
+# window (empty / bare one-character command / one- or two-char interjection)
+# AND there's substantive eng content that got attached to THIS sub from
+# a neighbouring window, the reviewer can mistake the eng for fabrication
+# (because it doesn't match the thin chi) and DELETE content that is actually
+# real dialogue from the adjacent beat.
+#
+# Ep1 case study: sub 18 had chi `上` (one-character Jin-officer attack command)
+# but the eng "What do you want?" — the victim's challenge from the sub-17 beat
+# — was reflowed into sub 18's window because sub 17 had no chi overlap at all.
+# Reading eng against chi alone ("上" vs "What do you want?") looks like
+# fabrication. Three-track reading catches it (yue carries both actions in
+# sequence), but the two-track failure mode is exactly what this flag surfaces.
+#
+# Fires when ALL THREE conditions are true:
+#   (a) chi for THIS sub is thin (empty, ≤3 CJK chars)
+#   (b) eng for THIS sub is substantive (>4 non-trivial words)
+#   (c) an adjacent sub (±1 by index) has empty eng OR empty chi
+# Condition (c) is the signature of a reflow boundary — content got pulled
+# across an eng/chi alignment mismatch.
+
+def _is_reflow_risk(a_this, a_prev, a_next):
+    """True if this sub shows the reflow-casualty signature. a_prev/a_next
+    may be None at episode boundaries."""
+    chi = a_this.get('chi', '') or ''
+    eng = a_this.get('eng', '') or ''
+    # (a) thin chi
+    chi_cjk = sum(1 for c in chi if '\u4e00' <= c <= '\u9fff')
+    if chi.strip() and chi_cjk > 3:
+        return False
+    # (b) substantive eng
+    if not eng.strip():
+        return False
+    # Strip punctuation and count words. Threshold: ≥3 non-trivial words
+    # in the general case, but chi with ≤1 CJK char (e.g. the Ep1 sub 18
+    # single-character 上 attack command) is so thin that even a short eng
+    # like "What do you want?" is worth flagging.
+    words = [w for w in re.findall(r'\w+', eng) if len(w) > 1]
+    min_words = 2 if chi_cjk <= 1 else 3
+    if len(words) < min_words:
+        return False
+    # (c) adjacent sub has empty eng or empty chi
+    def is_empty_side(a, side):
+        if a is None:
+            return False
+        v = a.get(side, '') or ''
+        return not v.strip()
+    if (is_empty_side(a_prev, 'eng') or is_empty_side(a_prev, 'chi')
+            or is_empty_side(a_next, 'eng') or is_empty_side(a_next, 'chi')):
+        return True
+    return False
+
+# Yue-solo detector (v16 Ep1 follow-up).
+#
+# Companion to _is_reflow_risk but narrower. Fires when BOTH chi and eng
+# are thin but yue carries substantive content at HIGH confidence — the
+# signature of yue asserting a line that the chi editor elided and the eng
+# translator didn't carry.
+#
+# This is genuinely real dialogue some of the time (reflow stranded it, or
+# the other two tracks skipped a beat) and Whisper hallucination other times
+# (ASR invented plausible-sounding speech during music/silence/noise). The
+# flag just raises the sub for reviewer judgment — it does NOT say "use
+# this yue". Reviewer applies Rule C (intelligibility gate) and scene-context
+# plausibility, as always.
+#
+# Restricted to HIGH confidence only: MEDIUM/LOW yue already can't win
+# semantic arbitration under Rule B, so flagging them would be noise.
+#
+# Also suppressed when the sub ALREADY fires the `r` reflow-risk flag:
+# _is_reflow_risk's trigger (thin chi + substantive eng + adjacent empty side)
+# covers the same territory from the eng angle; no point firing both.
+#
+# Yue-dedup handling: if yue for this sub is a "[see N]" reference (i.e. the
+# Whisper segment is shared with a neighbouring sub and was stored once with
+# pointers), the yue content for THIS sub alone may be small. We approximate
+# by requiring yue to have ≥8 CJK chars — enough that even after spillover
+# from a multi-sub segment, the content is substantive.
+
+def _is_yue_solo(a_this, is_yue_owner):
+    """True if yue asserts substantive content while chi and eng are both
+    thin, at HIGH confidence, AND this sub is the yue-owner (not a spillover
+    partner sharing a multi-sub Whisper segment with a neighbour).
+
+    is_yue_owner: True if this sub is the primary owner of its yue segment
+    (stored yue is scoped to this sub, not shared with another). False means
+    the stored yue is multi-sub spillover and shouldn't be used as the
+    substantiveness signal.
+
+    Also caps yue CJK length at 20 chars to exclude the case where Whisper
+    emitted a multi-beat segment and the exact text happened not to be
+    shared with any neighbour (so yue_owner=='own' but the content is still
+    not scoped to this sub's time window). A 5–20 CJK char band hits the
+    sweet spot: long enough to be substantive, short enough to be a single
+    line."""
+    if not is_yue_owner:
+        return False
+    conf = a_this.get('yue_confidence', 'N/A')
+    if conf != 'HIGH':
+        return False
+    chi = a_this.get('chi', '') or ''
+    eng = a_this.get('eng', '') or ''
+    yue = a_this.get('yue', '') or ''
+    if yue.startswith('[DISCARDED'):
+        return False
+    chi_cjk = sum(1 for c in chi if '\u4e00' <= c <= '\u9fff')
+    yue_cjk = sum(1 for c in yue if '\u4e00' <= c <= '\u9fff')
+    eng_words = [w for w in re.findall(r'\w+', eng) if len(w) > 1]
+    if chi_cjk > 3:
+        return False
+    if len(eng_words) >= 4:
+        return False
+    if not (5 <= yue_cjk <= 20):
+        return False
+    return True
+
 def _length_ratio_ok(eng_text, chi_text):
     """True if eng and chi are within 1.5× in character length."""
     if not eng_text or not chi_text:
@@ -437,7 +556,6 @@ for a in aligned:
     if _chi_has_ocr_artifact(a['chi']):
         flags.append('o')
     ann['flags'] = ''.join(flags)
-
     if conf == 'HIGH':
         ann['note'] = 'YUE-AUTH: yue is authoritative. Compare yue vs chi — prefer yue where they differ.'
         ann['yue'] = yue_clean
@@ -450,6 +568,58 @@ for a in aligned:
     if a.get('yue_avg_logprob') is not None:
         ann['avg_logprob'] = a['yue_avg_logprob']
     confidence_annotations[idx] = ann
+
+# Compute yue_owner mapping BEFORE the reflow-risk pass, because _is_yue_solo
+# uses it. Originally this lived inside the dump-emission block; hoisted so
+# the flag computation can reference it. yue_owner[idx] = 'own' for primary
+# subs, or an int pointing to the owning sub for spillover partners.
+yue_owner = {}
+by_yue = {}
+for a in aligned:
+    idx = a['index']
+    yue_raw = a.get('yue', '')
+    yue_clean_for_owner = re.sub(r'^\[DISCARDED[^\]]*\]\s*', '', yue_raw).strip()
+    if not yue_clean_for_owner:
+        continue
+    by_yue.setdefault(yue_clean_for_owner, []).append(idx)
+aligned_by_idx_for_owner = {a['index']: a for a in aligned}
+for yue_text, idxs in by_yue.items():
+    if len(idxs) == 1:
+        yue_owner[idxs[0]] = 'own'
+        continue
+    best_idx, best_overlap = None, -1
+    for i in idxs:
+        a = aligned_by_idx_for_owner[i]
+        ys, ye = a['start_ms'], a.get('yue_end_ms', a['end_ms'])
+        cs, ce = a['start_ms'], a['end_ms']
+        overlap = max(0, min(ye, ce) - max(ys, cs))
+        if overlap > best_overlap:
+            best_overlap, best_idx = overlap, i
+    for i in idxs:
+        yue_owner[i] = 'own' if i == best_idx else best_idx
+
+# Post-loop reflow-risk pass (v16). Needs adjacency, so done after the main
+# loop populated confidence_annotations for all subs. Flags appended to
+# the existing flags string:
+#   r — chi-reflow signature (thin chi + substantive eng + adjacent empty side)
+#   y — yue-solo signature (both chi and eng thin, yue substantive at HIGH
+#       confidence, this sub is the yue-owner not a spillover partner).
+#       Could be real content lost from chi+eng OR Whisper hallucination;
+#       reviewer applies intelligibility gate + scene plausibility.
+# r and y are mutually exclusive — r takes priority when both would fire
+# (the reflow-from-adjacent signature is the more specific finding).
+for i, a in enumerate(aligned):
+    a_prev = aligned[i - 1] if i > 0 else None
+    a_next = aligned[i + 1] if i + 1 < len(aligned) else None
+    idx = a['index']
+    existing = confidence_annotations.get(idx, {}).get('flags', '')
+    is_yue_owner = yue_owner.get(idx) == 'own'
+    if _is_reflow_risk(a, a_prev, a_next):
+        if 'r' not in existing:
+            confidence_annotations[idx]['flags'] = existing + 'r'
+    elif _is_yue_solo(a, is_yue_owner):
+        if 'y' not in existing:
+            confidence_annotations[idx]['flags'] = existing + 'y'
 
 with open(f'{WORK}/ep{EP}_h_all.json', 'w', encoding='utf-8') as f:
     json.dump({str(k): v for k, v in overrides.items()}, f, ensure_ascii=False, indent=1)
@@ -483,45 +653,25 @@ with open(f'{WORK}/ep{EP}_confidence.json', 'w', encoding='utf-8') as f:
 #   o  chi has OCR-artifact noise
 #   L  eng vs chi length ratio > 1.5×
 
-# --- (a) Yue-dedup pass: for each non-empty yue string, find the sub with
-#         the strongest timing overlap, and map every other sub with that same
-#         yue string to `[see N]`.
-yue_owner = {}  # sub_idx -> 'own' | int (the owning sub index)
-# Group sub indices by the exact yue_clean text they carry.
-by_yue = {}
-for a in aligned:
-    idx = a['index']
-    yue_raw = a.get('yue', '')
-    yue_clean = re.sub(r'^\[DISCARDED[^\]]*\]\s*', '', yue_raw).strip()
-    if not yue_clean:
-        continue
-    by_yue.setdefault(yue_clean, []).append(idx)
-
-# For each group of ≥2 subs sharing the same yue text, pick the owner: the sub
-# whose chi-window [start_ms, end_ms] has the largest overlap with the yue
-# time window [start_ms, yue_end_ms]. Tie-break by earliest sub.
-aligned_by_idx = {a['index']: a for a in aligned}
-for yue_text, idxs in by_yue.items():
-    if len(idxs) == 1:
-        yue_owner[idxs[0]] = 'own'
-        continue
-    best_idx, best_overlap = None, -1
-    for i in idxs:
-        a = aligned_by_idx[i]
-        ys, ye = a['start_ms'], a.get('yue_end_ms', a['end_ms'])
-        cs, ce = a['start_ms'], a['end_ms']
-        overlap = max(0, min(ye, ce) - max(ys, cs))
-        if overlap > best_overlap:
-            best_overlap, best_idx = overlap, i
-    for i in idxs:
-        yue_owner[i] = 'own' if i == best_idx else best_idx
+# --- (a) Yue-dedup pass: now hoisted to BEFORE the reflow-risk flag pass
+#         above (search for "Compute yue_owner mapping BEFORE"), because
+#         _is_yue_solo needs the owner map to filter out spillover-partner
+#         subs. yue_owner[idx] = 'own' | int is already populated; we just
+#         use it below in the dump emission.
 
 # --- (b) Emit the dump ---
 dump_path = f'{WORK}/ep{EP}_dump.txt'
 with open(dump_path, 'w', encoding='utf-8') as f:
-    f.write(f"=== DUMP Ep{EP} ({len(aligned)} subs, v14 format) ===\n")
+    f.write(f"=== DUMP Ep{EP} ({len(aligned)} subs, v16 format) ===\n")
     f.write("Header: <idx>|<conf>|<flags>[ T-ADJ]   (flags: • AUTO-KEEP, ! fabrication-risk,\n")
-    f.write("                                        i idiom, @ missing address, o OCR noise)\n")
+    f.write("                                        i idiom, @ missing address, o OCR noise,\n")
+    f.write("                                        r reflow risk — thin chi, substantive eng,\n")
+    f.write("                                        adjacent sub has empty side; DO NOT call\n")
+    f.write("                                        eng fabrication before checking neighbours,\n")
+    f.write("                                        y yue-solo — chi+eng both thin, yue HIGH\n")
+    f.write("                                        and substantive; could be real content\n")
+    f.write("                                        lost from chi+eng OR ASR hallucination,\n")
+    f.write("                                        apply Rule C intelligibility gate)\n")
     f.write("E/C/Y lines: eng / chi / yue; newlines shown as ' // '.\n")
     f.write("Y [see N]  means this sub shares yue with sub N — read yue there.\n")
     f.write("—— gap Ns ——  marks a scene boundary (>5s silence between subs).\n")

@@ -195,13 +195,15 @@ C <chi>
 Y <yue>                      (omitted if empty; may be "[see N]" for dedup)
 ```
 
-The `<flags>` column is a 5-character padded string carrying per-sub priority signals computed by `auto_override_v2.py`:
+The `<flags>` column carries per-sub priority signals computed by `auto_override_v2.py`:
 
 - `•` — AUTO-KEEP (passed all seven faithful_heuristic gates; likely quick-confirm)
 - `!` — eng has fabrication-risk markers (long parenthetical, `", which"` clause)
 - `i` — chi contains an idiom from the injection set
 - `@` — chi has an address term (師父, 前輩, 老伯…) missing from the Step 3 output
 - `o` — chi contains an OCR artifact (garbled quote marks, stray Latin letters amid CJK)
+- `r` — **reflow risk** (v16). Chi is thin (empty, ≤3 CJK chars) AND eng is substantive AND an adjacent sub has empty eng or chi. This is the signature of chi-spine alignment pulling eng content from a neighbouring beat into this sub's window. **When examining an `r`-flagged sub, do not call the eng fabrication without reading the adjacent subs first** — eng is probably legitimate dialogue that got reflowed here because its native window had no chi. See Step 4 checklist item 4 and the Ep1 sub 18 case.
+- `y` — **yue-solo** (v16). Chi AND eng are both thin but yue is substantive at HIGH confidence. Either real dialogue lost from chi+eng (reflow stranded it, or the other two tracks skipped a beat) or Whisper ASR hallucination (invented plausible-sounding speech during music/silence/noise). Apply Rule C intelligibility gate + scene-context plausibility. **If yue parses as real dialogue AND fits the scene, consider adding to hybrid; if yue is plausible-sounding but doesn't fit, treat as hallucination and ignore.** When in doubt, keep chi/eng as-is — don't invent dialogue just because yue emitted something. Mutually exclusive with `r` (which takes priority when the signatures overlap).
 
 A blank flags column means "no priority signal" — scan quickly unless something else jumps out. Flags are priority signals, not gates: every sub must still be read, but time concentrates on non-blank flags.
 
@@ -264,7 +266,19 @@ For every sub, walk this checklist:
 1. Read the chi text as semantic authority.
 2. Read yue for register, tone, and (if HIGH confidence) as a potential override of chi wording.
 3. Compare against the Step 3 output.
-4. If eng says something neither chi nor yue supports → **DELETE** the fabrication. (But if yue confirms what eng says and chi diverges, treat it as an OCR error in chi — see Ep28 Sub 22 in `REFERENCE.md` §8.)
+4. If eng says something neither chi nor yue supports → **DELETE** the fabrication. **But check reflow first.** Before calling eng fabrication, look at the chi for this sub:
+   - If chi is empty, one single CJK character, or ≤3 CJK chars AND the adjacent sub (±1 by index) also has empty eng or empty chi, the eng content is likely reflow casualty, not invention — it got pulled into this sub's window from a neighbouring beat where eng had content but chi didn't. **Preserve the eng**; merge it with whatever chi carries in this sub using the em-dash dialogue-split format (STYLE §13). The `r` reflow-risk flag in the dump fires on exactly this signature.
+   - If chi is substantive and eng still disagrees, check yue. If yue confirms what eng says and chi diverges, treat it as an OCR error in chi — see Ep28 Sub 22 in `REFERENCE.md` §8.
+   - Only call fabrication when eng lacks support from BOTH chi and yue AND the reflow check clears.
+   - Ep1 sub 18 is the canonical reflow-casualty case: chi `上` (one-character attack command), eng "What do you want?" (victim's retort from the previous beat that had no chi), yue carried both in sequence. Three-track reading plus the reflow check catches what two-track reading misses.
+
+4b. **Yue-solo subs (`y` flag).** When chi AND eng are both thin but yue at HIGH confidence carries substantive scoped content (5–20 CJK chars, owned by this sub — not a multi-sub Whisper segment), yue may be either:
+   - **Real dialogue** the chi editor elided and the eng translator didn't carry (Ep1 sub 113: chi empty + eng "Are you alright?" + yue `道長,你看見沒有` — real question to 丘處機 that neither other track captured; Ep1 sub 171: chi empty + eng "- Of course!" + yue `如果是一男一女呢` — the gender question from the naming discussion; Ep1 sub 368: chi empty + eng "Stop" + yue `你說那麼多` — officer's cut-off "you're talking too much" which is richer than the stock "Stop")
+   - **Whisper ASR hallucination** — invented plausible-sounding speech during music, silence, or crowd noise (Ep1 sub 1: yue transcribed the theme-song lyrics as if they were dialogue)
+
+   Decision procedure: (a) Apply Rule C intelligibility gate — is the yue coherent, parseable-as-real-speech? (b) Is the yue plausible given the scene you can see from adjacent subs? If both yes → yue is probably real content; consider adding to hybrid (with em-dash dialogue-split if chi/eng also carry something). If yue reads as coherent but doesn't fit the scene (theme-song lyrics, crowd noise transcribed as speech) → treat as hallucination and keep chi/eng as-is. **When in doubt, do not invent dialogue from yue alone.** The `y` flag is a priority signal for examination, not a verdict.
+
+   Note: the `y` flag is HIGH-confidence-only by design. MEDIUM-yue subs where yue carries more content than chi+eng (Ep1 sub 298's 黃藥師 dying plea `大嫂…小天…我不會死的…` vs chi `嘯天` + eng "Xiaotian!") won't fire `y` but are caught by normal Rule A register-examination when the reviewer reads yue for tone.
 5. If chi has nuance eng lacks → **REWRITE** to capture it.
 6. If yue is HIGH and diverges from chi, first check yue is intelligible (coherent syntax, parseable as real speech). If garbled → fall back to chi, stop. Then ask: **are yue's word and chi's word synonyms, or different words entirely?**
    - **Synonyms, yue more vivid/colloquial/register-appropriate** → Rule A: **REWRITE** to match yue.
@@ -389,7 +403,7 @@ After the three SRTs are presented, update `SESSION-NOTES.md` and present the up
 
 What to update, in order:
 
-1. **Move the episode's status entry.** If the episode completed FULL under the current bundle version, move its row out of the "Pending — Needs FULL Processing" table and into the "Completed under v{VERSION} (FULL)" table. Replace any prior-session content preview with a row body in the format specified below. If the outcome was PARTIAL or MECHANICAL-ONLY, leave the row in Pending and annotate the outcome honestly — don't promote a degraded delivery.
+1. **Move the episode's status entry.** If the episode completed FULL under the current bundle version, move its row out of the "Pending — Needs FULL Processing" table and into the "Completed (FULL)" table. **Insert the row at the position sorted by episode number ascending** — Ep4 goes between Ep3 and Ep5, not at the top or bottom of the table. See the sort-rule note above the Completed table in `SESSION-NOTES.md` for the rationale; the Bundle column is not the ordering key. The row schema is `| Episode | Bundle | Subs | Notes |` — Episode is the first column and the stable sort key. Replace any prior-session content preview with a row body in the format specified below. If the outcome was PARTIAL or MECHANICAL-ONLY, leave the row in Pending and annotate the outcome honestly — don't promote a degraded delivery.
 
    **Completed-table row body format.** The body must contain, in this order, and nothing else:
 
@@ -521,11 +535,11 @@ WHY: 那個老賊 / 嗰個老賊 (that old scoundrel) — entire characterisatio
 
 There is no batch-processing shortcut. The examination loop in Step 4 is not optional and cannot be compressed. Step 3's preprocessing handles mechanical substitutions, but Error Taxonomy Categories 1 (FABRICATION) and 2 (CHI_MEANING_LOST) **always require reading against both chi and yue** — no mechanical pass can catch invented content or flattened nuance.
 
-When context budget is tight relative to the expected delta, state the projected quality in the Step 0 report so the user can judge:
+State the context usage and number of in the Step 0 report so the user can be aware:
 
-> "My context estimate is ~ZZ%, and Episode N has XXX subs. Projected quality at current context: borderline (may end PARTIAL)."
+> "My context estimate is ~ZZ%, and Episode N has XXX subs."
 
-The user decides whether to proceed. A 70% baseline often still has room for one small episode; judge from the conservative sub-count estimates in Step 0.
+A 45 mimute episode with ~450 subs often uses 50% of context to process.
 
 See the [Quality Control](#quality-control--mandatory) section for the full diagnostic framework.
 
@@ -575,14 +589,15 @@ Upload ALL of these to start a new session:
    - Place/create all 7 scripts and `extras_baseline.json`
    - Run `pipeline.py` → `ep{N}_aligned.json` (structural alignment only; dump comes from Step 3)
    - Run `shared_extras.py` → `ep{N}_extra.json` (baseline only, initially)
-   - Run `auto_override_v2.py` → `ep{N}_h_all.json` + `ep{N}_confidence.json` + `ep{N}_dump.txt` (with per-sub flags); `view` the dump file in ranges
-   - Examine every sub; concentrate effort on subs whose flags column is non-blank
+   - Run `auto_override_v2.py` → `ep{N}_h_all.json` + `ep{N}_confidence.json` + `ep{N}_dump.txt` (with per-sub flags)
+   - `view` the dump file in ranges; examine every sub; concentrate effort on subs whose flags column is non-blank
    - Collect corrections into `ep{N}_overrides.tsv`; run `apply_overrides.py <N>`
    - Write `ep{N}_extras_add.json` if new CJK terms introduced; re-run `shared_extras.py <N>` to merge
    - Run `lint_overrides.py <N>` — fix any concat-trap warnings by updating the overlay
    - Build, CJK-fix, validate (zero CJK in romanised, zero banned terms)
    - Present output files
-   - **Update and present `SESSION-NOTES.md`** — move episode's row into Completed table, add new Watch List items, promote stable items out (see Step 8.5)
+   - **Update and present `SESSION-NOTES.md`** — move episode's row into Completed table (keep rows sorted by episode number ascending — see SESSION-NOTES.md sort rule), add new Watch List items, promote stable items out (see Step 8.5)
    - **Report Step 9 ending context** (informational)
-4. **ONE EPISODE PER REQUEST for FULL quality.** If context is tight, state the projected quality in Step 0 and let the user decide.
+4. **ONE EPISODE PER REQUEST for FULL quality.** If there are multiple episodes uploaded, only process one then.
 5. **Follow Narration Discipline.** Run tools silently between the Step 0 and Step 9 reports; surface only actual issues (one line each) and the final `present_files`. Do not produce mid-turn progress recaps, interpretive commentary on tool output, or end-of-episode "candidates to promote" / "watch list" summaries — edits to `SESSION-NOTES.md` are where such findings go.
+6. **Expect each episode to require 3+ turns.** A FULL pass to completion often takes 3+ turns.
