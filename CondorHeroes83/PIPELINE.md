@@ -407,6 +407,8 @@ What to update, in order:
 
    **Completed-table row body format.** The body must contain, in this order, and nothing else:
 
+   **Size budget — target ≤500 chars, hard cap ≤800 chars.** A row is a pointer into consolidated docs, not a summary of them. The `SESSION-NOTES.md` header restates this budget with the cut-order when over cap; if you find yourself writing 1,000+ chars, stop and trim. The first things to cut are per-sub citations (sub 344, subs 48–53), who-said-what parentheticals, full verse transcriptions (a pointer to `STYLE.md` §10 suffices), and "Outcome: FULL — every sub examined..." paragraphs (FULL is the default for rows in this table; the phrase carries no information). Ep28–Ep32 rows in the current file are the reference terse style at ~250–400 chars; Ep1 restructured to ~700 is the ceiling for a pilot-density row.
+
    a. **Arc label** — one sentence naming the location or plot driver AND the key characters. Example: "臨安 / 元宵 arc with 岳文 and 武穆遺書 plot." Not "Opens with 郭靖/黃蓉 at an inn where 蓉兒's silver-note grift..." The label pins the episode for future precedent lookups; it is not a plot synopsis. No more than ~15 words.
 
    b. **"First FULL firing for:"** — flat comma-separated list of terms, idioms, classical references, and names that this episode is the first FULL-processed instance of. This is the load-bearing content that future sessions consult for cross-episode precedent.
@@ -429,6 +431,7 @@ What to update, in order:
 
 What NOT to do:
 
+- **Don't exceed the 800-char hard cap on row bodies.** If a row is over, trim per-sub citations and explanatory parentheticals before presenting. The O(N²) growth problem with this file is solved by keeping rows terse — not by hoping the reader skims the wall of text.
 - Don't restate the SESSION-NOTES edits in chat. The user can read the file. Narration of what you changed costs context and duplicates what's in the file. One sentence — "Updated SESSION-NOTES with Ep{N} status and {N} new Watch List items" — is enough, and often even that is optional if the file speaks for itself.
 - Don't add content-free edits (minor phrasing tweaks, reformatting, editorial prettification). SESSION-NOTES is append-mostly with targeted promotions; it's not a doc to polish.
 - Don't promote something after only one episode's evidence. The two-episode threshold exists because single-episode patterns are often episode-specific and don't generalise.
@@ -596,7 +599,7 @@ Upload ALL of these to start a new session:
    - Run `lint_overrides.py <N>` — fix any concat-trap warnings by updating the overlay
    - Build, CJK-fix, validate (zero CJK in romanised, zero banned terms)
    - Present output files
-   - **Update and present `SESSION-NOTES.md`** — move episode's row into Completed table (keep rows sorted by episode number ascending — see SESSION-NOTES.md sort rule), add new Watch List items, promote stable items out (see Step 8.5)
+   - **Update and present `SESSION-NOTES.md`** — move episode's row into Completed table (keep rows sorted by episode number ascending — see SESSION-NOTES.md sort rule; row body ≤500 chars target, ≤800 hard cap), add new Watch List items, promote stable items out (see Step 8.5)
    - **Report Step 9 ending context** (informational)
 4. **ONE EPISODE PER REQUEST for FULL quality.** If there are multiple episodes uploaded, only process one then.
 5. **Follow Narration Discipline.** Run tools silently between the Step 0 and Step 9 reports; surface only actual issues (one line each) and the final `present_files`. Do not produce mid-turn progress recaps, interpretive commentary on tool output, or end-of-episode "candidates to promote" / "watch list" summaries — edits to `SESSION-NOTES.md` are where such findings go.
