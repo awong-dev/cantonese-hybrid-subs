@@ -168,9 +168,13 @@ shared_concat_fixes = {
     "張老Father": "Old Zoeng",                       # 張老爹; bare 爹→Father strands 張老
     "官字taels個口": "the official's mouth speaks both ways",  # 官字兩個口; 兩→taels
     # v16 family (Ep5+Ep6 two-ep confirmation for 大Master; the rest Ep6):
-    "五Master": "Fifth Master",                      # 五師父 (江南七怪)
-    "七Master": "Seventh Master",                    # 七師父 (江南七怪)
     "大Master": "First Master",                      # 大師父 (Ep5+Ep6; also STYLE §19)
+    "二Master": "Second Master",                     # 二師父 (江南七怪)
+    "三Master": "Third Master",                      # 三師父 (江南七怪)
+    "四Master": "Fourth Master",                     # 四師父 (江南七怪)
+    "五Master": "Fifth Master",                      # 五師父 (江南七怪)
+    "六Master": "Sixth Master",                      # 六師父 (江南七怪)
+    "七Master": "Seventh Master",                    # 七師父 (江南七怪)
     "紅Mother": "the Matchmaker",                    # 紅娘; 娘→Mother strands 紅
     "姑Mother": "Miss",                              # bare 姑娘; 娘→Mother strands 姑
     "柯Big Brother": "Brother O",                    # 柯大哥; 大哥→Big Brother strands 柯
