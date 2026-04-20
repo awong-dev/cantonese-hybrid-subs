@@ -78,7 +78,9 @@
     "時辰": "sichen",
     "氣聚丹田": "qi gathers at the dantian",
     "內力": "internal force",
-    "真經": "the Manual"
+    "真經": "the Manual",
+    "安答": "anda",
+    "武穆遺書": "the Book of Wu Mu"
   },
   "yl": {
     "歐陽": "Au-Yeung", "郭": "Gwok", "陸": "Luk",
@@ -158,6 +160,8 @@
     "時辰": "sichen",
     "氣聚丹田": "qi gathers at the dantian",
     "內力": "internal force",
-    "真經": "the Manual"
+    "真經": "the Manual",
+    "安答": "anda",
+    "武穆遺書": "the Book of Wu Mu"
   }
 }

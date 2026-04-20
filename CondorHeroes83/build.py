@@ -58,16 +58,25 @@ with open('/home/claude/PersonalNamesUpdated.csv', 'r', encoding='utf-8-sig') as
         names_yl[ch] = row['Yale'].strip()
 
 # Common idioms
+# v17: trimmed from 14 entries to 4 in the §10 catalogue-purge session.
+# Under the STYLE §10 plain-prose rule, idioms whose English rendering
+# stands alone as plain prose are rendered in English directly in the
+# hybrid — they never reach build.py as CJK, so dict entries for them
+# would be dead code. The 4 retained entries are:
+#   - Three paired proverbs that NEED the full-couplet form to handle
+#     punctuation cleanly. Each half is in extras_baseline.json, so a
+#     reviewer typing the full couplet would otherwise get the halves
+#     converted separately, leaving a stray 全形 comma in the middle.
+#     These entries catch the full couplet first and emit a clean
+#     half-comma-half rendering. The half-renderings here match
+#     extras_baseline.json to prevent drift.
+#   - One §10-catalogued idiom safety-catch: 人之將死其言也善 without
+#     comma (§10 canonical form uses a comma). Catches the no-comma
+#     variant if the reviewer writes it that way.
 idioms = {
-    '死罪可免，活罪難逃': 'the death penalty is waived, but punishment cannot be escaped',
+    '死罪可免，活罪難逃': 'spared from death, but punishment is unavoidable',
     '男歡女愛，天公地道': 'love between a man and a woman is perfectly natural',
     '幫人幫到底，送佛送到西': 'help a person to the end, escort the Buddha all the way west',
-    '逢凶化吉': 'turn danger into fortune', '濟世扶危': 'helping those in danger',
-    '傻頭傻腦': 'silly and dim-witted', '利字當頭': 'when gain comes first',
-    '何樂而不為': 'why not?', '山水有相逢': 'paths will cross again',
-    '推宮換血': 'a blood exchange', '名利': 'fame and gain',
-    '不見棺材不流淚': "won't cry till you see the coffin",
-    '以牙還牙': 'an eye for an eye', '投鼠忌器': "afraid to strike the rat for fear of breaking the vase",
     '人之將死其言也善': 'when a man is dying, his words are kind',
 }
 

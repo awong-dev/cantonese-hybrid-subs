@@ -212,7 +212,7 @@ Canonical renderings for recurring name/nickname forms. Personal names proper li
 | 父王 | 父王 | Royal Father | Royal Father |
 | 閻王爺 | 閻王爺 | King of Hell | King of Hell |
 | 梅師姊 | 梅師姊 | Senior Sister Mui | Senior Sister Mui |
-| 老賊 | 老賊 | the Old Man | the Old Man |
+| 老賊 | 老賊 | the Old Scoundrel | the Old Scoundrel |
 | 念慈 | 念慈 | Nim-ci | Nihm-chih |
 | 穆姑娘 | 穆姑娘 | Miss Muk | Miss Muk |
 | 穆姊姊 | 穆姊姊 | Sister Muk | Sister Muhk |
@@ -245,12 +245,15 @@ Canonical renderings for recurring name/nickname forms. Personal names proper li
 | 瑤迦 (程瑤迦) | 瑤迦 | Jiu-gaa | Yiu-ga |
 | 冠英 (陸冠英) | 冠英 | Gun-jing | Gun-ying |
 | 孫不二 | 孫不二 | Syun Bat-ji | Syun Bat-ji |
+| 顏烈 | 顏烈 | Ngaan Lit | Ngaahn Liht |
+| 小靖 | 小靖 | Siu-Zing | Siu-Jing |
 
 Notes on specific entries:
-- **老賊** — literally "Old Thief/Scoundrel", but 梅超風 uses it as an intimate term for her dead husband 陳玄風. Softened to "the Old Man" in romanised. See `REFERENCE.md` for context.
 - **駙馬爺** — 蓉兒 uses it sarcastically toward 郭靖.
 - **晚輩 / 後輩** — humble self-reference / peer reference when addressing a 前輩.
 - **女魔頭** — 梅超風's own self-description in Ep23.
+- **顏烈** — 完顏洪烈's cover alias in the Ep1 pilot / Ep2 醉仙樓 scene. Also present as the fuller address form 顏大爺 in Ep5's 蒙古-camp arc. Now in `PersonalNamesUpdated.csv`.
+- **小靖** — young-child diminutive for 郭靖, used by 李萍 in the Ep3 蒙古 widow scenes. Distinct from the vocative **阿靖** (CSV entry: Aa-Zing / Aa-Jing).
 
 ---
 
@@ -334,7 +337,7 @@ All 四字成語 found in chi must appear as CJK in hybrid. See §10 for the cat
 老伯 · 少爺 · 弟子 · 長老 · 幫主 · 公子 — keep CJK when spoken.
 
 ### Standalone idioms
-大開殺戒 · 亡國奴 · 劫數難逃 · 各安天命 · 好自為之
+劫數難逃 (only 四字成語 with cultural weight that passes §10's plain-prose test). All other standalone idioms go English in hybrid.
 
 ### What does NOT get CJK in hybrid
 
@@ -412,13 +415,15 @@ Canonical English renderings for high-frequency terms. **This table gives the ro
 
 ## 9. Idiom & Cultural Term Rules
 
-### NEVER replace Chinese imagery with Western idioms (default)
-- Preserve 四字成語 and 俗語 as Chinese concepts.
-- **不見棺材不流淚** → "won't cry till you see the coffin" — NOT "won't believe till it's too late".
-- **以牙還牙** → "an eye for an eye" — acceptable because the concept maps cleanly.
-- **狗咬呂洞賓** → "biting the hand that feeds you" — acceptable because the concept maps (see `REFERENCE.md`).
+### NEVER flatten imagery to an abstract moral (default)
 
-Rule of thumb: use a Western equivalent only when the *meaning* maps 1:1; keep Chinese when the *imagery* is the point.
+When rendering an idiom in English, preserve the specific image or concept rather than collapsing to a generic abstract moral.
+
+- **不見棺材不流淚** → "won't cry till you see the coffin" — NOT "won't believe till it's too late". The coffin image is the point; don't paraphrase it away even when the phrase is rendered fully in English.
+- **以牙還牙** → "an eye for an eye" — 1:1 map; render plainly in English.
+- **狗咬呂洞賓** → "biting the hand that feeds you" — concept maps cleanly; render plainly in English.
+
+Rule of thumb: use a Western equivalent only when the *meaning* maps 1:1; preserve the specific imagery when it's the point. Note that this applies to English rendering in both hybrid and romanised — most idioms should render cleanly in English without CJK per §10's plain-prose test. Only §10-catalogued phrases keep CJK in hybrid.
 
 ### Paired / couplet proverbs — render each half literally (v16 Ep1 rule)
 
@@ -446,14 +451,12 @@ The CJK+gloss format's job is to preserve cultural/literary content the English 
 | RIGHT | WRONG |
 |-------|-------|
 | Who told him to look down on us — 狗眼看人低! | He looked down on us. 狗眼看人低. |
-| Think it over carefully — 好自為之. | Think it over. 好自為之. |
-| Looks like a major battle — 大開殺戒. | Looks like there's going to be a huge slaughter. |
 | I fear my time has come — 劫數難逃. | I fear this is my fate — I won't escape it. |
 | He damn well deserves it | He deserves it — 抵死 |
 
 **Rules:**
 - **Never gloss an idiom twice** (once in Chinese AND as a separate English expansion). The English before the dash IS the gloss.
-- **Idiom on its own is fine** — if the sub is just an exclamation: "豈有此理!" is acceptable standalone.
+- **Idiom on its own is fine** — if the sub is just an exclamation and the idiom is §10-catalogued (e.g. "邪中有三分正!" or "泰山北斗!"), the CJK alone is acceptable. For non-catalogued idioms, render in English.
 - **Don't inject idioms into subs where they don't appear in chi.** Only include idioms that are actually in the source text for that sub.
 
 ### Romanised: faithful English translation only
@@ -468,16 +471,18 @@ The CJK+gloss format's job is to preserve cultural/literary content the English 
 
 ## 10. Idioms Encountered (Full Catalogue)
 
-Settled English renderings for idioms encountered across Eps 1–29 (especially the Ep22/23 FULL session). In hybrid, keep the Chinese; in romanised, use the rendering below.
+Settled renderings for idioms that earn CJK+gloss treatment in hybrid. In hybrid, keep the Chinese; in romanised, use the rendering below.
 
 ### What qualifies for this catalogue (admission gate)
 
 Not every four-character Chinese phrase is a catalogue-worthy idiom. **Before adding a new entry, check that the phrase meets at least one of these criteria:**
 
-1. **Fixed 四字成語** — a classical compound listed in standard idiom dictionaries, with a stable English rendering that preserves imagery the English can only approximate (e.g. **投鼠忌器**, **不見棺材不流淚**, **打草驚蛇**).
+1. **Fixed 四字成語** — a classical compound listed in standard idiom dictionaries, with a stable English rendering that preserves imagery the English can only approximate.
 2. **Classical allusion** — references a specific classical source (e.g. **秦晉之好** from 左傳, **泰山北斗** from 史記, **人之將死, 其言也善** from 論語).
-3. **Named proverb or 俗語** with cultural weight the English can't fully carry (e.g. **狗咬呂洞賓**, **好心遭雷劈**).
+3. **Named proverb or 俗語** with cultural weight the English can't fully carry.
 4. **Poetic / elegiac couplet** from an identifiable literary tradition (e.g. 曹操 短歌行 couplets, the Dragon-chant quartet).
+
+**The primary test — the plain-prose rule.** Strip the CJK from the hybrid entry and read only the English rendering. *If it stands alone as plain prose without losing imagery or cultural weight, it does not belong in this catalogue — a consistency ledger is not reason enough to keep it.* Render in English, no CJK in hybrid. This catalogue is only for phrases whose Chinese form carries something the English gloss can't fully convey on its own: a specific image ("biting the hand" vs "狗咬呂洞賓"'s named 呂洞賓), a classical source, a poetic structure, or a culturally-weighted register. Everything else goes English.
 
 **Descriptive common-noun phrases are NOT catalogue-worthy, even if they sound literary.** Test: strip the CJK and read the English rendering. If it works as a plain English noun phrase ("love snake" / "a first-rate expert" / "a top master" / "a strange creature"), it's a descriptor, not an idiom — render in English, no CJK in hybrid. Examples of what fails the admission gate:
 - **情蛇** ("love snake" — descriptive metaphor, not a named creature or fixed compound)
@@ -486,91 +491,22 @@ Not every four-character Chinese phrase is a catalogue-worthy idiom. **Before ad
 
 Phrases that **do** pass the gate (for reference): **塞外高人** passes as a set classical phrase meaning specifically "masters from beyond the frontier" (the 塞外 qualifier is geographic, not a general adjective); **一代宗師** passes as a fixed four-character compound with specific wuxia-world meaning ("master of a generation"). When in doubt, err toward English — the catalogue should stay tight.
 
-### Military / warfare register
-- **投鼠忌器** — "afraid to strike the rat for fear of breaking the vase"
-- **敵不動我不動** / **兵家大忌** — "a cardinal error in warfare"
-- **打草驚蛇** — "alerting the enemy / tipping them off"
-- **單槍匹馬** — "single-handedly"
-- **馬到成功** — "success at the first charge" (in hybrid, often as toast: *"To your success — 馬到成功."*)
+### Catalogue entries
 
-### Moral/wisdom register
-- **人之將死, 其言也善** — "When a man is dying, his words are kind" (hybrid: CJK + gloss on same line)
-- **無毒不丈夫** — "ruthlessness is the mark of a great man"
-- **不見棺材不流淚** — "won't cry till you see the coffin"
-- **一人做事一人當** — "a man answers for his own deeds"
-- **罪大惡極** — "utterly wicked"
-- **假仁假義** — "false righteousness / hypocrisy"
-- **沒齒難忘** — "never to be forgotten"
-- **清理門戶** — "set my own house in order"
-- **後會有期** — "we will meet again / until we meet again"
-- **人死不能復生** — "the dead cannot return"
-
-### Action / urgency
-- **事不宜遲** — "we must act at once"
-- **死到臨頭** — "in the face of death"
-- **夜長夢多** — "delay breeds danger"
-- **大功告成** — "the great work is accomplished"
-- **碎屍萬段** — "tear to pieces" (keep as CJK in hybrid)
-- **萬萬不能** — "absolutely not"
-
-### State of mind / manner
-- **婦人之仁** — "a woman's soft-heartedness"
-- **死性不改** — "never changes his ways"
-- **自身難保** — "I can barely save myself"
-- **三番五次** — "time and again"
-- **耿耿於懷** — "weighed on his heart"
-- **糊裡糊塗** — "muddle-headed"
-- **拖泥帶水** — "wishy-washy"
-- **傻頭傻腦** — "dim-witted / blockhead"
-- **蠻不講理** — "stubborn and unreasonable"
-- **平心靜氣** — "calm and composed"
-- **全神貫注** — "concentrate fully"
-- **諸多顧忌** — "so many scruples"
-- **不用拐彎抹角** — "come straight to the point"
-- **舉手之勞** — "it was nothing"
-- **知心朋友** — "true friend"
-
-### Praise / status
-- **寶刀未老** — "the precious blade hasn't aged"
-- **彼此彼此** — "same to same" (peer banter between 五絕)
-- **爐火純青** — "polished to perfection"
-- **中看不中用** — "all show and no substance" (7公's self-deprecating use re 降龍十八掌)
-- **英明神武** — "dashing heroism" (often mock-self-praise)
-- **艷福** — "luck with women" (7公's wry vocabulary)
-- **後生可畏** — "young people are getting capable"
-- **臭名遠揚** — "infamous / notoriously known"
-- **勢不兩立** — "at odds / cannot coexist"
-- **防不勝防** — "impossible to guard against"
-
-### Life / death / devotion
-- **精忠報國** — "utmost devotion to the country"
-- **延年益壽** — "prolongs one's life"
-- **抱頭痛哭** — "embrace and weep"
-- **亡國奴** — "slave of a fallen nation"
-- **劫數難逃** — "cannot escape one's fate"
-- **各安天命** — "each to their own fate"
-- **好自為之** — "make your own choices wisely"
-
-### Safety / prudence
-- **不怕一萬, 只怕萬一** — "better safe than sorry" (in hybrid couplet: *"不怕一萬, 只怕萬一 — better safe than sorry."*)
-
-### Special cases
-- **狗咬呂洞賓** — "biting the hand that feeds you" (Western equivalent acceptable; concept maps)
-- **狗眼看人低** — "look down on others"
-- **以牙還牙** — "an eye for an eye"
-- **大開殺戒** — "a major battle / huge slaughter"
-- **豈有此理** — "outrageous / how can this be!"
-- **邪中有三分正, 正中帶七分邪** — "The heretical are three parts righteous; the righteous are seven parts heretical!" (黃藥師's couplet about 蓉兒). **Keep Chinese in hybrid; English translation only in romanised. Do NOT double-print Chinese + English in romanised.**
-- **有失遠迎** — "forgive us for not welcoming you sooner" (standard courtesy)
-
-### Marriage alliance / classical references
-- **秦晉之好** — "the bond of 秦晉" (hybrid) / "the bond of Chun-Zeon" (jy) / "the bond of Chun-Jeun" (yl). Classical allusion to the marriage alliance between the states of 秦 and 晉. These are idiom-of-reference, not modern place names.
-- **泰山北斗** — "the authority of the martial world" (standard rendering). Classical allusion: the authoritative figures in a field. **Pairing note:** do not write "泰山北斗 of 武林" in hybrid — 武林 goes English ("the martial world") per §7, and because 泰山北斗's rendering already contains "martial world", combining them in the same phrase produces "of the martial world of the martial world" duplicate in romanised. Drop 武林, rewrite (e.g. "...of our age", "...of our time"), or use an alternative rendering ("the Mount Tai of the Northern Dipper"). Observed twice: Ep30, Ep33 sub 356.
-- **天作之合** — "a match made in Heaven". English idiom maps cleanly; no CJK+gloss needed.
+- **人之將死, 其言也善** — "When a man is dying, his words are kind" (hybrid: CJK + gloss on same line). 論語 classical allusion.
+- **婦人之仁** — "a woman's soft-heartedness". Classical compound; the rendering retains the distinctive gendered image.
+- **劫數難逃** — "cannot escape one's fate". Buddhist 劫數 imagery; cultural weight English can't fully carry.
+- **不怕一萬, 只怕萬一** — "better safe than sorry" (hybrid couplet: *"不怕一萬, 只怕萬一 — better safe than sorry."*). Classical couplet; the ten-thousand / one-in-ten-thousand parallelism is the point, not the gloss.
+- **狗眼看人低** — "look down on others". Named 俗語; the dog-eye image is the idiom.
+- **邪中有三分正, 正中帶七分邪** — "The heretical are three parts righteous; the righteous are seven parts heretical!" (黃藥師's couplet about 蓉兒). Poetic couplet with named speaker. **Keep Chinese in hybrid; English translation only in romanised. Do NOT double-print Chinese + English in romanised.**
+- **秦晉之好** — "the bond of 秦晉" (hybrid) / "the bond of Chun-Zeon" (jy) / "the bond of Chun-Jeun" (yl). Classical allusion (左傳) to the marriage alliance between the states of 秦 and 晉. These are idioms-of-reference, not modern place names.
+- **泰山北斗** — "the authority of the martial world" (standard rendering). Classical allusion (史記): the authoritative figures in a field. **Pairing note:** do not write "泰山北斗 of 武林" in hybrid — 武林 goes English ("the martial world") per §7, and because 泰山北斗's rendering already contains "martial world", combining them in the same phrase produces "of the martial world of the martial world" duplicate in romanised. Drop 武林, rewrite (e.g. "...of our age", "...of our time"), or use an alternative rendering ("the Mount Tai of the Northern Dipper"). Observed twice: Ep30, Ep33 sub 356.
 
 ### Classical laments / elegiac verse
 - **想逝者之不罪兮, 惜形中之載道** / **天蓋高而無階, 懷此恨其最苦** (Ep28) — 陸乘風's lament for 瑤迦. Format as CJK + em-dash + English gloss on the next line (Dragon-chant quartet pattern). Glosses: "my love runs deep, the dead beyond recall" / "Heaven is high but has no stair; this sorrow cuts deepest".
 - **天長地久, 人生幾何** / **譬如朝露, 去日苦短** (Ep33 subs 173–174) — 黃藥師's lament for the supposedly-dead 蓉兒. Adapted from 曹操 短歌行. Format as CJK + em-dash + English gloss on same line. Glosses: "Heaven and Earth endure; how brief a human life" / "like morning dew, the days gone are bitter and short".
+- **林升 題臨安邸** (Ep20 full + Ep1 compressed form — two-ep confirmed) — Southern Song lament over the occupied capital. Quatrain format: four lines, each a CJK line + em-dash + English gloss on same line. Canonical text: 山外青山樓外樓 / 西湖歌舞幾時休 / 暖風熏得遊人醉 / 直把杭州作汴州. Glosses: "beyond the green hills, more green hills; beyond the tower, yet another tower" / "when will the song and dance on 西湖 ever cease?" / "the warm breeze lulls the travellers drunk" / "they take 杭州 for 汴州". Ep1 uses a compressed two-line form invoking lines 2+4 as narration backdrop; render only the two lines that chi carries.
+- **滿江紅 quatrain** (Ep1 first firing, Ep15+ 武穆遺書-arc reappearance expected) — 岳飛's 靖康恥 quatrain. Format as CJK line + em-dash + English gloss on same line. Already a first-firing reference; established format under v15.
 
 ### 九陰真經 quotations (from 周伯通's slap-memorise teaching, Ep29+)
 - **天之道, 損有餘而補不足** — "Heaven's way: take from the surplus and replenish the lack". Adapted from 道德經 77. Hybrid: CJK + em-dash + English on next line; romanised: English only.
@@ -769,6 +705,21 @@ Added by `cjk_fix_v2.py` under v13 (do NOT re-register in episode overlays):
 - `週-daai-go` / `周-daai-go` → `daai-go`; `週-daaih-go` / `周-daaih-go` → `daaih-go` (v13 leading-週 strip, Ep31/Ep32)
 - Extended `OCR_NAME_COLLAPSE` table: 老頑童 variants (老誠童/老顏童/老其童/老示童/老顛童/老和童/老基童/老阿棟/老誠和童); 歐陽蜂/歐陽鋒 → 歐陽峰; 郭蜻 → 郭靖; 阿蜻 → 阿靖; 其兒/鞭兒 → 蓉兒; 量有此理 → 豈有此理; 王老邪/羅老邪 → 黃老邪; 若師兄 → 藥師兄; 瑤珈 → 瑤迦 (v13 chi-OCR batch damage, Ep28/Ep30/Ep31/Ep32).
 
+Added by `cjk_fix_v2.py` under v17 (do NOT re-register in episode overlays). **Important context:** Ep7's row in SESSION-NOTES flagged that the v15/v16 entries immediately below had been claimed as promoted but were never actually present in the shipped `cjk_fix_v2.py` — Eps 2 through 7 all needed manual post-build seds for these. v17 recovers them properly:
+- **v15 pilot-arc family** (Ep1): `六Your Highness` → `the Sixth Prince` (六王爺); `My Mother子` → `my wife` (娘子); `張老Father` → `Old Zoeng` / `Old Jeung` (張老爹); `官字taels個口` → `the official's mouth speaks both ways` (官字兩個口).
+- **v16 江南七怪 master-address family** (Ep5+Ep6 for 大Master; Ep6 for the rest): `五Master` → `Fifth Master`; `七Master` → `Seventh Master`; `大Master` → `First Master`; `紅Mother` → `the Matchmaker` (紅娘); `姑Mother` → `Miss` (bare 姑娘); `柯Big Brother` → `Brother O` (柯大哥); `Zit-BitMaster` → `Master Zit-Bit` / `Jit-BitMaster` → `Master Jit-Bit` (哲別師父).
+- **Ep20 / Ep23 / Ep25 confirmed-trap family**: `本姑Mother` → `this girl` (本姑娘, Ep20+Ep25 three firings); `岳Your Highness` → `Lord Ngok` (岳王爺, Ep20); `Wongsenior` → `senior Wong` (黃前輩, Ep23); `死Old Heretic` → `damned Old Heretic` (死老邪, Ep23 — matches the STYLE §5 rendering).
+- **Ep3 `<nickname>+<CSV-name>` concat-trap family**: `銅屍Can Jyun-fung` → `Bronze Corpse Can Jyun-fung`; `鐵屍Mui Ciu-fung` → `Iron Corpse Mui Ciu-fung`; `飛天蝙蝠O Zan-ngok` → `Flying Bat O Zan-ngok` (jy spellings; Yale counterparts in `yale_concat_fixes`). Structural note: names stage 4 fires the CSV name before extras stage 5, stranding the nickname. Likely recurs wherever 江南七怪 nicknames + CSV names co-occur.
+- **Ep33 Big-Brother-family**: `Zau Baak-tungBig Brother` → `Brother Zau Baak-tung` / `Jau Baak-tungBig Brother` → `Brother Jau Baak-tung` (周伯通大哥; 大哥 titles stage eats it).
+- **Extended `OCR_NAME_COLLAPSE`**: `啟桌` → `啟稟` (Ep1+Ep2+Ep4 three-ep); `希彰` / `希芯` / `希章` → `希望` (Ep1+Ep2+Ep33 three-ep); `梅朝風` / `梅竹風` → `梅超風` (Ep5+Ep6+Ep7 three-ep); `節別` → `哲別` (Ep6+Ep7 yue-ASR two-ep); `窩辣台` → `窩闊台`, `骨都虎` → `忽都虎` (Ep3); `和伯伽` / `伯伽` → `瑤迦` (Ep25); `網康` → `阿康` (Ep24); `活將軍` → `霍將軍`, `活叔叔` → `霍叔叔` (Ep7 chi-OCR of 霍).
+- **Dup-gloss collapser threshold lowered**: Jaccard 0.7 → 0.55 and phrase-length minimum 8 → 6 chars. Catches the Ep24/Ep33 short-idiom miss family (後會有期, 忘恩負義, 視日無多, 碎屍萬段 — four-ep pattern).
+
+Added to `extras_baseline.json` under v17 (do NOT re-register):
+- `安答` → `anda` (Ep3+Ep4 two-ep). Mongol sworn-brotherhood loanword; lowercase romanisation (loanword convention).
+- `武穆遺書` → `the Book of Wu Mu` (Ep20+Ep21 two-ep).
+
+`STYLE.md` §10 catalogue purge under v17 — tightened the admission gate with a **plain-prose rule**: *if the English rendering stands alone as plain prose without losing imagery or cultural weight, the entry does not belong in the catalogue*. A consistency ledger is not reason enough to keep an entry when the English form fully carries the meaning. Applied retrospectively, this purged ~55 entries; §10 now retains only 8 CJK+gloss-earning idioms plus the classical laments, 九陰真經 quotations, 內力/內功/內傷 family, meditation/qi, and Dragon chant quartet subsections. Kept: **人之將死, 其言也善** (論語 allusion); **婦人之仁** (gendered classical compound); **劫數難逃** (Buddhist 劫數 weight); **不怕一萬, 只怕萬一** (parallelism-dependent couplet); **狗眼看人低** (dog-eye image is the idiom); **邪中有三分正, 正中帶七分邪** (黃藥師's poetic couplet); **秦晉之好** (左傳 allusion); **泰山北斗** (史記 allusion). All other idioms — including ones previously catalogued like 投鼠忌器, 打草驚蛇, 不見棺材不流淚, 清理門戶, 精忠報國, 好自為之, 大開殺戒, 豈有此理, 一心一意, 雞犬不寧, etc. — now render in English in both hybrid and romanised. §9's anti-flattening rule still applies to English renderings ("won't cry till you see the coffin", not "won't believe till it's too late"). §7 Standalone-idioms line updated to reflect the single remaining entry.
+
 ### The `<titles-key>+<suffix>` cross-stage trap — structural rule (v13)
 
 **Rule:** registering a compound in `extras_baseline.json` or an episode overlay is insufficient when `build.py`'s titles stage contains a shorter-key match that is a substring of the compound. The titles stage (stage 3) fires before the extras stage (stage 5), so the shorter key converts first and strands the remaining prefix/suffix as CJK.
@@ -813,7 +764,7 @@ Also scan for `"the the "` (double article) and `"my the "` / `"your the "` — 
 ## 21. Anti-Patterns (What NOT to Do)
 
 1. **Don't pad short subs.** If chi is one short sentence, the English should be one short sentence. Not two.
-2. **Don't inject idioms into subs where they don't appear in chi.** If 精忠報國 appears in sub 131's chi, put it in sub 131 — don't also scatter it into subs 130, 133, 136.
+2. **Don't inject idioms into subs where they don't appear in chi.** If 劫數難逃 appears in sub 131's chi, put it in sub 131 — don't also scatter it into subs 130, 133, 136.
 3. **Don't translate 老伯 / 少爺 / 公子 / 長老 to English in hybrid.** These are address terms.
 4. **Don't write "the Song dynasty" when you can write 大宋.** Hybrid means use Chinese.
 5. **Don't use excessive exclamation marks.** See §13 quota.

@@ -160,6 +160,35 @@ shared_concat_fixes = {
     # v13 週-daai-go leading-週 strip (Ep31/Ep32):
     "週-daai-go": "daai-go",
     "周-daai-go": "daai-go",
+    # v17 — v15/v16 concat-traps flagged by Ep7 as added-to-SESSION-NOTES
+    # but never landed in the shipped script. Recovering them now.
+    # v15 family (Ep1 pilot narration + OCR-drift compounds):
+    "六Your Highness": "the Sixth Prince",          # 六王爺; titles→Your Highness eats 王爺
+    "My Mother子": "my wife",                        # 娘子; titles 娘→Mother strands 子
+    "張老Father": "Old Zoeng",                       # 張老爹; bare 爹→Father strands 張老
+    "官字taels個口": "the official's mouth speaks both ways",  # 官字兩個口; 兩→taels
+    # v16 family (Ep5+Ep6 two-ep confirmation for 大Master; the rest Ep6):
+    "五Master": "Fifth Master",                      # 五師父 (江南七怪)
+    "七Master": "Seventh Master",                    # 七師父 (江南七怪)
+    "大Master": "First Master",                      # 大師父 (Ep5+Ep6; also STYLE §19)
+    "紅Mother": "the Matchmaker",                    # 紅娘; 娘→Mother strands 紅
+    "姑Mother": "Miss",                              # bare 姑娘; 娘→Mother strands 姑
+    "柯Big Brother": "Brother O",                    # 柯大哥; 大哥→Big Brother strands 柯
+    "Zit-BitMaster": "Master Zit-Bit",               # 哲別師父 jy; 師父→Master eats 別
+    # Ep20+Ep25+Ep25 three-firing cross-stage trap:
+    "本姑Mother": "this girl",                       # 本姑娘; 娘→Mother strands 本姑
+    # Ep20 cross-stage trap (岳王爺 compound):
+    "岳Your Highness": "Lord Ngok",                  # 岳王爺; 王爺→Your Highness strands 岳
+    # Ep23 two cross-stage traps:
+    "Wongsenior": "senior Wong",                     # 黃前輩; 前輩→senior strands Wong
+    "死Old Heretic": "damned Old Heretic",           # 死老邪 per STYLE §5
+    # Ep3 <nickname>+<CSV-name> concat-trap family (names stage 4 fires
+    # CSV name before extras stage 5, stranding the nickname):
+    "銅屍Can Jyun-fung": "Bronze Corpse Can Jyun-fung",
+    "鐵屍Mui Ciu-fung": "Iron Corpse Mui Ciu-fung",
+    "飛天蝙蝠O Zan-ngok": "Flying Bat O Zan-ngok",
+    # Ep33 Big Brother-family compound (大哥 titles stage eats it):
+    "Zau Baak-tungBig Brother": "Brother Zau Baak-tung",
 }
 
 yale_fixes = {
@@ -187,6 +216,19 @@ yale_concat_fixes = {
     # v13 週-daaih-go leading-週 strip (Ep31/Ep32):
     "週-daaih-go": "daaih-go",
     "周-daaih-go": "daaih-go",
+    # v17 — Yale counterparts for v15/v16 entries above.
+    # Most entries in shared_concat_fixes are variant-neutral (they operate
+    # on English titles-stage output like "Your Highness", "Father", "Master")
+    # so they don't need Yale overrides. Listed here are the few where Yale
+    # spelling differs from Jyutping.
+    "張老Father": "Old Jeung",                       # jy Zoeng → yl Jeung
+    "Jit-BitMaster": "Master Jit-Bit",               # jy Zit-Bit → yl Jit-Bit
+    # Ep3 <nickname>+<CSV-name> Yale spellings:
+    "銅屍Chan Yun-fung": "Bronze Corpse Chan Yun-fung",
+    "鐵屍Mui Chiu-fung": "Iron Corpse Mui Chiu-fung",
+    "飛天蝙蝠O Jan-ngok": "Flying Bat O Jan-ngok",
+    # Ep33 Yale counterpart:
+    "Jau Baak-tungBig Brother": "Brother Jau Baak-tung",
 }
 
 # Name-variant OCR collapse — runs on ALL THREE variants before variant-specific
@@ -226,6 +268,19 @@ OCR_NAME_COLLAPSE = {
     "若師兄": "藥師兄",
     # v13 — 瑤珈 → 瑤迦 (Ep28 single-ep; canonical form per CSV):
     "瑤珈": "瑤迦",
+    # v17 — chi-OCR variants confirmed across 3+ episodes in early-arc batch
+    # (Ep1–Ep7 shared OCR pipeline; yue track witness corroborates):
+    "啟桌": "啟稟",                                  # Ep1+Ep2+Ep4 three-ep
+    "希彰": "希望", "希芯": "希望", "希章": "希望",  # Ep1+Ep2+Ep33 three-ep
+    "梅朝風": "梅超風", "梅竹風": "梅超風",          # Ep5+Ep6+Ep7 three-ep
+    "節別": "哲別",                                  # Ep6+Ep7 yue-ASR two-ep
+    "郭蜻": "郭靖",                                  # already in v13 batch but
+                                                      # reaffirmed Ep3/4/5/6/7
+    "窩辣台": "窩闊台", "骨都虎": "忽都虎",          # Ep3 novel; flagged two-ep
+    "和伯伽": "瑤迦", "伯伽": "瑤迦",                # Ep25 chi-drift
+    "網康": "阿康",                                  # Ep24 novel OCR
+    "活將軍": "霍將軍", "活叔叔": "霍叔叔",          # Ep7 chi-OCR (活→霍);
+                                                      # flagged for 2nd firing
 }
 for variant in ["hybrid", "jyutping", "yale"]:
     fp = f"/mnt/user-data/outputs/{ep}-eng-{variant}-v{VERSION}.srt"
@@ -254,10 +309,20 @@ for variant in ["jyutping", "yale"]:
     # Collapse "X — Y" duplicate-gloss patterns (StyleRulings Ep22/23 learning).
     # Happens when hybrid uses "ENGLISH — CJK-idiom" and the CJK-idiom
     # converts to the same (or very similar) English. Two triggers:
-    #   (a) Content words heavily overlap (>70% Jaccard).
+    #   (a) Content words heavily overlap (>55% Jaccard).
     #   (b) One side's content words are a subset of the other's AND the
     #       smaller side has ≥2 content words. Catches "a blood exchange"
     #       being a subset of "perform a blood exchange on him".
+    # v17 threshold lowering: Jaccard 0.7 → 0.55, minimum phrase length
+    # 8 → 6 chars. Four-ep miss pattern (Ep24+Ep33+Ep4+Ep6) for short
+    # idioms — 後會有期, 忘恩負義, 視日無多, 碎屍萬段 — whose renderings
+    # are only 3–5 content words, where even exact-synonym glosses were
+    # falling below the 0.7 threshold because small-set Jaccard is jumpy
+    # (e.g. {"meet","again"} vs {"meet","again","until"} = 2/3 = 0.67 passes,
+    # but {"tear","pieces"} vs {"tear","them","pieces"} = 2/3 = 0.67 still
+    # fine — the real misses were where one side picked up an extra
+    # stopword-adjacent noun). Subset check is the more reliable catch for
+    # these cases, but the lower Jaccard widens the safety net.
     STOPWORDS = {'a','an','the','of','to','on','in','for','with','and',
                  'is','was','be','it','i','you','we','he','she','him','her',
                  'his','our','my','your','this','that','these','those'}
@@ -271,12 +336,12 @@ for variant in ["jyutping", "yale"]:
             return m.group(0)
         jaccard = len(lc & rc) / len(lc | rc)
         subset = (lc.issubset(rc) or rc.issubset(lc)) and min(len(lc), len(rc)) >= 2
-        if jaccard > 0.7 or subset:
+        if jaccard > 0.55 or subset:
             # Keep the side with more content; drop the em-dash phrase entirely
             return left if len(left) >= len(right) else right
         return m.group(0)
     content = re.sub(
-        r'([^\n—]{8,}?)(\s+—\s+)([^\n—.!?]{8,}?)(?=[.!?\n])',
+        r'([^\n—]{6,}?)(\s+—\s+)([^\n—.!?]{6,}?)(?=[.!?\n])',
         collapse_dupe, content
     )
     with open(fp, "w", encoding="utf-8") as f:

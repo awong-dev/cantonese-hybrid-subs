@@ -35,9 +35,9 @@ This document is lookup material — consult when you hit a specific name, idiom
 
 ### 老賊 (梅超風 referring to her dead husband 陳玄風)
 - Literally "Old Thief/Scoundrel" — but used as an **intimate term for the deceased**.
-- Romanised: **"the Old Man"** (softened, since it's grief-tinged).
+- Romanised: **"the Old Scoundrel "** (Scoundrel is more appropriate. There is no larcency).
 - Context example: 梅超風 says *"Ever since 老賊 died, I've been alone."*
-- Reconfirmed Ep22 sub 151 and Ep23 sub 98.
+- **Origin: Ep3 subs 408, 418** — the 桃花洞 death scene, where 陳玄風 is killed by 柯鎮惡 in the 銅屍/鐵屍 duel. 梅超風's vow **生則同窮, 死則同穴** ("in life we shared poverty, in death we share a grave") roots the pet-name in the shared grave they swore. Ep22 sub 151 and Ep23 sub 98 are later grief invocations, not the first firing.
 
 ### 黃老邪 / 黃小邪 / 老邪 / 死老邪
 - **黃老邪** = Old Heretic Wong (黃藥師's nickname).
@@ -350,6 +350,35 @@ This is the single biggest problem. A new session defaults to keeping the origin
 - WRONG: "that old scoundrel Cheng wouldn't come and beg me for it"
 - CHI: 程老頭也不會對我那麼低聲下氣了
 - RIGHT: "that old scoundrel 程 wouldn't have grovelled so" (**低聲下氣** = grovelling / humbling oneself)
+
+---
+
+### CATEGORY 2b — YUE_AUTHORITY_REGISTER (Rule A override)
+
+Yue at HIGH confidence carries a more vivid, colloquial, or register-appropriate synonym of what chi flattened. Rule A (see `STYLE.md` §2): when yue and chi mean the same thing but yue is spicier, more emotionally precise, or matches the Cantonese speaker's actual register, yue overrides chi. Passes the intelligibility gate first — if yue is garbled, fall back to chi regardless of tier.
+
+**Example — yue vivid, chi flat:**
+- ENG: "He's got cunning schemes"
+- CHI: 佢有鬼主意
+- YUE: 佢好古惑 [HIGH]
+- FIX: "He's crafty — 古惑."
+- Why: 古惑 is what's actually spoken; 鬼主意 is chi flattening the vivid Cantonese word.
+
+**Example — yue emotionally sharper:**
+- ENG: "Poor thing"
+- CHI: 可憐
+- YUE: 淒涼 [HIGH]
+- FIX: "Desolate — 淒涼."
+- Why: 淒涼 is emotionally stronger than 可憐. Register match matters even when chi semantics are close.
+
+**Example — register drift (yue is the correct register; both chi and eng drift):**
+- ENG: "You again, you stinking beggar!"
+- CHI: 又係你呢個臭要飯的 (OCR; chi-track mistranscribes)
+- YUE: 又係你呢個死乞兒 [HIGH]
+- FIX: "You again, you stupid beggar!"
+- Why: Actual Cantonese is 死乞兒 ("damned/stupid beggar"), not 臭要飯的. Render the register the speaker actually used.
+
+Contrast with Rule B (semantic disagreement, chi wins) — see `STYLE.md` §2 Rule B and the Ep24 Sub 344 推宮換血 case in §2 above.
 
 ---
 

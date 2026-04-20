@@ -86,16 +86,7 @@ Good:
 >
 > [Step 9 context report]
 
-Bad (what the v10 first-pass produced):
-> "Let me now read STYLE.md..."
-> "Good — I have the full style and reference context. Now let me set up the working directory..."
-> "Step 3 complete. Only 19 AUTO-KEEPs out of 503 — that's a low rate, which makes sense for an episode with lots of CJK-dense scenes..."
-> "**Ep27 progress report — Ep27**  [paragraph of recap]"
-> "**Summary of Step 4 work:** [bullet list of what was already visible in tool output]"
-> "**Candidates to promote from Ep27 overlay → `extras_baseline.json`**: [long list]"
-> "**Watch List additions** [another long list]"
-
-The good version delivers the same work product with a small fraction of the conversational text.
+Bad: narrating every step ("Let me now read STYLE.md...", "Step 3 complete — only 19 AUTO-KEEPs, which makes sense because..."), emitting progress-report blocks between script runs, and duplicating at end-of-turn the Watch-List / promotion lists that belong in SESSION-NOTES.md.
 
 ---
 
@@ -144,7 +135,7 @@ Context baseline — Episode N
 • Projected quality at current context: FULL / borderline (may end PARTIAL) / likely MECHANICAL-ONLY
 ```
 
-**How to make the call (v10):** with the v10 efficiency changes (file-based dump, AUTO-KEEP pre-filter, TSV override format, overlay-based extras, pre-build lint), the conservative sub-count estimates are roughly ~25% of context for a 400-sub episode during Step 4, and ~40% for a 600-sub episode — down from ~35% / ~50% in v9. If `baseline + expected delta` exceeds ~90%, project the outcome as borderline or likely-degraded. These remain deliberately conservative; actual usage varies with episode density, and the efficiency gains depend on the reviewer actually using the file-based flow (reading `ep{N}_dump.txt` via `view` ranges rather than re-dumping via `python3 -c`).
+**How to make the call.** Conservative sub-count estimates: ~25% of context for a 400-sub episode during Step 4, ~40% for a 600-sub episode. If `baseline + expected delta` exceeds ~90%, project the outcome as borderline or likely-degraded. These estimates assume the file-based flow (reading `ep{N}_dump.txt` via `view` ranges rather than re-dumping via `python3 -c`) — reverting to stdout-and-echo patterns inflates usage significantly.
 
 ### Step 1 — Parse & Align
 
@@ -153,13 +144,11 @@ cp /mnt/user-data/uploads/PersonalNamesUpdated.csv /home/claude/
 python3 pipeline.py <N>
 ```
 
-Parses the three source tracks and aligns them onto a **chi-spine skeleton**: the output's entry count and timestamps are taken from chi, not eng. Outputs `ep{N}_aligned.json` plus a compact summary to stdout.
+Parses the three source tracks and aligns them onto a **chi-spine skeleton**: the output's entry count and timestamps are taken from chi, not eng. Outputs `ep{N}_aligned.json` plus a compact summary to stdout. The per-sub dump comes out of Step 3 (`auto_override_v2.py`), not this step — dump-writing colocates with flag-computation so `aligned.json` doesn't have to be re-read.
 
-**v14 change — the dump moves to Step 3.** Prior bundles (v10–v13) had `pipeline.py` write `ep{N}_dump.txt` alongside `ep{N}_aligned.json`. The dump now comes out of `auto_override_v2.py` instead, because the dump format carries per-sub flags (`•` AUTO-KEEP, `!` fabrication risk, `i` idiom, `@` missing address, `o` OCR noise) that depend on `auto_override_v2.py`'s heuristics. Colocating dump-writing with flag-computation avoids re-reading `aligned.json` in a separate pass. `pipeline.py`'s sole output is now the structural alignment.
+**Don't revert to stdout-dump-and-echo.** The dump is written once to disk and consumed via `view` line ranges in Step 2. Printing to stdout and round-tripping via `python3 -c` was the pre-v10 pattern and cost significant context; it caused real past sessions to run out of budget.
 
-**v10 precursor — file-based dump** (still applies): the dump is written once to disk and consumed by `view`ing line ranges in Step 2. In pre-v10 bundles it was printed to stdout and re-echoed via `python3 -c`, which cost context. That's still the rule — only the script that emits it has changed.
-
-**Chi as entry spine (pipeline.py v6):**
+**Chi as entry spine:**
 - Output entry count = chi entry count (not eng). See `STYLE.md` §16.
 - For each chi entry, overlapping eng entries by timestamp window are reflowed onto the chi entry as the "draft content" field:
   - **Chi window spans multiple eng entries** → merge their content (joined with newlines, in eng-index order).
@@ -170,12 +159,12 @@ Parses the three source tracks and aligns them onto a **chi-spine skeleton**: th
 
 **Why chi-spine:** eng and chi arrive with independently authored timings. Timestamp-overlap alignment using eng as the implicit skeleton produced "double-subs" — adjacent output entries with near-duplicate content when eng and chi both translated the same spoken line at offset times. Chi-spine makes structural duplication impossible: each spoken line has exactly one entry (chi's).
 
-**Whisper JSON handling (pipeline.py v6):**
+**Whisper JSON handling:**
 - Reads yue from `{N}-yue.json` (Whisper output) only — no CSV fallback.
-- Aligns yue words to **chi_tra subs** (consistent with chi-spine principle).
+- Aligns yue words to chi_tra subs (chi-spine principle).
 - Discards raw JSON from memory after extraction; keeps compact per-sub yue alignment only.
 
-**Confidence tiers from `avg_logprob` (auto_override_v2.py v2.1):**
+**Confidence tiers from `avg_logprob`:**
 - **HIGH** (≥ −0.3) — yue is *candidate* authoritative over chi; flagged for manual review, where the reviewer applies the intelligibility gate (see `STYLE.md` §2) to decide whether yue actually overrides.
 - **MEDIUM** (≥ −0.8) — chi remains authority; yue consulted for tone/register/nuance.
 - **LOW** (< −0.8) — yue text discarded entirely; prefixed with `[DISCARDED]` in dump.
@@ -184,9 +173,9 @@ Each sub in the dump is annotated `[HIGH]` / `[MEDIUM]` / `[LOW]`, and `[T-ADJ]`
 
 ### Step 2 — Read the Full Dump (MANDATORY)
 
-Read EVERY line of `ep{N}_dump.txt` (written by Step 3 under v14). Use `view` with line ranges — typically 100–200 subs per range — rather than `cat` or `python3 -c` round-trips.
+Read EVERY line of `ep{N}_dump.txt`. Use `view` with line ranges — typically 100–200 subs per range — rather than `cat` or `python3 -c` round-trips.
 
-**v14 dump format.** Each sub occupies 3–4 lines:
+**Dump format.** Each sub occupies 3–4 lines:
 
 ```
 <idx>|<conf>|<flags>[ T-ADJ]
@@ -202,8 +191,8 @@ The `<flags>` column carries per-sub priority signals computed by `auto_override
 - `i` — chi contains an idiom from the injection set
 - `@` — chi has an address term (師父, 前輩, 老伯…) missing from the Step 3 output
 - `o` — chi contains an OCR artifact (garbled quote marks, stray Latin letters amid CJK)
-- `r` — **reflow risk** (v16). Chi is thin (empty, ≤3 CJK chars) AND eng is substantive AND an adjacent sub has empty eng or chi. This is the signature of chi-spine alignment pulling eng content from a neighbouring beat into this sub's window. **When examining an `r`-flagged sub, do not call the eng fabrication without reading the adjacent subs first** — eng is probably legitimate dialogue that got reflowed here because its native window had no chi. See Step 4 checklist item 4 and the Ep1 sub 18 case.
-- `y` — **yue-solo** (v16). Chi AND eng are both thin but yue is substantive at HIGH confidence. Either real dialogue lost from chi+eng (reflow stranded it, or the other two tracks skipped a beat) or Whisper ASR hallucination (invented plausible-sounding speech during music/silence/noise). Apply Rule C intelligibility gate + scene-context plausibility. **If yue parses as real dialogue AND fits the scene, consider adding to hybrid; if yue is plausible-sounding but doesn't fit, treat as hallucination and ignore.** When in doubt, keep chi/eng as-is — don't invent dialogue just because yue emitted something. Mutually exclusive with `r` (which takes priority when the signatures overlap).
+- `r` — **reflow risk**. Chi is thin (empty, ≤3 CJK chars) AND eng is substantive AND an adjacent sub has empty eng or chi. This is the signature of chi-spine alignment pulling eng content from a neighbouring beat into this sub's window. **When examining an `r`-flagged sub, do not call the eng fabrication without reading the adjacent subs first** — eng is probably legitimate dialogue that got reflowed here because its native window had no chi. Canonical case: Ep1 sub 18 (chi `上`, eng "What do you want?" — the victim's retort reflowed from the previous beat).
+- `y` — **yue-solo**. Chi AND eng are both thin but yue is substantive at HIGH confidence. Either real dialogue lost from chi+eng (reflow stranded it, or the other two tracks skipped a beat) or Whisper ASR hallucination (invented plausible-sounding speech during music/silence/noise). Apply Rule C intelligibility gate + scene-context plausibility. If yue parses as real dialogue AND fits the scene, consider adding to hybrid; if yue is plausible-sounding but doesn't fit (theme-song lyrics during credits, crowd noise), treat as hallucination and ignore. **When in doubt, do not invent dialogue from yue alone.** Mutually exclusive with `r` (which takes priority when signatures overlap). HIGH-confidence-only by design — MEDIUM yue with richer content than chi+eng gets caught by normal Rule A register-examination in Step 4.
 
 A blank flags column means "no priority signal" — scan quickly unless something else jumps out. Flags are priority signals, not gates: every sub must still be read, but time concentrates on non-blank flags.
 
@@ -245,59 +234,31 @@ The output is saved to `ep{N}_h_all.json`. **This output is not a draft translat
 
 Think of Step 3 as "setting up the hybrid's CJK scaffolding so the human isn't retyping 白駝山 or remembering to inject 奮不顧身 themselves."
 
-**v10 change — baseline/overlay split for extras.** Prior bundles kept the entire baseline of shared romanisation mappings (plus every episode's new entries) inside `shared_extras.py`, so each episode's builder file duplicated ~180 lines of boilerplate. In v10, `shared_extras.py` is a thin merger: it reads `extras_baseline.json` (ships with the bundle) and optionally `ep{N}_extras_add.json` (per-episode overlay — the reviewer writes this in Step 5), merges them, and writes `ep{N}_extra.json` for `build.py` to consume. A reviewer with nothing new to add can skip the overlay file and `shared_extras.py` still works. Overlay keys override baseline keys on collision.
+**Baseline + overlay split.** `shared_extras.py` is a thin merger: it reads `extras_baseline.json` (ships with the bundle) and optionally `ep{N}_extras_add.json` (per-episode overlay — the reviewer writes this in Step 5), merges them, and writes `ep{N}_extra.json` for `build.py` to consume. A reviewer with nothing new to add can skip the overlay file; `shared_extras.py` still works. Overlay keys override baseline keys on collision.
 
-**v10 addition — AUTO-KEEP heuristic.** `auto_override_v2.py` now annotates each sub in `ep{N}_confidence.json` with an `auto_keep: true/false` flag. An `auto_keep: true` flag means the sub passed all seven conservative gates (all tracks non-empty, yue HIGH/MEDIUM, no fabrication-risk markers, no idioms in chi, no missing address terms, ≤1.5× length ratio, ≥0.7 content-word overlap) — indicating the Step 3 output is very likely already faithful. AUTO-KEEP is a **priority signal, not a gate**: the reviewer still reads every sub in Step 4, but concentrates examination time on the NEEDS REVIEW set (anything not flagged AUTO-KEEP). The heuristic is designed for false-negative bias: when in doubt, the heuristic does not flag. A false positive (flagging a sub faithful when it has a subtle meaning/register issue) would silently degrade quality; a false negative just costs a sub's worth of examination that was probably going to be quick anyway.
+**AUTO-KEEP heuristic.** `auto_override_v2.py` annotates each sub in `ep{N}_confidence.json` with an `auto_keep: true/false` flag. `auto_keep: true` means the sub passed all seven conservative gates (all tracks non-empty, yue HIGH/MEDIUM, no fabrication-risk markers, no idioms in chi, no missing address terms, ≤1.5× length ratio, ≥0.7 content-word overlap) — likely already faithful. AUTO-KEEP is a **priority signal, not a gate**: Step 4 still reads every sub, but concentrates examination time on the NEEDS REVIEW set (anything not flagged AUTO-KEEP). The heuristic is deliberately false-negative-biased: a false positive (flagging a subtly-flawed sub faithful) would silently degrade quality; a false negative just costs a quick-confirm examination.
 
 ### Step 4 — Examine Every Sub; Override When Warranted
 
-Read `ep{N}_h_all.json` (now populated with Step 3's CJK substitutions) alongside the chi track, the yue track, and the `ep{N}_confidence.json` tier annotations from Step 3. Examine EVERY sub against the priority chain: **yue (HIGH) > chi (semantic authority) > eng (draft)**. If the text — with its mechanical substitutions applied — already matches the source content and register faithfully, default to it. Override only when content or register mismatches.
-
-For a fuller treatment of the priority chain and the Yue-Authority Rule, see `STYLE.md` §2. The short version as it applies here:
-
-- **Yue HIGH, semantically agrees with chi** — yue is the actual spoken dialogue at HIGH confidence. Apply the **intelligibility gate**: if yue is coherent on its own terms (parses as something a character would say), yue wins on register/wording nuance (Rule A); if yue is garbled — broken syntax or semantically incoherent — treat as ASR noise and fall back to chi. Confidence tier doesn't settle this; Whisper can be HIGH-confident on nonsense. Examples of legitimate yue-override (Rule A): 古惑 over 鬼主意; 淒涼 over 可憐. These are all cases where chi and yue are *synonyms differing in register*.
-- **Yue HIGH, semantically disagrees with chi (different word, not a register variant)** — chi wins by default (Rule B). Yue reaches Claude via ASR and is subject to homophone errors (功/宮 both `gung1`; 保/寶 both `bou2`). Chi, being a written translation, doesn't have homophone errors. Override chi only when there's independent corroboration for yue: eng confirms yue (Ep28 Sub 22), or a **prior FULL-completed episode** has established the form yue matches, or chi has a visible OCR artefact. The cross-episode clause is strict — the prior episode must actually have been completed and rendered the form a specific way; it's not a license to substitute what the reviewer expects ought to be canonical. Named wuxia techniques and 四字成語 are especially prone to this failure mode — a yue variant of a fixed compound is almost always a homophone of the real term, not a new term.
-- **Yue MEDIUM** — chi drives meaning; yue is consulted for tone, register, and emotional nuance.
-- **Yue LOW** — yue discarded; chi-only processing.
-- **Yue reveals OCR errors in chi** — fix the error; yue is the witness (but only when yue is genuinely the witness, per the rules above).
+Read `ep{N}_h_all.json` (populated with Step 3's CJK substitutions) alongside the chi track, the yue track, and `ep{N}_confidence.json`. Examine EVERY sub against the priority chain (**yue HIGH > chi > eng**) per `STYLE.md` §2 — which defines the Rule A register override, the Rule B semantic-disagreement default, and the Rule C intelligibility gate. If the Step 3 output already matches source content and register faithfully, default to it. Override only when content or register mismatches.
 
 For every sub, walk this checklist:
 
-1. Read the chi text as semantic authority.
-2. Read yue for register, tone, and (if HIGH confidence) as a potential override of chi wording.
-3. Compare against the Step 3 output.
-4. If eng says something neither chi nor yue supports → **DELETE** the fabrication. **But check reflow first.** Before calling eng fabrication, look at the chi for this sub:
-   - If chi is empty, one single CJK character, or ≤3 CJK chars AND the adjacent sub (±1 by index) also has empty eng or empty chi, the eng content is likely reflow casualty, not invention — it got pulled into this sub's window from a neighbouring beat where eng had content but chi didn't. **Preserve the eng**; merge it with whatever chi carries in this sub using the em-dash dialogue-split format (STYLE §13). The `r` reflow-risk flag in the dump fires on exactly this signature.
-   - If chi is substantive and eng still disagrees, check yue. If yue confirms what eng says and chi diverges, treat it as an OCR error in chi — see Ep28 Sub 22 in `REFERENCE.md` §8.
-   - Only call fabrication when eng lacks support from BOTH chi and yue AND the reflow check clears.
-   - Ep1 sub 18 is the canonical reflow-casualty case: chi `上` (one-character attack command), eng "What do you want?" (victim's retort from the previous beat that had no chi), yue carried both in sequence. Three-track reading plus the reflow check catches what two-track reading misses.
+1. Read chi for meaning, yue for register and (if HIGH) potential Rule A override. Compare against Step 3's output.
+2. If eng says something neither chi nor yue supports → **DELETE** the fabrication. **But check reflow first** (the `r` flag in the Step 2 dump fires on this signature; see its explanation there). If chi is thin AND an adjacent sub has empty eng or chi, the eng content is probably reflow casualty, not invention — preserve it, merge with chi via em-dash dialogue-split (STYLE §13). If chi is substantive but eng still disagrees and yue confirms eng, treat as OCR error in chi (REFERENCE §8 Sub 22).
+3. For `y`-flagged yue-solo subs, apply the procedure described with the flag in Step 2: Rule C intelligibility gate + scene-context plausibility. When in doubt, don't invent dialogue from yue alone.
+4. If chi has nuance eng lacks → **REWRITE** to capture it.
+5. If yue HIGH diverges from chi: pass through the intelligibility gate, then apply Rule A (synonyms, yue more vivid → rewrite to yue) or Rule B (different words → chi wins unless eng / prior-FULL-episode / visible chi OCR corroborates yue). See `STYLE.md` §2.
+6. If yue's register is sharper/warmer/more colloquial than the draft → **REWRITE** to match yue's register (Rule A on a register-only difference).
+7. If chi or yue has an address term Step 3 didn't catch → ensure it's **CJK in hybrid**.
+8. If chi or yue has an idiom Step 3 didn't catch → ensure it's **in the hybrid sub**.
+9. **Common-noun CJK sweep** — before finalising, check none of the following have been left as CJK in hybrid (see `STYLE.md` §7 "What does NOT get CJK" for the full list): generic wuxia vocabulary (武功/武林/江湖/內力/內功/輕功/功力), colloquial insult compounds (臭丫頭/死丫頭/死乞兒/臭乞兒/王八蛋/禁宮), Mandarin 叫化子 (use Cantonese 乞兒 or English "beggar"), descriptive common-noun metaphors (情蛇, 一流高手, X+高人/高手/蛇). Named techniques (九陰真經, 降龍十八掌, etc.) remain CJK. `lint_overrides.py`'s common-noun heuristic catches many automatically, but reviewer judgment is the final arbiter.
+10. If none apply → **leave the sub alone**; the draft is faithful.
+11. Collect corrections into `ep{N}_overrides.tsv` (format below) and apply with `apply_overrides.py`.
 
-4b. **Yue-solo subs (`y` flag).** When chi AND eng are both thin but yue at HIGH confidence carries substantive scoped content (5–20 CJK chars, owned by this sub — not a multi-sub Whisper segment), yue may be either:
-   - **Real dialogue** the chi editor elided and the eng translator didn't carry (Ep1 sub 113: chi empty + eng "Are you alright?" + yue `道長,你看見沒有` — real question to 丘處機 that neither other track captured; Ep1 sub 171: chi empty + eng "- Of course!" + yue `如果是一男一女呢` — the gender question from the naming discussion; Ep1 sub 368: chi empty + eng "Stop" + yue `你說那麼多` — officer's cut-off "you're talking too much" which is richer than the stock "Stop")
-   - **Whisper ASR hallucination** — invented plausible-sounding speech during music, silence, or crowd noise (Ep1 sub 1: yue transcribed the theme-song lyrics as if they were dialogue)
+**Triage.** Subs with `auto_keep: true` in `ep{N}_confidence.json` should still be read, but quickly — the heuristic already checked fabrication risk, idiom injection, address-term drops, and length divergence. Concentrate examination time on `auto_keep: false`, where fabrications, meaning flattening, yue-authority overrides, register drift, and idiom injection cluster.
 
-   Decision procedure: (a) Apply Rule C intelligibility gate — is the yue coherent, parseable-as-real-speech? (b) Is the yue plausible given the scene you can see from adjacent subs? If both yes → yue is probably real content; consider adding to hybrid (with em-dash dialogue-split if chi/eng also carry something). If yue reads as coherent but doesn't fit the scene (theme-song lyrics, crowd noise transcribed as speech) → treat as hallucination and keep chi/eng as-is. **When in doubt, do not invent dialogue from yue alone.** The `y` flag is a priority signal for examination, not a verdict.
-
-   Note: the `y` flag is HIGH-confidence-only by design. MEDIUM-yue subs where yue carries more content than chi+eng (Ep1 sub 298's 黃藥師 dying plea `大嫂…小天…我不會死的…` vs chi `嘯天` + eng "Xiaotian!") won't fire `y` but are caught by normal Rule A register-examination when the reviewer reads yue for tone.
-5. If chi has nuance eng lacks → **REWRITE** to capture it.
-6. If yue is HIGH and diverges from chi, first check yue is intelligible (coherent syntax, parseable as real speech). If garbled → fall back to chi, stop. Then ask: **are yue's word and chi's word synonyms, or different words entirely?**
-   - **Synonyms, yue more vivid/colloquial/register-appropriate** → Rule A: **REWRITE** to match yue.
-   - **Different words** → Rule B: chi wins by default. Only override chi if eng or cross-episode evidence corroborates yue, or chi has a visible OCR artefact.
-7. If yue's emotional register is sharper, warmer, more colloquial, or more formal than the draft → **REWRITE** to match yue's register even if chi semantics are preserved (this is Rule A applied to a register-only difference).
-8. If chi or yue has an address term Step 3 didn't catch → ensure it's **CJK in hybrid**.
-9. If chi or yue has an idiom Step 3 didn't catch → ensure it's **in the hybrid sub**.
-10. **Common-noun CJK sweep (v14 Ep33 rule).** Before finalising the hybrid entry, check that none of the following have been left as CJK in hybrid — they must all be English (see `STYLE.md` §7 "What does NOT get CJK"):
-    - **Generic wuxia vocabulary** — 武功 / 武林 / 江湖 / 內力 / 內功 / 輕功 / 功力. These are common nouns; CJK here clutters without adding cultural weight. Named techniques (九陰真經, 降龍十八掌, 空明拳, 打狗棒法, etc.) remain CJK.
-    - **Colloquial insult compounds** — 臭丫頭 / 死丫頭 / 死乞兒 / 臭乞兒 / 王八蛋 / 禁宮. Intensifier + common-noun-insult goes English. Contrast with intensifier + proper-nickname (死老邪, 老毒物) which stays CJK.
-    - **叫化子** — render as Cantonese 乞兒 if CJK is warranted, otherwise English "beggar"; never leave the Mandarin 叫化子 in hybrid.
-    - **Descriptive common-noun metaphors** — phrases like 情蛇, 一流高手, X+高人, X+蛇 where X is an adjective rather than a proper qualifier. Test: strip the CJK and read the English rendering alone. If it works as a plain English noun phrase ("a first-rate expert"), it's a descriptor, not an idiom — English in hybrid. See `STYLE.md` §10's admission gate for what qualifies as a catalogue-worthy idiom.
-    This check is what `lint_overrides.py`'s "common-noun-rendering heuristic" tries to catch automatically, but the reviewer's judgment is the final arbiter. Step 3 preprocessing does not strip these — they're a pure Step 4 discipline.
-11. If none of the above apply → **leave the sub alone**; the draft is faithful.
-12. Collect your corrections into `ep{N}_overrides.tsv` (see below) and apply with `apply_overrides.py`.
-
-**v10 — how to triage the examination.** `ep{N}_confidence.json` now carries an `auto_keep` flag per sub (see Step 3). Subs with `auto_keep: true` should still be read, but quickly — the heuristic has already checked for fabrication risk, idiom injection, address-term drops, and length divergence, and all of those gates passed. Treat AUTO-KEEP as "likely quick confirm". Subs with `auto_keep: false` are where examination time earns its keep: fabrications, meaning flattening, yue-authority overrides, register drift, idiom injection all concentrate in the NEEDS REVIEW set.
-
-**v10 — how to write overrides.** Collect corrections into `/home/claude/ep{N}_overrides.tsv`, one per line, tab-separated:
+**Writing overrides.** Collect into `/home/claude/ep{N}_overrides.tsv`, one per line, tab-separated:
 
 ```
 <index>\t<English text with \\n for embedded newlines>
@@ -316,7 +277,7 @@ Lines starting with `#` are comments. Apply the file with:
 python3 apply_overrides.py <N>
 ```
 
-This merges the TSV into `ep{N}_h_all.json`, replacing entries by index. Subs not listed in the TSV keep whatever Step 3 wrote — an empty TSV is a valid "trust Step 3 completely" signal (though unlikely to be the right call for a full episode). The TSV format replaces the prior pattern of emitting overrides as a Python literal dict inside a patch script, which cost ~1.3× the text size in context due to dict/quoting overhead.
+This merges the TSV into `ep{N}_h_all.json`, replacing entries by index. Subs not listed keep whatever Step 3 wrote. **Don't revert to emitting overrides as a Python literal dict inside a patch script** — the pre-v10 pattern cost ~1.3× the context due to dict/quoting overhead.
 
 Examining every sub is what makes FULL quality — not rewriting every sub. A faithful draft left untouched is a correct outcome.
 
@@ -364,16 +325,13 @@ python3 lint_overrides.py <N>
 
 Runs two diagnostic checks on `ep{N}_h_all.json` and `ep{N}_extras_add.json`:
 
-**Check 1 — concat-trap patterns** (v10). Scans the hybrid for known CJK-leak concat patterns catalogued in `STYLE.md` §19 and the `SESSION-NOTES.md` Watch List. Catalogued patterns include `裘老前輩` / `裘前輩` (surname+title), `X大哥` (surname+Brother), `我爹` / `你爹` (possessive+kinship), `大金國` / `大宋` (dynasty prefix), `我<FullName>` (emphatic self-reference), `大師父`. Running this before `build.py` lets the reviewer register missing compounds in the overlay once rather than iterating after build.
+**Check 1 — concat-trap patterns.** Scans the hybrid for known CJK-leak concat patterns catalogued in `STYLE.md` §19 and the `SESSION-NOTES.md` Watch List. Catalogued patterns include `裘老前輩` / `裘前輩` (surname+title), `X大哥` (surname+Brother), `我爹` / `你爹` (possessive+kinship), `大金國` / `大宋` (dynasty prefix), `我<FullName>` (emphatic self-reference), `大師父`. Running this before `build.py` lets the reviewer register missing compounds in the overlay once rather than iterating after build.
 
-**Check 2 — common-noun-rendering heuristic** (v14). Scans overlay entries (`ep{N}_extras_add.json`) and flags any whose English rendering looks like a common noun (lowercase-starting, or article-plus-lowercase, or Capital-plus-lowercase-words). Enforces STYLE.md §7's exhaustive-lists rule: hybrid CJK is for names/titles/places/idioms/terms-of-art, not common nouns. Catches the Ep20-style "如意燈 kept as CJK when it should have been 'lucky lanterns' in English" failure.
+**Check 2 — common-noun-rendering heuristic.** Scans overlay entries (`ep{N}_extras_add.json`) and flags any whose English rendering looks like a common noun (lowercase-starting, or article-plus-lowercase, or Capital-plus-lowercase-words). Enforces STYLE.md §7's exhaustive-lists rule: hybrid CJK is for names/titles/places/idioms/terms-of-art, not common nouns. Catches the Ep20-style "如意燈 kept as CJK when it should have been 'lucky lanterns' in English" failure.
 
-The heuristic has three action buckets:
-- **(a) Genuine idiom/term-of-art** → promote to STYLE.md §8/§10.
-- **(b) Common noun kept in CJK by mistake** → drop from overlay, rewrite affected hybrid subs in English.
-- **(c) Character voice / flavour phrase** (like 臭要飯的) → judgment call; promote to STYLE.md only if recurring.
+Three action buckets: **(a)** genuine idiom/term-of-art → promote to STYLE.md §10; **(b)** common noun kept in CJK by mistake → drop from overlay, rewrite affected hybrid subs in English; **(c)** character voice / flavour phrase (臭要飯的) → judgment call; promote to STYLE.md only if recurring.
 
-Both checks are **non-fatal** — the reviewer inspects each warning and decides. The lint exits 1 if either check surfaces issues, 0 only if both are clean.
+Both checks are non-fatal — the reviewer inspects each warning and decides. The lint exits 1 if either surfaces issues, 0 only if both are clean.
 
 ### Step 6 — Build 3 Variants
 
@@ -393,48 +351,32 @@ Then apply targeted `sed` fixes for any remaining CJK in romanised files — see
 
 - Grep romanised files for all **banned terms** (see `STYLE.md` §18).
 - Grep hybrid file for **Pinyin leakage** (Guo Jing, Huang Rong, Rong-er, etc.).
-- Grep hybrid file for **common-noun CJK** that should be English (v14 Ep33 rule, `STYLE.md` §18): 武功 · 武林 · 江湖 · 內力 · 內功 · 輕功 · 功力 · 叫化子 · 臭丫頭 · 死丫頭 · 死乞兒 · 臭乞兒 · 王八蛋 · 禁宮. Any of these as CJK in hybrid is a build-time error — fix the hybrid sub and rebuild.
+- Grep hybrid file for **common-noun CJK** that should be English (`STYLE.md` §18): 武功 · 武林 · 江湖 · 內力 · 內功 · 輕功 · 功力 · 叫化子 · 臭丫頭 · 死丫頭 · 死乞兒 · 臭乞兒 · 王八蛋 · 禁宮. Any as CJK in hybrid is a build-time error — fix the hybrid sub and rebuild.
 - Validate: zero CJK in romanised files; zero banned terms; zero overlapping timestamps; same subtitle count and indices as source `{N}-chi_tra.csv` (chi is the entry spine; see `STYLE.md` §16).
 - `present_files` with all three SRTs.
 
 ### Step 8.5 — Update and Present SESSION-NOTES.md
 
-After the three SRTs are presented, update `SESSION-NOTES.md` and present the updated file so the user can drop it into the next session's handoff bundle. This replaces the prior flow where session findings were lost between chats unless the user remembered to ask for them.
+After the three SRTs are presented, update `SESSION-NOTES.md` and present it so the user can drop it into the next session's handoff bundle. Without this step, session findings are lost between chats.
 
 What to update, in order:
 
-1. **Move the episode's status entry.** If the episode completed FULL under the current bundle version, move its row out of the "Pending — Needs FULL Processing" table and into the "Completed (FULL)" table. **Insert the row at the position sorted by episode number ascending** — Ep4 goes between Ep3 and Ep5, not at the top or bottom of the table. See the sort-rule note above the Completed table in `SESSION-NOTES.md` for the rationale; the Bundle column is not the ordering key. The row schema is `| Episode | Bundle | Subs | Notes |` — Episode is the first column and the stable sort key. Replace any prior-session content preview with a row body in the format specified below. If the outcome was PARTIAL or MECHANICAL-ONLY, leave the row in Pending and annotate the outcome honestly — don't promote a degraded delivery.
+1. **Move the episode's status entry.** If the episode completed FULL under the current bundle version, move its row out of "Pending — Needs FULL Processing" into the "Completed (FULL)" table, **inserted at the position sorted by episode number ascending** (Ep4 goes between Ep3 and Ep5; the Bundle column is not the ordering key). Row schema: `| Episode | Bundle | Subs | Notes |`. If the outcome was PARTIAL or MECHANICAL-ONLY, leave the row in Pending and annotate honestly — don't promote a degraded delivery.
 
-   **Completed-table row body format.** The body must contain, in this order, and nothing else:
+   **Row body format and size budget are specified in `SESSION-NOTES.md`'s own header** — read it before writing the row. Target ≤500 chars, hard cap ≤800 chars. Five elements in order: arc label (≤15 words), `First FULL firing for:` (flat comma-separated list), cross-episode precedents (omit if none), chi-OCR variants (omit if none), promotion flags (omit if none). Narrative plot detail does not belong in SESSION-NOTES — the SRTs carry the plot.
 
-   **Size budget — target ≤500 chars, hard cap ≤800 chars.** A row is a pointer into consolidated docs, not a summary of them. The `SESSION-NOTES.md` header restates this budget with the cut-order when over cap; if you find yourself writing 1,000+ chars, stop and trim. The first things to cut are per-sub citations (sub 344, subs 48–53), who-said-what parentheticals, full verse transcriptions (a pointer to `STYLE.md` §10 suffices), and "Outcome: FULL — every sub examined..." paragraphs (FULL is the default for rows in this table; the phrase carries no information). Ep28–Ep32 rows in the current file are the reference terse style at ~250–400 chars; Ep1 restructured to ~700 is the ceiling for a pilot-density row.
+2. **Add new Watch List entries.** Anything without a settled rendering goes under a descriptive heading. Skip things already in `STYLE.md` §5 / §6 / §10 or `REFERENCE.md`. Recurring CJK leaks, name-variant OCR drift, cross-stage concat traps, and classical allusions are typical additions. If a concat-trap fix needed a post-build `sed` pass (rather than overlay registration), log the mechanism — that's what the "Cross-stage concat traps" section exists for.
 
-   a. **Arc label** — one sentence naming the location or plot driver AND the key characters. Example: "臨安 / 元宵 arc with 岳文 and 武穆遺書 plot." Not "Opens with 郭靖/黃蓉 at an inn where 蓉兒's silver-note grift..." The label pins the episode for future precedent lookups; it is not a plot synopsis. No more than ~15 words.
+3. **Promote stable items out of the Watch List.** Any entry that has fired in two-or-more episodes without contradicting renderings moves into the appropriate consolidated doc (name → `STYLE.md` §5; title → §6; idiom → §10; judgment call → `REFERENCE.md`; concat-trap → `cjk_fix_v2.py` or `extras_baseline.json`) and is deleted from `SESSION-NOTES.md`.
 
-   b. **"First FULL firing for:"** — flat comma-separated list of terms, idioms, classical references, and names that this episode is the first FULL-processed instance of. This is the load-bearing content that future sessions consult for cross-episode precedent.
-
-   c. **Cross-episode precedents established or revised** — short callouts only when relevant: "first on-screen use of X", "first scene naming all four 五絕 together", "Ep21 summary previously said X fired first; Ep20 corrects that to Ep20 first." Omit this entire element if the episode established no such precedent.
-
-   d. **Chi-OCR variants encountered** — flat list like `匡文/策老伯/品王爺→岳文/岳老伯/岳王爺`. Feeds future `cjk_fix_v2.py` `OCR_NAME_COLLAPSE` promotions. Omit if the episode had no notable OCR damage.
-
-   e. **Promotion flags** — short pointers to Watch List items that fired here and are candidates for promotion on next firing (e.g. "岳王爺 and 本姑娘 cross-stage traps need promotion to `cjk_fix_v2.py` `shared_concat_fixes` on next firing"). Omit if none.
-
-   **Narrative plot detail does not belong in SESSION-NOTES.** Who said what to whom, scene-by-scene beats, character motivations, and dialogue color are all excluded. The SRTs carry the plot; SESSION-NOTES carries only what future sessions need for precedent continuity.
-
-   **Prior-session preview rows** in the Pending table follow the same constraint: location + arc-driver keywords only, no plot prose. These predate the current rule-set and do not count as established precedent — their only job is to let a future session know what the episode is about before processing it.
-
-2. **Add new Watch List entries.** Anything encountered during processing that doesn't yet have a settled rendering goes under a short descriptive heading in the Watch List. Skip things already covered by `STYLE.md` §5 (names), §6 (titles), §10 (idioms), or `REFERENCE.md`. Recurring CJK leaks, name-variant OCR drift, cross-stage concat traps, and classical allusions are typical additions. If a concat-trap fix needed a post-build `sed` pass (rather than overlay registration working cleanly), log the mechanism and the fix — that's what the Watch List's "Cross-stage concat traps" section exists for.
-
-3. **Promote stable items out of the Watch List.** Any Watch List entry that has now fired in two-or-more episodes without contradicting renderings should be moved into the appropriate consolidated doc (name → `STYLE.md` §5; title → §6; idiom → §10; context-dependent judgment → `REFERENCE.md`; concat-trap fix → `cjk_fix_v2.py` or `extras_baseline.json`) and deleted from `SESSION-NOTES.md`. If the promotion target is a script or JSON config rather than a markdown doc, note in the SESSION-NOTES edit that the companion file needs updating — but actually editing the script is not required if it wasn't part of this session's work.
-
-4. **Call `present_files` on the updated `SESSION-NOTES.md`.** This is what makes the update reachable — without a present_files call, the edit sits in `/home/claude/` where the user can't retrieve it.
+4. **Call `present_files` on the updated `SESSION-NOTES.md`.** Without a present_files call, the edit sits in `/home/claude/` where the user can't retrieve it.
 
 What NOT to do:
 
-- **Don't exceed the 800-char hard cap on row bodies.** If a row is over, trim per-sub citations and explanatory parentheticals before presenting. The O(N²) growth problem with this file is solved by keeping rows terse — not by hoping the reader skims the wall of text.
-- Don't restate the SESSION-NOTES edits in chat. The user can read the file. Narration of what you changed costs context and duplicates what's in the file. One sentence — "Updated SESSION-NOTES with Ep{N} status and {N} new Watch List items" — is enough, and often even that is optional if the file speaks for itself.
-- Don't add content-free edits (minor phrasing tweaks, reformatting, editorial prettification). SESSION-NOTES is append-mostly with targeted promotions; it's not a doc to polish.
-- Don't promote something after only one episode's evidence. The two-episode threshold exists because single-episode patterns are often episode-specific and don't generalise.
+- **Don't exceed the 800-char hard cap on row bodies.** Cut per-sub citations and who-said-what parentheticals first.
+- Don't restate SESSION-NOTES edits in chat. One sentence is enough; often none is fine — the file speaks for itself.
+- Don't add content-free edits (phrasing tweaks, reformatting). SESSION-NOTES is append-mostly with targeted promotions.
+- Don't promote something after only one episode's evidence. The two-episode threshold exists because single-episode patterns often don't generalise.
 
 ### Step 9 — Report Ending Context
 
@@ -456,151 +398,51 @@ The delta is informational. Each session starts from the conservative defaults i
 
 ## What "Examine Against Sources" Looks Like — Concrete Examples
 
-Each example shows the three tracks plus the fix. When yue is present, it confirms or overrides.
-
-### FABRICATION (delete content not in sources)
-```
-ENG: "He ran away laughing at her"
-CHI: 他走了
-YUE: 佢走咗
-FIX: "He left"
-WHY: "laughing at her" is nowhere in chi or yue. Delete it.
-```
-
-> **Cross-check yue before deleting — the Ep28 Sub 22 correction.** An earlier version of this doc flagged *"fed poisonous scorpions daily"* as a fabrication on the basis of chi alone. But yue (HIGH confidence) said 每日用一隻毒蝎嚟養大 — the eng was right; the chi had an OCR error. **When eng and chi disagree, check yue before deleting.** If yue confirms eng, treat chi as OCR-corrupted.
-
-### MEANING FLATTENED (rewrite to match sources)
-```
-ENG: "He became very angry"
-CHI: 他好像很生氣
-YUE: 佢好似好嬲
-FIX: "He seemed very angry"
-WHY: 好像 / 好似 = "seemed/appeared", not "became". Both chi and yue preserve the certainty level eng collapsed.
-```
-
-```
-ENG: "Father is just waiting for teacher to go retrieve the antidote"
-CHI: 爹是一心一意去給我找解藥的
-YUE: 爹一心一意去幫我搵解藥
-FIX: "阿爹 is single-mindedly determined to find me the antidote"
-WHY: 一心一意 = "wholeheartedly / single-mindedly", not "just waiting". Yue confirms chi.
-```
-
-### YUE OVERRIDES CHI (Yue-Authority Rule)
-```
-ENG: "He's got cunning schemes"
-CHI: 佢有鬼主意
-YUE: 佢好古惑     [HIGH]
-FIX: "He's crafty — 古惑."
-WHY: 古惑 is what's actually spoken. 鬼主意 is chi flattening the vivid Cantonese word.
-```
-
-```
-ENG: "Poor thing"
-CHI: 可憐
-YUE: 淒涼        [HIGH]
-FIX: "Desolate — 淒涼."
-WHY: 淒涼 is emotionally stronger than 可憐 — register match matters even when chi semantics are close.
-```
-
-### REGISTER DRIFT (rewrite to match yue tone, even if chi meaning is preserved)
-```
-ENG: "You again, you stinking beggar!"
-CHI: 又係你呢個臭要飯的      (OCR: chi-track mistranscribes)
-YUE: 又係你呢個死乞兒        [HIGH]
-FIX: "You again, you stupid beggar!"
-WHY: Actual Cantonese is 死乞兒 ("damned/stupid beggar"), not 臭要飯的. Both chi and yue ASR get this wrong but yue is closer. Render the register the speaker actually used.
-```
-
-### ADDRESS TERM DROPPED (restore from sources)
-```
-ENG: "Who do you think is responsible?"
-CHI: 仙姑, 依你看是哪路人馬幹的
-YUE: 仙姑, 你睇係邊路人馬搞嘅
-FIX: "仙姑, who do you think is behind this?"
-WHY: The address term 仙姑 was dropped from the English. Both chi and yue have it.
-```
-
-### CHARACTERISATION DROPPED (restore from sources)
-```
-ENG: "Lu Chengfeng is a disciple of the lord of Peach Blossom Island"
-CHI: 陸乘風那個老賊 是桃花島島主的傳人
-YUE: 陸乘風嗰個老賊 係桃花島島主嘅傳人
-FIX: "陸乘風, that old scoundrel, is a disciple of the master of 桃花島"
-WHY: 那個老賊 / 嗰個老賊 (that old scoundrel) — entire characterisation dropped. Chi and yue agree.
-```
-
-(See `REFERENCE.md` → Error Taxonomy for the full catalogue of error categories and examples.)
-
----
-
-## Context Awareness
-
-There is no batch-processing shortcut. The examination loop in Step 4 is not optional and cannot be compressed. Step 3's preprocessing handles mechanical substitutions, but Error Taxonomy Categories 1 (FABRICATION) and 2 (CHI_MEANING_LOST) **always require reading against both chi and yue** — no mechanical pass can catch invented content or flattened nuance.
-
-State the context usage and number of in the Step 0 report so the user can be aware:
-
-> "My context estimate is ~ZZ%, and Episode N has XXX subs."
-
-A 45 mimute episode with ~450 subs often uses 50% of context to process.
-
-See the [Quality Control](#quality-control--mandatory) section for the full diagnostic framework.
+See `REFERENCE.md` §8 **Error Taxonomy** for worked examples across all error categories: FABRICATION (Category 1, with the Ep28 Sub 22 yue-as-witness case study), CHI_MEANING_LOST (Category 2, with six examples showing meaning-flattening, address-term drops, and characterisation drops), YUE_AUTHORITY_REGISTER (Category 2b, with 古惑 / 淒涼 / 死乞兒 Rule A examples), NAME/TITLE LEAK (Category 3), and IDIOM MISSING (Category 4).
 
 ---
 
 ## Handoff Files Checklist
 
-Upload ALL of these to start a new session:
+Upload ALL of these to start a new session — **15 bundle files + 3 per-episode inputs**:
 
-### Config & Reference (4 consolidated documents)
+### Config & reference (4 docs)
 1. `PIPELINE.md` — this file
 2. `STYLE.md` — style decisions (variants, names, titles, idioms, yue register, formatting, anti-patterns)
 3. `REFERENCE.md` — context-dependent judgment calls, error taxonomy, Five Greats framework
-4. `SESSION-NOTES.md` — episode completion status, pending-episode previews, watch list of names/terms/oddities
+4. `SESSION-NOTES.md` — episode completion status, pending-episode previews, watch list
 
-### Version file
-5. `VERSION` — single line containing the handoff bundle version (e.g. `10`). `build.py` and `cjk_fix_v2.py` read this at runtime and stamp it into output SRT filenames (`{EP}-eng-{variant}-v{VERSION}.srt`) so every delivered subtitle file is traceable to the rule-set that produced it. A bundle with missing or malformed VERSION will fail loudly rather than ship unstamped SRTs.
+### Version file (1)
+5. `VERSION` — single line containing the handoff bundle version (e.g. `17`). `build.py` and `cjk_fix_v2.py` read this at runtime and stamp it into output SRT filenames (`{EP}-eng-{variant}-v{VERSION}.srt`). A bundle with missing or malformed VERSION fails loudly rather than shipping unstamped SRTs.
 
 ### Data files (2)
 6. `PersonalNamesUpdated.csv` — name lookup (copy to `/home/claude/` first)
-7. `extras_baseline.json` — shared romanisation baseline for terms beyond personal names (titles, places, sects, idioms, kinship). Loaded by `shared_extras.py`; merged with any `ep{N}_extras_add.json` overlay to produce `ep{N}_extra.json`.
+7. `extras_baseline.json` — shared romanisation baseline beyond personal names (titles, places, sects, idioms, kinship). Loaded by `shared_extras.py`; merged with any `ep{N}_extras_add.json` overlay to produce `ep{N}_extra.json`.
 
-### Pipeline scripts (7 files)
-8. `pipeline.py` — CSV/JSON parser and chi-spine alignment (v6: Whisper preprocessing, chi-as-entry-spine). v10: writes the full dump to `ep{N}_dump.txt` rather than stdout. Importable module with `run()` and `main()`.
-9. `auto_override_v2.py` — deep override with CJK injection + idioms (v2.1: confidence-tier aware; v10: AUTO-KEEP heuristic annotation)
-10. `shared_extras.py` — thin merger: baseline + optional `ep{N}_extras_add.json` overlay → `ep{N}_extra.json`
-11. `apply_overrides.py` (v10) — applies Step 4 reviewer overrides from `ep{N}_overrides.tsv` into `ep{N}_h_all.json`
-12. `lint_overrides.py` (v10) — pre-build lint for known CJK-leak concat patterns
-13. `build.py` — builder with all conversion tables. Fix path: `PersonalNamesUpdated.csv` → `/home/claude/PersonalNamesUpdated.csv`. Reads `VERSION` adjacent to itself for output filename stamping.
-14. `cjk_fix_v2.py` — comprehensive CJK cleanup for romanised files. Reads `VERSION` to locate the SRTs build.py wrote.
+### Pipeline scripts (7)
+8. `pipeline.py` — CSV/JSON parser and chi-spine alignment (importable module with `run()` and `main()`).
+9. `auto_override_v2.py` — deep override with CJK injection, idiom handling, confidence-tier annotation, AUTO-KEEP flagging, and dump emission.
+10. `shared_extras.py` — thin merger: baseline + optional `ep{N}_extras_add.json` overlay → `ep{N}_extra.json`.
+11. `apply_overrides.py` — applies Step 4 reviewer overrides from `ep{N}_overrides.tsv` into `ep{N}_h_all.json`.
+12. `lint_overrides.py` — pre-build lint for known CJK-leak concat patterns and common-noun renderings.
+13. `build.py` — builder with all conversion tables. Expects `PersonalNamesUpdated.csv` at `/home/claude/PersonalNamesUpdated.csv`. Reads `VERSION` adjacent to itself.
+14. `cjk_fix_v2.py` — comprehensive CJK cleanup for romanised files. Reads `VERSION` to locate the SRTs `build.py` wrote.
 
-### Tests (1 file)
-15. `test_pipeline.py` — unittest suite covering synthetic reflow cases and a 17-row Ep24 real-data slice. Run with `python3 -m unittest test_pipeline.py -v`. Not required for sub generation, but verifies pipeline.py still works correctly after any edits.
+### Tests (1)
+15. `test_pipeline.py` — unittest suite covering synthetic reflow cases and a 17-row Ep24 real-data slice. Run with `python3 -m unittest test_pipeline.py -v`. Not required for sub generation, but verifies `pipeline.py` still works correctly after any edits.
 
-### Per-episode inputs
+### Per-episode inputs (3)
 16. `{N}-eng.csv`, `{N}-chi_tra.csv`, `{N}-yue.json`
 
 ---
 
 ## Quick-Start for New Chat
 
-1. Upload the handoff bundle — **4 reference docs + 1 VERSION file + 2 data files + 7 scripts + 1 test file = 15 files** (see [Handoff Files Checklist](#handoff-files-checklist) above) — plus the episode sources `{N}-eng.csv`, `{N}-chi_tra.csv`, `{N}-yue.json`.
+1. Upload the 15 bundle files + 3 per-episode sources above.
 2. Say: *"Process episode N with full source-authority rewriting (FULL standard)"* — i.e. examine every sub against chi and yue per the priority chain in `STYLE.md` §2.
-3. The assistant MUST:
-   - **Report Step 0 context baseline** before doing anything else
-   - Copy `PersonalNamesUpdated.csv` to `/home/claude/`
-   - Place/create all 7 scripts and `extras_baseline.json`
-   - Run `pipeline.py` → `ep{N}_aligned.json` (structural alignment only; dump comes from Step 3)
-   - Run `shared_extras.py` → `ep{N}_extra.json` (baseline only, initially)
-   - Run `auto_override_v2.py` → `ep{N}_h_all.json` + `ep{N}_confidence.json` + `ep{N}_dump.txt` (with per-sub flags)
-   - `view` the dump file in ranges; examine every sub; concentrate effort on subs whose flags column is non-blank
-   - Collect corrections into `ep{N}_overrides.tsv`; run `apply_overrides.py <N>`
-   - Write `ep{N}_extras_add.json` if new CJK terms introduced; re-run `shared_extras.py <N>` to merge
-   - Run `lint_overrides.py <N>` — fix any concat-trap warnings by updating the overlay
-   - Build, CJK-fix, validate (zero CJK in romanised, zero banned terms)
-   - Present output files
-   - **Update and present `SESSION-NOTES.md`** — move episode's row into Completed table (keep rows sorted by episode number ascending — see SESSION-NOTES.md sort rule; row body ≤500 chars target, ≤800 hard cap), add new Watch List items, promote stable items out (see Step 8.5)
-   - **Report Step 9 ending context** (informational)
-4. **ONE EPISODE PER REQUEST for FULL quality.** If there are multiple episodes uploaded, only process one then.
-5. **Follow Narration Discipline.** Run tools silently between the Step 0 and Step 9 reports; surface only actual issues (one line each) and the final `present_files`. Do not produce mid-turn progress recaps, interpretive commentary on tool output, or end-of-episode "candidates to promote" / "watch list" summaries — edits to `SESSION-NOTES.md` are where such findings go.
-6. **Expect each episode to require 3+ turns.** A FULL pass to completion often takes 3+ turns.
+3. The assistant runs Steps 0 through 9 as specified in [The Pipeline](#the-pipeline) above. Step 0 context baseline is reported before any tool call; Steps 1–8 run silently between reports; Step 8.5 updates and presents `SESSION-NOTES.md`; Step 9 reports ending context.
+
+**Hard rules:**
+- **ONE EPISODE PER REQUEST for FULL quality.** If multiple episodes are uploaded, pick one and state the choice.
+- **Follow [Narration Discipline](#narration-discipline).** Run tools silently between the Step 0 and Step 9 reports; surface only actual issues (one line each) and the final `present_files`. No mid-turn progress recaps, interpretive commentary on tool output, or end-of-episode "candidates to promote" summaries — those edits go in `SESSION-NOTES.md`.
+- **Expect 3+ turns.** A FULL pass to completion often takes 3+ turns.
