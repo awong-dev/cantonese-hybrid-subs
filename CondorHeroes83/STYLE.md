@@ -339,6 +339,9 @@ All 四字成語 found in chi must appear as CJK in hybrid. See §10 for the cat
 ### Standalone idioms
 劫數難逃 (only 四字成語 with cultural weight that passes §10's plain-prose test). All other standalone idioms go English in hybrid.
 
+### Five Greats (五絕) epithets
+東邪 · 西毒 · 南帝 · 北丐 · 中神通 — canonical wuxia epithets naming the five supreme masters. Keep CJK in hybrid; see §10 for romanised renderings.
+
 ### What does NOT get CJK in hybrid
 
 The CJK requirements above are exhaustive — if a phrase isn't on one of these lists, it stays in English. Specifically:
@@ -441,7 +444,7 @@ This is the pattern-specific form of the general §9 rule above, called out beca
 
 **Preferred format: `English gloss — 中文成語.`** (English first, em-dash, then the Chinese idiom.)
 
-**Scope of the CJK+gloss format.** Reserve this format for 四字成語, poetic couplets, classical allusions, and literary phrases where the Chinese form carries meaning the English gloss alone can't fully convey. **Do not** use it for:
+**Scope of the CJK+gloss format.** Reserve this format for 四字成語, poetic couplets, classical allusions, and literary phrases where the Chinese form carries meaning the English gloss alone can't fully convey and for the first-appearance of Proper Nouns and Titles in an episode. **Do not** use it for:
 - Colloquial slang or intensifiers (抵死, 好彩, 乜嘢) — render the register in English
 - Everyday vocabulary that happens to differ between Cantonese and Mandarin — use Rule A to pick the form, render in English
 - Emotional interjections — match the tone in English
@@ -501,6 +504,22 @@ Phrases that **do** pass the gate (for reference): **塞外高人** passes as a 
 - **邪中有三分正, 正中帶七分邪** — "The heretical are three parts righteous; the righteous are seven parts heretical!" (黃藥師's couplet about 蓉兒). Poetic couplet with named speaker. **Keep Chinese in hybrid; English translation only in romanised. Do NOT double-print Chinese + English in romanised.**
 - **秦晉之好** — "the bond of 秦晉" (hybrid) / "the bond of Chun-Zeon" (jy) / "the bond of Chun-Jeun" (yl). Classical allusion (左傳) to the marriage alliance between the states of 秦 and 晉. These are idioms-of-reference, not modern place names.
 - **泰山北斗** — "the authority of the martial world" (standard rendering). Classical allusion (史記): the authoritative figures in a field. **Pairing note:** do not write "泰山北斗 of 武林" in hybrid — 武林 goes English ("the martial world") per §7, and because 泰山北斗's rendering already contains "martial world", combining them in the same phrase produces "of the martial world of the martial world" duplicate in romanised. Drop 武林, rewrite (e.g. "...of our age", "...of our time"), or use an alternative rendering ("the Mount Tai of the Northern Dipper"). Observed twice: Ep30, Ep33 sub 356.
+
+### Five Greats (五絕) epithets
+
+The canonical wuxia epithets naming the five supreme masters of the 華山論劍. Fixed compounds with specific named referents (see REFERENCE.md §6 for the framework table); keep CJK in hybrid, render per the table below in romanised. These are epithets — proper-noun titles — not descriptions, and the Chinese form carries the literary-canonical register the English gloss alone cannot.
+
+- **東邪** — "the Eastern Heretic" (黃藥師). Eastern cardinal + 邪 "heretic/unorthodox" epithet.
+- **西毒** — "the Western Poison" (歐陽峰). Western cardinal + 毒 "poison/venom" epithet.
+- **南帝** — "the Southern Emperor" (一燈大師, 段智興). Southern cardinal + 帝 "emperor" epithet.
+- **北丐** — "the Northern Beggar" (洪七公). Northern cardinal + 丐 "beggar" epithet.
+- **中神通** — "the Central Divine" (王重陽). Central position + 神通 "divine power" epithet.
+
+Usage notes:
+- Epithets appear both standalone ("東邪 黃藥師, only has one daughter") and as catalogue pairings ("東邪西毒, 南帝北丐"). Both forms keep CJK in hybrid.
+- When a character refers to another by epithet rather than name (e.g. 蓉兒 calling her father "東邪" in third person), preserve the epithet form — it carries a different register than "my father" or "黃藥師".
+- 中神通 is rare post-華山論劍 (王重陽 died before the series proper); most episodes pair only the four living Greats.
+- For 一燈大師 specifically: the series uses both 南帝 (pre-ordination epithet) and 一燈 (post-ordination monastic name) — track which form the scene uses and preserve it.
 
 ### Classical laments / elegiac verse
 - **想逝者之不罪兮, 惜形中之載道** / **天蓋高而無階, 懷此恨其最苦** (Ep28) — 陸乘風's lament for 瑤迦. Format as CJK + em-dash + English gloss on the next line (Dragon-chant quartet pattern). Glosses: "my love runs deep, the dead beyond recall" / "Heaven is high but has no stair; this sorrow cuts deepest".

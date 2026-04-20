@@ -258,7 +258,7 @@ In hybrid, format as CJK line + em-dash + English gloss on the next line. In rom
 | Title | Name | Jyutping | Yale |
 |-------|------|----------|------|
 | 東邪 Eastern Heretic | 黃藥師 | Wong Joek-si | Wong Yeuhk-si |
-| 西毒 Western Venom | 歐陽峰 | Au-Joeng Fung | Au-Yeung Fung |
+| 西毒 Western Poison | 歐陽峰 | Au-Joeng Fung | Au-Yeung Fung |
 | 南帝 Southern Emperor | 一燈 | Jat-Dang | Yat-Dang |
 | 北丐 Northern Beggar | 洪七公 | Hung Cat-gung | Huhng Chat-gung |
 | 中神通 Central Divine | 王重陽 | Wong Cung-joeng | Wong Chung-yeung |
