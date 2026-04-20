@@ -43,6 +43,8 @@ Episodes FULL-processed under the consolidated pipeline. **Bundle** records the 
 | 22 | v12 | 463 | 洪七公 poisoning at 望江樓 + 降龍十八掌 death-bed transmission to 郭靖. First FULL firing for: 望江樓, 清溪別院, 博將軍/赤將軍, 沙通天, 彭連虎, 靈智上人, 降龍有悔/躍龍在淵, 一流絕頂高手, 時辰, 兵家大忌, 夜長夢多, 打草驚蛇, 狗咬呂洞賓, 好心遭雷劈, Dragon-chant quartet (去似天龍雲飛躍 / 收似降龍穩深沈 / 腳似飛龍騰萬里 / 拳似怒龍翻四海 — STYLE §10 format), 人之將死/其言也善. Cross-episode: 老賊 (梅超風's term for 陳玄風) second firing with Ep23 (→ REFERENCE §1). |
 | 23 | v14 | 429 | 華箏 poisoning-cure + 梅超風 老賊 lament + 黃藥師 first appearance (邪中有三分正 couplet) + 華箏 法師 hairpin-suicide. First FULL firing for: 雪蓮玉露丸/雪蓮, 黃小邪 (蓉兒 self-name), 死老邪 (七公 insult to 黃藥師), 邪中有三分正/正中帶七分邪 couplet (STYLE §10), 女魔頭, 寶刀未老/彼此彼此/爐火純青/中看不中用/甘敗下風 (Five-Greats banter), 艷福, 抱頭痛哭, 罪大惡極, 一人做事一人當, 假仁假義, 清理門戶, 沒齒難忘, 延年益壽, 法師, 當今兩大高手, 黃世伯/世伯. Cross-episode: 老賊 second firing (Ep22+Ep23 → REFERENCE §1 confirmed). Chi-OCR: 其兒/鞭兒→蓉兒 (continuing pattern), 郭蜻→郭靖, 央馬爺→駙馬爺, 陳元鋒/袁風/元鋒→陳玄風/玄風, 駁→爹. Promotion flags: `黃前輩→Wongsenior` cross-stage trap (前輩→senior eats it); `死老邪→死Old Heretic` trap (worked around in English; STYLE §5 has 死老邪→damned Old Heretic). Both → `cjk_fix_v2.py` `shared_concat_fixes` on next firing. |
 | 11 | v17 | 475 | 靈智上人/歐陽克 inn ambush + 楊鐵心-as-木易 reveal to 郭靖 + 完顏洪烈 voice-recognition of 包惜弱 + 梅超風 cave (97→99th victim, 功虧一簣 fails) + 比武招親 with 完顏康 incognito win. First FULL firing for: 楊鐵心-as-木易 disguise, 木大叔/穆世伯/楊大叔/楊叔叔/楊嬸嬸/穆姊姊/穆大叔/穆小姐 family-address cluster, 荷塘村, 土地廟, 玄門/奇門 internal-arts variants, 完顏康 incognito self-naming, 李公明, 功虧一簣, 父皇. Cross-episode: 大金國 cjk_fix concat trap recurred (stable); 郭大哥 overlay registration needed (CSV-name + 大哥 parallel to Ep33 周伯通大哥). Chi-OCR: 鞭兒/其兒→蓉兒 (Ep30-32 batch continuing), 郭蜻→郭靖, 題蝦虹→蛤蟆 (yue witness). Promotion flags: 大漠 (Ep10+Ep11 → baseline); 女大不中留 (Ep31+Ep11 two-ep → STYLE §10 validated); 上人 (Ep10+Ep11 two-ep → baseline "the Reverend"); 楊大叔 family cluster → baseline on Ep15-19 楊康 arc firing. |
+| 12 | v18 | 533 | 王處一 poisoning arc — 燕京 + 包惜弱 death-anniversary mourning + 楊康/穆念慈 + 王府 banquet ambush + 九陰白骨爪 cave source revealed to 歐陽克. First FULL firing for: 王處一, 王道長, 長春真人/長春子, 五師叔/大師伯/三師兄/師叔/師伯/師兄 (全真七子 peer-order cluster), 忘年之交, 楊兄, 穆師伯/穆大叔, 彭某, 梁老先生/梁先生, 桑滿族, 千年參酒, 長白山, 恩師, 啟稟少爺, 窈窕淑女/君子好逑 (詩經·關雎 §10 crit-2), 踏破鐵鞋無覓處/得來全不費工夫 (夏元鼎 couplet §10 crit-4), 功虧一簣 (§10 crit-2), 調虎離山之計 (§10 crit-3), 完顏 bare, 春香. Cross-episode: 大漠 Ep10+11+12; 楊大叔/穆大叔/土地廟 Ep11+12; 燕京 Ep2+12; 醉仙樓 Ep2+9+12; 重陽真人 Ep8+12; 功虧一簣 Ep11+12 §10-confirmed — all → baseline. Promotion flags: 師叔/師伯/師兄/師弟 全真派 peer-address family Ep7/8/11/12 → baseline. |
+| 13 | v18 | 366 | 王處一 poisoning aftermath — 王府 escape, 落日亭 蓉兒-trick, 靈蛇山莊 raid (歐陽克 drinks 寶蛇 blood; 蓉兒 trapped with 梅超風 mistaking 郭靖 for 尹志平), 楊鐵心-as-木易 identifies 包惜弱 as 王妃, ep ends at 蒼松道觀. First FULL firing for: 王妃, 王府, 落日亭, 靈蛇山莊, 試劍亭, 蒼松道觀, 惠清師太, 牛道士, 梅若華, 梁老怪, 毒沙掌, 毒蛇霧, 五心向天, 父皇, 鐵心 (bare). Cross-episode: 王處一/王道長 Ep12+Ep13 → §5/baseline; 楊大叔 Ep11+Ep12+Ep13 three-ep → baseline; 楊兄/春香 Ep12+Ep13; 父皇 Ep11+Ep13; 王府 Ep11+Ep12+Ep13 three-ep → baseline. Chi-OCR: 其兒/鞭兒→蓉兒 (continuing), 希彰→希望, 量有此理→豈有此理, 阿勇→阿蓉 (Ep10+Ep13 two-ep), 大難難逃→大難不逃 (sub 136 dittography), 牡→畜生 (sub 12 chi). Promotion flags: **本Miss third firing (Ep20+Ep25+Ep13) → structural fix `shared_concat_fixes` longest-first sort.** Lin'an府 single-firing cross-stage trap → `cjk_fix_v2.py` on second firing. 王妃/王府 lint judgment-call (c) keep CJK as court-rank/place parallel to 王爺/小王爺 and 歸雲莊/靈蛇山莊. |
 | 24 | v14 | 364 | 蓉兒 boat departure + 華箏 drunken-proposition + 楊康 repentance with 穆念慈 + 黃帝內經 antidote diagnosis. First FULL firing for: 軟蝟甲 (first on-screen), 小保 (NOT 小寶 — REFERENCE §2 cross-episode-canonicality note), 推宮換血 (Rule B case study vs yue-HIGH 推功換血; genesis of STYLE §2 Rule A/B/C split, REFERENCE §2), 黃帝內經, 遊山玩水, 視日無多, 罪孽滿身, 故態復萌, 禽獸不如, 甘心被你欺騙. Cross-episode: 推宮換血 canonical vs yue homophone; genesis for STYLE §2 Rule A/B/C architecture. Chi-OCR: 網康→阿康 (novel 網/阿 OCR, watch), 華珍→華箏 (yue-ASR zing1/zan1), 燕尾甲→軟蝟甲 (yue-ASR, watch), 會牲→畜生, 九寶/小豪→小二, 境負→辜負. Promotion flags: collapser-miss family (後會有期, 忘恩負義, 視日無多) post-cleaned manually — candidate for lowering `cjk_fix_v2.py` collapser threshold or adding short-idiom entries. |
 | 25 | v14 | 423 | 華箏 frees 郭靖 + 穆念慈/楊康 reunion + 蓉兒 jealousy + 太湖 boat + 歸雲莊 reveals 陸家's 桃花島 link. First FULL firing for: 羞花亭, 千年蔘王, 大衍數 step-names (零/地三/頤王/起/伏/定/已/和 — 陸乘風 copy of 桃花島 layout), 淫賊/奸夫淫婦/如狼似虎/年少無知 (陸家 duel scandal register), 姓陸的, 馮兄→陸兄 OCR correction. Cross-episode: 推宮換血 second firing (念慈/楊康 romantic-sacrifice context, parallels Ep24 Rule B). Chi-OCR: 央馬爺/騎馬爺→駙馬爺, 和伯伽/伯伽→瑤迦 (consistent chi drift), 冠英→滿英 (yue ASR), 馮兄→陸兄. Promotion flags: 本姑娘→本姑Mother trap **third firing** (Ep20+Ep25, Ep20 flagged) → promote to `cjk_fix_v2.py` `shared_concat_fixes`; 遵命→"Yes, sir" post-build sed — cjk_fix_v2 candidate if recurs; 和伯伽→瑤迦 → `OCR_NAME_COLLAPSE` on next firing. **Outcome: PARTIAL** (manual sed passes required beyond cjk_fix_v2). |
 | 28 | v10 | 515 | 程家 snake-bite arc + 陸乘風 reveal at 黃藥師 reunion + 華箏 finds drunken 郭靖. First FULL firing for: 陸冠英/程瑤迦 betrothal, 想逝者/天蓋高 classical lament couplet (STYLE §10). Cross-episode: Sub 22 case study (PIPELINE §4, REFERENCE §8) — eng correct vs OCR-damaged chi, yue 每日用一隻毒蝎嚟養大 witness. Sub count 515 chi-spine. |
@@ -60,7 +62,7 @@ Prior-session FULL outputs below predate the current rule-set and are retained a
 
 | Episode | Subs (approx) | Status / Content Preview |
 |---------|---------------|--------------------------|
-| 12–14 | — | Not yet processed. |
+| 14 | — | Not yet processed. |
 | 15 | 464 | Prior-session FULL. 楊康 identity crisis + 包惜弱 letter + 穆念慈 + 黃蓉 vs 七怪 + 歐陽克. |
 | 16 | 452 | Prior-session FULL. 梅超風 ambush + 黃蓉/郭靖 reconciliation + 穆念慈/包惜弱 revelation + 楊康 武穆遺書 + rescue plan. |
 | 17 | 409 | Prior-session FULL. 楊康/包惜弱 escape + boat betrayal + 段天德 confession + 穆念慈 fireball. |
@@ -89,7 +91,6 @@ Candidates awaiting a second firing. On confirmation, promote to the appropriate
 - **韓丞相 vs 韓宰相** (Ep1+Ep2, same office) — watch for third firing to decide consolidation.
 - **江南七俠** (Ep2 sub 93) — honoured form; the rest of series uses 七怪.
 - **燕京, 法華寺, 金必達** (Ep2) — recur in Jin-court / 楊康-adoption arcs.
-- **七怪 sibling-order vocatives** (大哥/二哥/三弟/四弟/五弟/六弟/七妹 — Ep2 subs 26–52) — two-ep confirmation candidate; promote to `extras_baseline.json` after next firing.
 - **小康 vs 康仔** (Ep2) — chi written 小康, yue spoken 康仔; 康兒 is baseline vocative.
 - **楚河漢界** (Ep2) — dictionary idiom. Promote to STYLE §10 on next firing.
 - **一日之恩/永世難忘** (Ep2) — classical kindness-debt compound. Promote to §10 on next firing.
@@ -102,7 +103,6 @@ Candidates awaiting a second firing. On confirmation, promote to the appropriate
 - **桃花洞** — 陳玄風/梅超風 hideout; structural location for later-ep 梅超風 laments.
 - **李萍** as active character (Ep3 蒙古 widow scenes) — first on-screen firing of the 郭靖 mother. Recurs throughout.
 - **靖媽, 郭夫人** — address forms for 李萍. Watch for consistency.
-- **成吉思汗's self-epithet 大漠的蒼狼** (Ep3 subs 75/76/77) — **novel chi-vs-yue divergence**: yue has 蒼狼 (wolf, canonical); chi has 蒼龍 (dragon, OCR drift). Rule A case study. Promote chi→yue override to `cjk_fix_v2.py` if pattern recurs.
 - **鐵木真 chronology** — 1196 王罕 alliance, 1201 塔塔 fall, 1202 王罕/札木合 rivals. Canonical reference dates.
 - **Idioms** 英雄豪傑, 天公地道 (baseline first FULL), 生死與共, 生死關頭, 高深莫測, 來日方長, 卻之不恭, 為民除害, 好勇鬥狠 — promote per §10 on second firing.
 - **`哲別 + 大人/叔叔` concat** (Ep3 subs 109, 127 — `Zit-BitSir/Zit-BitUncle`) — investigation pending; post-build sed'd. Watch for recurrence; promote to `cjk_fix_v2.py` on next firing.
@@ -133,27 +133,11 @@ Candidates awaiting a second firing. On confirmation, promote to the appropriate
 - **全真派** (variant of 全真教 — both appear in Ep8). Flag if 全真派 becomes the preferred form.
 - **Classical/idiom plain-prose-path confirmations** (Ep8 second/third firings of items that pass §7 plain-prose rule and stay English only): 三生有幸 (Ep7+Ep8), 指腹為婚 (Ep6+Ep8), 虛有其表 (Ep5+Ep8), 兵不厭詐 (Ep8), 君子報仇十年不晚 (Ep8), 殺個片甲不留 (Ep8), 深仇大恨 (Ep8), 邪魔外道 (Ep8), 貪生怕死 (Ep8). Record for reference; none earn §10 catalogue entry.
 
-**Ep8 — items ready for promotion on this session (acted within bundle v17):**
-- **四Master → Fourth Master** concat-trap — acted (added to `cjk_fix_v2.py` `shared_concat_fixes` this session; completes 大/五/七/四 Master family that Ep6 partly landed).
-- **大汗** (Ep3+Ep4+Ep5+Ep7+Ep8 five-ep stable Mongol-ruler address) — **promote to `extras_baseline.json`** next bundle bump.
-- **重陽真人** (Ep31+Ep8 two-ep) — **promote to STYLE §5 / `extras_baseline.json`** next bump.
-- **女魔頭** (Ep23+Ep8 two-ep, already in STYLE §5) — **drop from Ep23 Watch List**.
-- **大漠的蒼狼 / 蒼龍→蒼狼 chi-OCR** (Ep3+Ep8 two-ep) — **promote to `cjk_fix_v2.py` `OCR_NAME_COLLAPSE`** next bump.
-- **央馬/騎馬→駙馬 chi-OCR** (Ep8+Ep23+Ep25 three-ep) — **promote to `OCR_NAME_COLLAPSE`** next bump.
-- **金刀** (Ep6+Ep8 two-ep, precursor of 金刀駙馬 title) — **promote to `extras_baseline.json`** next bump.
-
 **Ep9 single-firings (蒙古 departure + 江南七怪 fake-kidnap + 蓉兒 first appearance):**
-- **西毒, 華山論劍, 赤頂青蛇, 大力金剛指, 妙手雙飛, 少林寺, 黃河三鬼, 嘉興, 醉仙樓** — Ep9-naming; 醉仙樓 recurs as the Ep1/Ep2 venue, Ep9 is first 七怪-rendezvous naming. Promote as they recur (西毒/華山論劍 especially central for Ep15+ arcs).
+- **西毒, 華山論劍, 赤頂青蛇, 大力金剛指, 妙手雙飛, 少林寺, 嘉興, 醉仙樓** — Ep9-naming; 醉仙樓 recurs as the Ep1/Ep2 venue, Ep9 is first 七怪-rendezvous naming. Promote as they recur (西毒/華山論劍 especially central for Ep15+ arcs).
 - **釀鴨舌, 珍珠魚目羹, 豆腐絲擺麵, 豆腐絲, 女兒紅** — 蓉兒's dish-ordering scene. Precursor to REFERENCE §4 Ep21 dish table; keep-CJK per that precedent. Promote overlay entries to `extras_baseline.json` on Ep21 second firing.
-- **楊叔叔** (郭靖's address for 楊鐵心 — sub 374). Distinct from Ep8's 楊家叔叔 (family-reference). Promote on second firing.
-- **金刀駙馬** (Ep9 first FULL firing of the compound — Ep6 金刀 + Ep8 駙馬 each Watch, Ep9 is the first on-screen use of the title by others toward 郭靖). Precedes 駙馬爺 (sarcastic variant Ep23+). Promote to `extras_baseline.json` next bump.
 - **小叫化子 rendering policy** — 蓉兒's chosen nickname in the 醉仙樓 disguise scene. Per STYLE §18 ban on 叫化子 CJK, rendered as English "little beggar" across all three variants (not Cantonese 乞兒仔 which would render "beggar boy (yue)" per STYLE §7). Flag if future episode uses 乞兒仔 directly — that would be CJK-kept per STYLE §7 Cantonese form.
 - **Classical/idiom plain-prose-path confirmations** (Ep9 plain-prose renderings): 後會有期 (second firing after Ep24; §10-purged under v17, plain-prose-English confirmed); 一聲不徹/一聲不出 (sub 165 — chi OCR 徹/出 two-ep flag).
-
-**Ep9 — items ready for promotion this session (acted within bundle v17):**
-- **二Master/三Master/六Master** concat-traps — post-build sed'd this session (not added to shipped `cjk_fix_v2.py` yet). With Ep6 大/五/七 + Ep8 四 already landed, **these three complete the 江南七怪 master-address family**. Promote to `shared_concat_fixes` next bundle bump.
-- **六弟/二哥/七妹/三哥 sibling-ordinal vocatives** (Ep2+Ep9 two-ep at minimum — pending since the Ep2 Watch flag) — post-build sed'd. Either add compound entries (六弟→Sixth Brother, 二哥→Second Brother, 七妹→Seventh Sister, 三哥→Third Brother, plus 四弟/五弟/大哥 covered) to `extras_baseline.json`, or post-build fix. Action: promote next bundle bump.
-- **馬道長** (Ep7+Ep8+Ep9 three-ep) — **promote to STYLE §5 + `extras_baseline.json`** next bundle bump (was already flagged Ep7/Ep8; Ep9 is third confirmation).
 
 **Ep10 single-firings (蓉兒/郭靖 girl-reveal arc):**
 - **飛箱樓** — small-town inn 郭靖/蓉兒 lodge at; 歐陽克 sends 白衣護法 to scout it. Promote to `extras_baseline.json` on second firing.
@@ -162,21 +146,29 @@ Candidates awaiting a second firing. On confirmation, promote to the appropriate
 - **阿蓉** — 郭靖's intimate address for 黃蓉 in the cave girl-reveal arc + post-confession scenes (subs 182, 222–276 cluster, 358, 365, 387). Distinct from 蓉兒 (vocative). Promote to STYLE §5 + `extras_baseline.json` on second firing.
 - **護法 / 白衣護法** — 靈智上人's bodyguard rank, 歐陽克's 白衣護法 scout. Promote to STYLE §6 on second firing.
 - **沙兄** — peer-address among 王爺's invited masters (歐陽克 to 沙通天). Single-firing — watch.
-- **蛤蟆功** — 歐陽峰's named technique (sub 316, 靈智上人 references it). First on-screen reference. Promote to STYLE §8 on second firing.
-- **二師父** — 朱聰; cjk_fix_v2 二Master→Second Master fired cleanly via Ep17 v17 promotion. Confirms the 江南七怪 master-address family is robust.
 - **大滿→大漠** chi-OCR (sub 408) — single firing; watch for recurrence.
 - **廉詞→念慈** yue-ASR (subs 119, 120) — Rule B chi wins; informational only.
 - **歐陽峰 vs 歐陽鋒** (chi has 歐陽峰 throughout this episode; yue HIGH consistently has 歐陽鋒 — Whisper homophone fung1). Rule B chi wins (canonical 歐陽峰).
 - **大開殺戒/打是疼罵是愛/花開的招蜜蜂** — colloquial proverbs, plain-prose renderings (sub 86, 75); §10-purged confirmed.
 
-**Ep10 — items ready for promotion this session (acted within bundle v17):**
-- **黃河三鬼** (Ep9+Ep10 two-ep) — **promote to `extras_baseline.json`** next bundle bump.
-- **金刀駙馬** (Ep9+Ep10 two-ep, full compound) — **promote to `extras_baseline.json`** next bump.
-- **華山論劍** (Ep9+Ep10 two-ep) — STYLE §8 already has it; confirmed stable.
-- **沙通天/靈智上人** (Ep22+Ep10 two-ep) — already in `PersonalNamesUpdated.csv`; confirmed stable; drop from any pending Watch entries.
-- **小叫化子 → "little beggar" rendering** (Ep9+Ep10 two-ep) — rendering policy stable per STYLE §18 ban on 叫化子 CJK.
+**Ep13 single-firings (王處一 poisoning aftermath):**
+- **靈蛇山莊** — 梁子翁's manor opposite the 王府. Promote to `extras_baseline.json` on second firing.
+- **落日亭** — pavilion where 蓉兒 tricks 郭靖 to meet. Single-ep — watch.
+- **試劍亭** — 桃花島 pavilion 黃藥師 cites by couplet. Single-ep — watch (recurs in 桃花島 arcs Ep30+).
+- **蒼松道觀** — Taoist temple 郭靖/穆姑娘 take 王處一 to recover. Single-ep — watch.
+- **惠清師太** — Taoist Nun running 蒼松道觀; missing/dead at ep-end. Single-ep — watch.
+- **牛道士** (蓉兒's mock-form for 王處一, parallel to her general nickname-mocking habit) — single-ep — watch.
+- **梁老怪** (蓉兒's nickname for 梁子翁) — single-ep — watch.
+- **梅若華** — 黃藥師's name for 梅超風 before her marriage to 陳玄風 (the original 桃花島 disciple form). Single-ep — watch (will recur in 桃花島 flashbacks Ep30+).
+- **毒沙掌** — 沙通天's named technique 王處一 was poisoned with. Single-ep — watch (recurs whenever 沙通天's poison-history is invoked).
+- **毒蛇霧** — 梁子翁's snake-pit gas. Single-ep — watch.
+- **五心向天** — meditation posture 梅超風 demands of 蓉兒/郭靖 (subs 291–293). Single-ep — watch (recurs in 九陰真經 arcs Ep29+).
+- **鐵心** (bare) — STYLE §19 entry with no rendering yet beyond the surname concat. Sub 131 (包惜弱 vocative). Overlay rendered as Tit-sam (jy/yl). Promote to `extras_baseline.json` on second firing.
+- **內功心法** — full compound for 全真教's internal-energy formulas 梅超風 demands (sub 268). Plain-prose rendering ("internal-energy formulas") — 內功 itself is §7-banned-CJK in hybrid. Watch.
+- **大難難逃** chi-OCR (sub 136 — chi 難難 dittography for 大難不逃 / "this disaster won't be escaped"). Single firing — watch.
+- **粗心 vs 畜生** (sub 12 yue 粗心 ASR for chi 會牡/畜生; chi has the OCR-damaged 會牡 — `會牲` in raw) — Rule B chi-sense wins, rendered "brute". 完顏康 referent. Watch.
 
-**Ep20 single-firings (old FULL row; most unresolved):**
+
 - **岳王廟, 岳文, 岳老伯, 岳大叔, 碧玉富貴燈, 翠紅樓, 獅子林, 山神廟, 簡長老, 麻瘋病** — all single-ep places/characters. Promote as they recur.
 - **Idioms** 精忠報國, 醉生夢死, 風流快活, 亡國奴, 半壁江山, 用兵如神, 居功至偉, 皇天不負有心人, 各安天命, 鬼哭狼嚎 — single-ep; promote per §10 gate on next firing.
 
@@ -190,7 +182,7 @@ Candidates awaiting a second firing. On confirmation, promote to the appropriate
 - **降龍有悔, 躍龍在淵** — Dragon-palm names (Ep22 subs 301, 324).
 
 **Ep23 single-firings:**
-- **雪蓮玉露丸, 黃小邪, 邪中有三分正 couplet, 女魔頭, 法師** — as above.
+- **雪蓮玉露丸, 黃小邪, 邪中有三分正 couplet, 法師** — as above.
 
 **Ep24 single-firings:**
 - **燕尾甲→軟蝟甲 yue-ASR**, **華珍→華箏 yue-ASR** — promote to `OCR_NAME_COLLAPSE` on next firing.
@@ -200,7 +192,7 @@ Candidates awaiting a second firing. On confirmation, promote to the appropriate
 - **大衍數 step names** (零/地三/頤王/起/伏/定/已/和) — 頤王 needed sed; recurs at Ep26 歸雲莊.
 - **遵命 → "Yes, sir"** (Ep25) — `extras_baseline.json` if it fires again.
 
-**Ep31 single-firings (many; most Ep31-specific flashbacks):** 一陽指, 華山論劍, 重陽真人, 激將法, 過目不忘, 玉石俱焚, 雞鳴狗盜, 水能載舟亦能覆舟, 李白 將進酒 couplet, 女大不中留, 夫復何言, 圓寂, 陽壽已盡, 冰窒, 起死回生, 入土為安. Promote per §10 gate on next firing.
+**Ep31 single-firings (many; most Ep31-specific flashbacks):** 一陽指, 華山論劍, 激將法, 過目不忘, 玉石俱焚, 雞鳴狗盜, 水能載舟亦能覆舟, 李白 將進酒 couplet, 女大不中留, 夫復何言, 圓寂, 陽壽已盡, 冰窒, 起死回生, 入土為安. Promote per §10 gate on next firing.
 
 **Ep32 single-firings:** 百步穿腸, 蛇杖, 鋼刺, 一代宗師, 狼心狗肺, 七孔流血, 易如反掌, 死無葬身之地, 好生之德, 不識抬舉, 恩將仇報, 死有餘辜, 自作孽不可活, 言出必行, 願賭服輸, 百毒攻心. Promote per §10 gate on next firing. **六個時辰 hybrid-gloss convention** (Ep32 sub 231: `six shichen (twelve hours)`) — decide policy after next firing.
 
@@ -208,8 +200,8 @@ Candidates awaiting a second firing. On confirmation, promote to the appropriate
 
 ### 🟡 Cross-stage concat traps — pending promotion
 
-- **二Master/三Master/六Master** (Ep9 — completes 江南七怪 master-address family; 大/五/七 already in cjk_fix_v2 v17, 四 added Ep8). Post-build sed'd this session. Promote to `shared_concat_fixes` on next bundle bump.
-- **六弟/二哥/七妹/三哥 sibling-ordinal vocatives** (Ep2+Ep9 two-ep) — 江南七怪 address each other by ordinal sibling; bare kinship-title leaks as CJK after titles stage. Either add compound entries to `extras_baseline.json` or add post-build sed entries to `shared_concat_fixes`. Promote next bump.
+- **`Lin'an府` cross-stage trap** (Ep13 single firing) — `臨安` is in `build.py` terms (stage 2), `臨安府` only in episode overlay (stage 5). Stage 2 fires first, strands 府. Worked around with post-build sed `Lin'an府 → Lin'an Prefecture`. Promote to `cjk_fix_v2.py` `shared_concat_fixes` on second firing. (Or move 臨安府 to `build.py` terms dict directly.)
+- **六弟/二哥/七妹/三哥 sibling-ordinal vocatives** (Ep2+Ep9 two-ep) — promoted to `extras_baseline.json` (二哥/三哥/四弟/五弟/六弟/七妹). Drop on next-episode confirmation that the baseline path resolves them cleanly.
 - **`19th-generation 幫主` adjectival** (Ep33) — produces "19th-generation the Chief"; worked around with "leader". Observation only.
 - **`泰山北斗 + 武林` duplicate** (Ep33) — "of the martial world of the martial world". Structural fix: revise 泰山北斗 rendering, or enshrine "don't pair" rule in STYLE §8. (STYLE §10 already has a "don't pair" note under 泰山北斗 — enforcement lives in the reviewer's head; no code fix yet.)
 - **我柯鎮惡 / 我裘千仞** (Ep26) emphatic-self compounds. Fix when they fire again.
@@ -223,46 +215,9 @@ Candidates awaiting a second firing. On confirmation, promote to the appropriate
 
 ---
 
-## 🟢 Recent Promotions (last two bundle bumps)
+## 🟡 Pending audit — `build.py` / `extras_baseline.json` / `cjk_fix_v2.py` overlap
 
-Items promoted during the last two bundle bumps. **Do not re-register in episode overlays.** Older promotion history is compacted below.
-
-### v17 (promotion-only session — no episode processed)
-
-This bump is a correctness-and-consolidation pass, not an episode-processing bump. The v17 session audited v15 and v16's Recent Promotions against the shipped `cjk_fix_v2.py` and found that **most of their entries had been recorded as promoted but never actually landed in the script** (Ep7's row flagged this explicitly after Ep2–Ep7 each needed manual post-build seds for the same "already promoted" entries). v17 recovers those entries and also acts on every "promote this session" / confirmed-two-ep flag across the Completed table.
-
-- **`cjk_fix_v2.py` `shared_concat_fixes` / `yale_concat_fixes` — 18 entries recovered or newly added:**
-  - v15 pilot-arc family (Ep1 — claimed-but-never-shipped): `六Your Highness → the Sixth Prince`, `My Mother子 → my wife`, `張老Father → Old Zoeng` (jy) / `Old Jeung` (yl), `官字taels個口 → the official's mouth speaks both ways`.
-  - v16 江南七怪 master-address family (Ep5+Ep6 two-ep for 大Master; Ep6 for the rest — claimed-but-never-shipped): `五Master → Fifth Master`, `七Master → Seventh Master`, `大Master → First Master`, `紅Mother → the Matchmaker`, `姑Mother → Miss`, `柯Big Brother → Brother O`, `Zit-BitMaster → Master Zit-Bit` (jy) / `Jit-BitMaster → Master Jit-Bit` (yl).
-  - **v17 Ep8 addition**: `四Master → Fourth Master` (completes 江南七怪 master-address family — 郭靖 addresses 南希仁 as 四師父 in Ep8 sub 143; parallel to 大/五/七 Master entries that Ep6 landed).
-  - Ep20 / Ep23 / Ep25 confirmed-trap family: `本姑Mother → this girl` (Ep20+Ep25 three firings); `岳Your Highness → Lord Ngok` (Ep20); `Wongsenior → senior Wong` (Ep23); `死Old Heretic → damned Old Heretic` (Ep23 — matches STYLE §5).
-  - Ep3 `<nickname>+<CSV-name>` family: `銅屍Can Jyun-fung → Bronze Corpse Can Jyun-fung`, `鐵屍Mui Ciu-fung → Iron Corpse Mui Ciu-fung`, `飛天蝙蝠O Zan-ngok → Flying Bat O Zan-ngok` (jy spellings; Yale counterparts in `yale_concat_fixes`).
-  - Ep33 Big-Brother-family: `Zau Baak-tungBig Brother → Brother Zau Baak-tung` (jy) / `Jau Baak-tungBig Brother → Brother Jau Baak-tung` (yl).
-- **`cjk_fix_v2.py` `OCR_NAME_COLLAPSE` extensions** (all meet the two-ep-minimum bar): `啟桌 → 啟稟` (Ep1+Ep2+Ep4 three-ep); `希彰` / `希芯` / `希章 → 希望` (Ep1+Ep2+Ep33 three-ep); `梅朝風` / `梅竹風 → 梅超風` (Ep5+Ep6+Ep7 three-ep); `節別 → 哲別` (Ep6+Ep7 two-ep); `窩辣台 → 窩闊台`, `骨都虎 → 忽都虎` (Ep3); `和伯伽` / `伯伽 → 瑤迦` (Ep25 chi-drift); `網康 → 阿康` (Ep24); `活將軍 → 霍將軍`, `活叔叔 → 霍叔叔` (Ep7 chi-OCR of 霍).
-- **`cjk_fix_v2.py` dup-gloss collapser threshold tuning** (Ep24+Ep33+Ep4+Ep6 four-ep action flag): Jaccard 0.7 → 0.55 and phrase-length min 8 → 6 chars. Targets the short-idiom miss family (後會有期, 忘恩負義, 視日無多, 碎屍萬段).
-- **`extras_baseline.json`**: added `安答 → anda` (Ep3+Ep4 two-ep; Mongol loanword convention, lowercase) and `武穆遺書 → the Book of Wu Mu` (Ep20+Ep21 two-ep).
-- **`PersonalNamesUpdated.csv`**: added `顏烈` (Ep1+Ep2 two-ep — Ngaan Lit / Ngaahn Liht).
-- **`STYLE.md` §10 catalogue purge and admission-gate tightening**: added plain-prose rule (*if the English rendering stands alone as plain prose without losing imagery or cultural weight, the entry does not belong in the catalogue — a consistency ledger is not reason enough to keep it*) and applied retrospectively. Removed ~55 entries whose English rendering carried the full meaning (投鼠忌器, 打草驚蛇, 不見棺材不流淚, 清理門戶, 精忠報國, 好自為之, 大開殺戒, 豈有此理, 後會有期, etc. — also including 一心一意 and 雞犬不寧 which had been added earlier in this session). §10 now retains only 8 CJK+gloss-earning idioms (人之將死其言也善, 婦人之仁, 劫數難逃, 不怕一萬只怕萬一, 狗眼看人低, 邪中有三分正正中帶七分邪, 秦晉之好, 泰山北斗) plus classical-laments / 九陰真經-quotes / meditation subsections. §9 opening subsection reframed: the anti-flattening rule still applies to English renderings, but most idioms now render fully in English rather than as CJK+gloss. §7 Standalone-idioms line trimmed to the single remaining entry (劫數難逃).
-- **`STYLE.md` §5 Name Rendering Table**: added `顏烈` and `小靖` rows plus notes.
-- **`STYLE.md` §10 additions that DID land** (and remain): `林升 題臨安邸` quatrain added to Classical laments (Ep20 full + Ep1 compressed, two-ep); cross-reference to `滿江紅` quatrain pattern.
-- **`STYLE.md` §19**: full v17 promotions block documenting everything above so future sessions don't re-register.
-- **`REFERENCE.md` §1**: `老賊` origin rewritten to cite Ep3 subs 408/418 (桃花洞 death scene, 生則同窮/死則同穴 vow) as the first firing, not Ep22/Ep23 (those are grief invocations).
-- **`build.py` idioms dict trim**: 14 → 4 entries. Under the run-from-scratch pipeline model (no session state persists in `/home/claude/`), the idioms dict only ever sees the current reviewer's hybrid overrides. Idioms removed from §10 under the plain-prose rule are rendered in English directly in the hybrid and never reach `build.py` as CJK — their dict entries were dead code. Retained: the three paired-proverb couplets (死罪可免，活罪難逃 / 男歡女愛，天公地道 / 幫人幫到底，送佛送到西) whose full-couplet form needs punctuation-clean rendering the baseline-halves path would otherwise leave with a stray 全形 comma, plus the no-comma safety-catch variant of the §10-kept 人之將死其言也善. Couplet renderings aligned with baseline halves to prevent drift between full-couplet and separate-halves paths.
-- **No code change needed** for the Ep4 `our + the` flag: `build.py` line 212's article-collapse regex already includes `our` in `(my|your|his|her|our|their)`. The flag was stale — `our the great Jin empire` → `our great Jin empire` is already being normalised. Dropped from the Watch List without a code edit.
-- **Five Greats (五絕) epithets promoted to `STYLE.md` §10 + `extras_baseline.json`** (Ep11 session): added new §10 subsection "Five Greats (五絕) epithets" catalogueing 東邪 (黃藥師, "Eastern Heretic"), 西毒 (歐陽峰, "Western Poison"), 南帝 (一燈大師 / 段智興, "Southern Emperor"), 北丐 (洪七公, "Northern Beggar"), 中神通 (王重陽, "Central Divine"). These are canonical wuxia epithets — proper-noun titles, not descriptions — and pass §10's admission gate on criterion 2 (classical wuxia allusion with fixed named referents). Rendering convention: full cardinal adjective ("Eastern/Western/Southern/Northern/Central"), and 毒 renders as "Poison" (the standard English rendering for 歐陽峰's epithet), not "Venom". Added §7 pointer subsection "Five Greats (五絕) epithets" under Standalone idioms so the keep-CJK rule is discoverable. `extras_baseline.json` now has the five individual epithets alongside the pairings `東邪西毒 → Eastern Heretic and Western Poison` / `南帝北丐 → Southern Emperor and Northern Beggar` (updated from prior "East Heretic and West Venom" / "South Emperor and North Beggar" renderings — longest-first sort keeps the pair renderings correct). `REFERENCE.md` §6 Five Greats framework table updated: 西毒 row changed from "Western Venom" to "Western Poison" for consistency. Ep11 subs 15 and 267 regenerated to use 東邪 CJK in hybrid instead of the prior English rendering.
-- **Gloss format changed to `中文成語 (English gloss)` universally** (Ep11 session, prep for v18 bundle): STYLE §9 "Preferred format" rule migrated from `English gloss — 中文成語.` to `中文成語 (English gloss)` — Chinese idiom first, English gloss parenthesised after. Applied retrospectively across §10:
-  - Catalogue entries: 人之將死其言也善, 不怕一萬只怕萬一 updated.
-  - Classical laments / elegiac verse: Ep28 陸乘風 (想逝者 / 天蓋高), Ep33 黃藥師 (天長地久 / 譬如朝露 曹操 短歌行), 林升 題臨安邸 quatrain, 滿江紅 quatrain, 九陰真經 天之道, Dragon chant quartet — all format notes rewritten.
-  - §9 RIGHT/WRONG examples table updated to show `狗眼看人低 (who told him to look down on us)!` and `劫數難逃 (I fear my time has come)` shape.
-  - §19 hybrid-variant duplication trap subsection rewritten to describe the new `X (Y)` duplicate pattern alongside the legacy em-dash `X — Y` pattern.
-  - `REFERENCE.md` §8 Category 4 rule, §9 Key Takeaway #4, and Dragon chant (§5) format notes updated.
-  - `cjk_fix_v2.py` dup-gloss collapser extended: new parenthetical pattern `X (Y)` collapsed via the same Jaccard-or-subset rule as the em-dash pattern (v17 threshold: Jaccard 0.55, min length 6 chars). Both shapes now handled; legacy em-dash collapser retained for backward compatibility with prior-session output.
-  - `auto_override_v2.py` idiom injection simplified: just appends the CJK with a space separator (no em-dash), since Step 4 reviewers always reformat §10-eligible subs into the canonical `CJK (gloss)` form anyway and the em-dash staging was mechanical preprocessing only.
-  - Ep11 subs 335 (女大不中留) and 396 (功虧一簣) regenerated with the new parenthetical format.
-
-### 🟡 Pending audit — `build.py` / `extras_baseline.json` / `cjk_fix_v2.py` overlap
-
-The v17 idioms-dict trim surfaced a broader issue: several tables across these three files carry overlapping entries for the same CJK keys. Under the run-from-scratch pipeline, the ordering is terms-dict (stage 2) → titles (stage 3) → names (stage 4) → extras (stage 5) → post-build cjk_fix_v2. Earlier-stage entries silently override later-stage entries with the same key. This creates two risks: (a) dead code in later stages wastes audit attention, and (b) silent divergence between duplicate renderings.
+Several tables across these three files carry overlapping entries for the same CJK keys. Under the run-from-scratch pipeline, the ordering is terms-dict (stage 2) → titles (stage 3) → names (stage 4) → extras (stage 5) → post-build cjk_fix_v2. Earlier-stage entries silently override later-stage entries with the same key. Two risks: (a) dead code in later stages wastes audit attention, (b) silent divergence between duplicate renderings.
 
 Known overlap clusters to audit in a future session:
 - **`build.py` `terms` dict vs `extras_baseline.json`** — entries like 桃花島, 全真教, 九陰真經, 江湖, 降龍十八掌, 武林, 蒙古, 臨安, 大理 appear in both. Terms wins (stage 2 before stage 5). If renderings differ, baseline entry is dead code; worse, reviewer may read baseline and not realise terms overrides it.
@@ -270,17 +225,6 @@ Known overlap clusters to audit in a future session:
 - **`cjk_fix_v2.py` `fixes` dict vs `extras_baseline.json`** — the `fixes` dict runs post-build so it's a true belt-and-suspenders catch; safe as-is but many entries may now be redundant if extras-stage firing is robust.
 
 Recommended approach: audit by diffing keys across the three files, flag any entry whose rendering differs between sources, then delete redundant entries from the later-running source (baseline for terms/titles; fixes dict for post-build). Don't touch without the diff — some "redundant" entries may be the only correct one if another source has a stale rendering. Risk level: medium. Budget estimate: one full session just for the audit; save the actual edits for a follow-up. Not blocking anything; flagged so future sessions don't re-create the problem.
-
-### Compacted history (v11–v16)
-
-The full per-bump item lists for these bumps lived in prior SESSION-NOTES; content is now reflected in the source files. Look there if a v11–v16 promotion appears to regress:
-
-- **v16 bump** (Ep6 FULL session). Claimed promotions: seven `<titles-key>+<suffix>` / `<CSV-name>+<title>` concat-trap entries for 江南七怪 master-address family. **These were documented as promoted but never landed in the shipped `cjk_fix_v2.py`** — recovered under v17 above. Ep6 overlay-held first firings awaiting second firing remain: 迴聲谷, 八字純陰, 紅娘, 一箭雙鵰, 奮勇殺敵, 欲速則不達, 東征西討, 指腹為婚, 賊眉鼠眼.
-- **v15 bump** (Ep1 FULL session). Claimed promotions: four `<titles-key>+<suffix>` concat-trap entries (六Your Highness, My Mother子, 張老Father, 官字taels個口) plus 滿江紅 quatrain format (STYLE §10 Classical-laments). **The concat-trap entries were never shipped** — recovered under v17. The 滿江紅 format entry did land.
-- **v14 bump** (user-rule clarifications: generic wuxia vocabulary English in hybrid 武功/武林/江湖/內力/內功/輕功/功力; 叫化子 banned; colloquial insult compounds English; descriptive common-noun metaphors English; STYLE §10 admission-gate criteria. STYLE §5 additions: 歐陽先生/公子/叔叔. `extras_baseline.json` additions: 歐陽先生/公子/叔叔, 打狗棒/打狗棒法, 易筋鍛骨篇, 空明拳, 老乞兒/乞兒, 泰山北斗. STYLE §10 Classical laments: 曹操 短歌行 couplet).
-- **v13 bump** (STYLE §19 structural rule; `OCR_NAME_COLLAPSE` v13 batch; `<titles-key>+<suffix>` family fixes; 週-daai-go/daaih-go leading-週 strip; 時辰/氣聚丹田/內力/真經 baseline).
-- **v12 bump** (一陽指, 內子, 圓寂, 李白 將進酒 couplet pattern).
-- **v11 bump** (我爹/你爹, 週大哥, 陸乘風 OCR-variant collapse; 叔叔/武功/走火入魔 baseline; Luksenior/KauElder/我們the/Cing姑Mother concat fixes; STYLE §5 additions 瑤迦/冠英/孫不二; STYLE §8 積翠亭/梅花樁; STYLE §10 秦晉之好/泰山北斗/天作之合; 想逝者/天蓋高 lament; 天之道/損有餘而補不足 九陰真經; REFERENCE §3 周伯通 voice; REFERENCE §1 阿克 homophone cluster).
 
 ---
 

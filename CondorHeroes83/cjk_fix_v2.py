@@ -285,6 +285,17 @@ OCR_NAME_COLLAPSE = {
     "網康": "阿康",                                  # Ep24 novel OCR
     "活將軍": "霍將軍", "活叔叔": "霍叔叔",          # Ep7 chi-OCR (活→霍);
                                                       # flagged for 2nd firing
+    # v18 — additional Watch List promotions:
+    "蒼龍": "蒼狼",                                   # 大漠的蒼龍 chi-OCR; Ep3+Ep8 two-ep.
+                                                      # 成吉思汗's epithet 大漠的蒼狼 (wolf, canonical);
+                                                      # chi drifts 狼→龍 (visually similar). yue
+                                                      # witness confirms 蒼狼.
+    "央馬": "駙馬", "騎馬": "駙馬",                    # 駙馬 chi-OCR; Ep8+Ep23+Ep25 three-ep.
+                                                      # Both visual drifts of 駙. The wider compound
+                                                      # 駙馬爺 is unaffected because the longer
+                                                      # 央馬爺/騎馬爺 forms reduce by suffix.
+    "阿勇": "阿蓉",                                   # Ep10+Ep13 two-ep chi-OCR; 郭靖's intimate
+                                                      # form for 蓉兒. yue witness clean.
 }
 for variant in ["hybrid", "jyutping", "yale"]:
     fp = f"/mnt/user-data/outputs/{ep}-eng-{variant}-v{VERSION}.srt"
@@ -303,11 +314,15 @@ for variant in ["jyutping", "yale"]:
     if variant == "yale": lookup.update(yale_fixes)
     for k in sorted(lookup, key=len, reverse=True):
         content = content.replace(k, lookup[k])
-    # v11 concat-trap post-build fixes (see SESSION-NOTES v10 Watch List promotions)
+    # v11 concat-trap post-build fixes (see SESSION-NOTES v10 Watch List promotions).
+    # Sort longest-first so multi-key compounds win over their substrings —
+    # e.g. `本姑Mother → this girl` must fire before `姑Mother → Miss`,
+    # otherwise the short key strands `本Miss`. (Three-ep firing Ep20+Ep25+Ep13
+    # before this sort was added.)
     concat = dict(shared_concat_fixes)
     if variant == "yale": concat.update(yale_concat_fixes)
-    for k, v in concat.items():
-        content = content.replace(k, v)
+    for k in sorted(concat, key=len, reverse=True):
+        content = content.replace(k, concat[k])
     # Clean up double spaces
     content = re.sub(r'  +', ' ', content)
     # Collapse "X — Y" duplicate-gloss patterns (StyleRulings Ep22/23 learning).

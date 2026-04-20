@@ -232,6 +232,8 @@ Canonical renderings for recurring name/nickname forms. Personal names proper li
 | 赤將軍 | 赤將軍 | General Chi | General Chi |
 | 彭寨主 | 彭寨主 | Stockade Master Pang | Stockade Master Pahng |
 | 丘道長 | 丘道長 | Taoist Jau | Taoist Yau |
+| 馬道長 | 馬道長 | Taoist Maa | Taoist Ma |
+| 王道長 | 王道長 | Taoist Wong | Taoist Wong |
 | 駙馬 / 駙馬爺 | 駙馬 / 駙馬爺 | Prince Consort | Prince Consort |
 | 金刀駙馬 | 金刀駙馬 | the Golden Prince Consort | the Golden Prince Consort |
 | 晚輩 | 晚輩 | this junior | this junior |
@@ -282,6 +284,7 @@ Title and address conversions in romanised files (hybrid keeps CJK):
 | 王爺 | Your Highness / the Prince |
 | 小王爺 | the Young Prince |
 | 王子 | the Prince |
+| 王妃 | the royal concubine |
 | 公主 | Princess |
 | 閻王爺 | the King of Hell |
 | 老叫化子 | Old Beggar |
@@ -300,7 +303,7 @@ Title and address conversions in romanised files (hybrid keeps CJK):
 All character names from `PersonalNamesUpdated.csv`.
 
 ### Titles
-師父 · 師兄 · 師弟 · 師姊 · 師妹 · 師叔 · 師姑 · 前輩 · 莊主 · 少莊主 · 幫主 · 祖師爺 · 仙姑 · 駙馬爺 · 王爺 · 小王爺 · 大哥 · 七公 · 島主 · 老伯 · 少爺 · 弟子 · 長老 · 公子
+師父 · 師兄 · 師弟 · 師姊 · 師妹 · 師叔 · 師姑 · 前輩 · 莊主 · 少莊主 · 幫主 · 祖師爺 · 仙姑 · 駙馬爺 · 王爺 · 小王爺 · 王妃 · 大哥 · 七公 · 島主 · 老伯 · 少爺 · 弟子 · 長老 · 公子
 
 ### Address
 父王 · 阿爹 · 爹 · 娘親 · 靖哥哥 · 蓉兒 · 靖兒 · 康兒 · 阿靖 · 阿康 · 週大哥 · 黃島主 · 藥師兄 · 歐陽世兄 · etc.
@@ -707,37 +710,7 @@ These leaks appear episode after episode and need to be fixed in a targeted pass
 - `Yeung兄` → "Brother Yeung"
 - Classical Chinese phrases left in romanised files → translate to English
 
-Already handled by `cjk_fix_v2.py` under v11 (listed here for reference — do NOT re-add unless the automation regresses):
-- `週Big Brother` / `周Big Brother` → `週-daai-go` / `週-daaih-go` (v11)
-- 陸乘風 OCR-variant collapse (陸成風, 陸承鋒, 陸承峰, 陸勝鋒, 六成風, 六兄 → 陸乘風 / 陸兄; v11)
-- `Luksenior` → `senior Luk` / `Luhksenior` → `senior Luhk` (v11 concat-trap)
-- `KauElder` → `Elder Kau` / `KauhElder` → `Elder Kauh` (v11 concat-trap)
-- `我們the ` → `our ` (v11 concat-trap)
-- `Cing姑Mother` → `Miss Cing` / `Ching姑Mother` → `Miss Ching` (v11 concat-trap)
-- `瑤迦`, `冠英`, `孫不二` — now have explicit rows in §5 (v11).
-
-Added by `cjk_fix_v2.py` under v13 (do NOT re-register in episode overlays):
-- `我Father` → `my father` / `你Father` → `your father` (v13 `<titles-key>+<suffix>` family — our Ep21)
-- `the Chief萬福` → `Good fortune to the Chief` (v13 — Ep21 丐幫 greeting)
-- `大Jin` → `the great Jin empire` (v13 — Ep21 大金國)
-- `報告the Princess` → `Your report, Princess` (v13 — Ep21 華箏 scout report)
-- `週-daai-go` / `周-daai-go` → `daai-go`; `週-daaih-go` / `周-daaih-go` → `daaih-go` (v13 leading-週 strip, Ep31/Ep32)
-- Extended `OCR_NAME_COLLAPSE` table: 老頑童 variants (老誠童/老顏童/老其童/老示童/老顛童/老和童/老基童/老阿棟/老誠和童); 歐陽蜂/歐陽鋒 → 歐陽峰; 郭蜻 → 郭靖; 阿蜻 → 阿靖; 其兒/鞭兒 → 蓉兒; 量有此理 → 豈有此理; 王老邪/羅老邪 → 黃老邪; 若師兄 → 藥師兄; 瑤珈 → 瑤迦 (v13 chi-OCR batch damage, Ep28/Ep30/Ep31/Ep32).
-
-Added by `cjk_fix_v2.py` under v17 (do NOT re-register in episode overlays). **Important context:** Ep7's row in SESSION-NOTES flagged that the v15/v16 entries immediately below had been claimed as promoted but were never actually present in the shipped `cjk_fix_v2.py` — Eps 2 through 7 all needed manual post-build seds for these. v17 recovers them properly:
-- **v15 pilot-arc family** (Ep1): `六Your Highness` → `the Sixth Prince` (六王爺); `My Mother子` → `my wife` (娘子); `張老Father` → `Old Zoeng` / `Old Jeung` (張老爹); `官字taels個口` → `the official's mouth speaks both ways` (官字兩個口).
-- **v16 江南七怪 master-address family** (Ep5+Ep6 for 大Master; Ep6 for the rest): `五Master` → `Fifth Master`; `七Master` → `Seventh Master`; `大Master` → `First Master`; `紅Mother` → `the Matchmaker` (紅娘); `姑Mother` → `Miss` (bare 姑娘); `柯Big Brother` → `Brother O` (柯大哥); `Zit-BitMaster` → `Master Zit-Bit` / `Jit-BitMaster` → `Master Jit-Bit` (哲別師父).
-- **Ep20 / Ep23 / Ep25 confirmed-trap family**: `本姑Mother` → `this girl` (本姑娘, Ep20+Ep25 three firings); `岳Your Highness` → `Lord Ngok` (岳王爺, Ep20); `Wongsenior` → `senior Wong` (黃前輩, Ep23); `死Old Heretic` → `damned Old Heretic` (死老邪, Ep23 — matches the STYLE §5 rendering).
-- **Ep3 `<nickname>+<CSV-name>` concat-trap family**: `銅屍Can Jyun-fung` → `Bronze Corpse Can Jyun-fung`; `鐵屍Mui Ciu-fung` → `Iron Corpse Mui Ciu-fung`; `飛天蝙蝠O Zan-ngok` → `Flying Bat O Zan-ngok` (jy spellings; Yale counterparts in `yale_concat_fixes`). Structural note: names stage 4 fires the CSV name before extras stage 5, stranding the nickname. Likely recurs wherever 江南七怪 nicknames + CSV names co-occur.
-- **Ep33 Big-Brother-family**: `Zau Baak-tungBig Brother` → `Brother Zau Baak-tung` / `Jau Baak-tungBig Brother` → `Brother Jau Baak-tung` (周伯通大哥; 大哥 titles stage eats it).
-- **Extended `OCR_NAME_COLLAPSE`**: `啟桌` → `啟稟` (Ep1+Ep2+Ep4 three-ep); `希彰` / `希芯` / `希章` → `希望` (Ep1+Ep2+Ep33 three-ep); `梅朝風` / `梅竹風` → `梅超風` (Ep5+Ep6+Ep7 three-ep); `節別` → `哲別` (Ep6+Ep7 yue-ASR two-ep); `窩辣台` → `窩闊台`, `骨都虎` → `忽都虎` (Ep3); `和伯伽` / `伯伽` → `瑤迦` (Ep25); `網康` → `阿康` (Ep24); `活將軍` → `霍將軍`, `活叔叔` → `霍叔叔` (Ep7 chi-OCR of 霍).
-- **Dup-gloss collapser threshold lowered**: Jaccard 0.7 → 0.55 and phrase-length minimum 8 → 6 chars. Catches the Ep24/Ep33 short-idiom miss family (後會有期, 忘恩負義, 視日無多, 碎屍萬段 — four-ep pattern).
-
-Added to `extras_baseline.json` under v17 (do NOT re-register):
-- `安答` → `anda` (Ep3+Ep4 two-ep). Mongol sworn-brotherhood loanword; lowercase romanisation (loanword convention).
-- `武穆遺書` → `the Book of Wu Mu` (Ep20+Ep21 two-ep).
-
-`STYLE.md` §10 catalogue purge under v17 — tightened the admission gate with a **plain-prose rule**: *if the English rendering stands alone as plain prose without losing imagery or cultural weight, the entry does not belong in the catalogue*. A consistency ledger is not reason enough to keep an entry when the English form fully carries the meaning. Applied retrospectively, this purged ~55 entries; §10 now retains only 8 CJK+gloss-earning idioms plus the classical laments, 九陰真經 quotations, 內力/內功/內傷 family, meditation/qi, and Dragon chant quartet subsections. Kept: **人之將死, 其言也善** (論語 allusion); **婦人之仁** (gendered classical compound); **劫數難逃** (Buddhist 劫數 weight); **不怕一萬, 只怕萬一** (parallelism-dependent couplet); **狗眼看人低** (dog-eye image is the idiom); **邪中有三分正, 正中帶七分邪** (黃藥師's poetic couplet); **秦晉之好** (左傳 allusion); **泰山北斗** (史記 allusion). All other idioms — including ones previously catalogued like 投鼠忌器, 打草驚蛇, 不見棺材不流淚, 清理門戶, 精忠報國, 好自為之, 大開殺戒, 豈有此理, 一心一意, 雞犬不寧, etc. — now render in English in both hybrid and romanised. §9's anti-flattening rule still applies to English renderings ("won't cry till you see the coffin", not "won't believe till it's too late"). §7 Standalone-idioms line updated to reflect the single remaining entry.
+The bulk of recurring concat-trap and OCR-collapse patterns are now handled automatically by `cjk_fix_v2.py` (`shared_concat_fixes`, `yale_concat_fixes`, `OCR_NAME_COLLAPSE` tables). The active set is the source of truth; consult the script directly. Promote new patterns to those tables once they fire in two or more episodes without a contradicting rendering.
 
 ### The `<titles-key>+<suffix>` cross-stage trap — structural rule (v13)
 
@@ -755,7 +728,7 @@ Added to `extras_baseline.json` under v17 (do NOT re-register):
 2. If the compound needs a wholly different English rendering, either (a) promote the compound entry into `build.py`'s idioms stage (stage 1) so it wins by ordering, or (b) post-build-fix in `cjk_fix_v2.py`.
 3. Option (a) is structurally cleaner but requires editing `build.py` and re-checking that the compound doesn't break other idioms. Option (b) is lower-risk for one-off entries.
 
-**Known firings and their current resolution:** see the bullet list above. New compounds of this family should be added to `cjk_fix_v2.py`'s `shared_concat_fixes` as they're discovered.
+**Known firings and their current resolution:** see the worked examples above. New compounds of this family should be added to `cjk_fix_v2.py`'s `shared_concat_fixes` as they're discovered.
 
 ### Hybrid-variant duplication trap (IMPORTANT — learned Ep22/23; format updated v18)
 
