@@ -510,11 +510,18 @@ for a in aligned:
 
         for source in sources_to_check:
             if idiom_chi in source and idiom_chi not in text:
+                # v18: STYLE §9 gloss format is now `中文成語 (English gloss)`,
+                # so the old em-dash-separated shape no longer applies. For
+                # heuristic injection we just append the CJK with a space —
+                # the reviewer at Step 4 is expected to reformat any §10
+                # entry into the final `CJK (gloss)` shape anyway (§10 is
+                # tiny under v17's plain-prose rule; most idioms render
+                # English-only and don't reach this injection path).
                 text = text.rstrip()
                 if text.endswith('.') or text.endswith('!') or text.endswith('?'):
-                    text = text[:-1] + f' — {idiom_chi}' + text[-1]
+                    text = text[:-1] + f' {idiom_chi}' + text[-1]
                 else:
-                    text += f' — {idiom_chi}'
+                    text += f' {idiom_chi}'
                 break  # Don't double-inject from both sources
 
     overrides[idx] = text

@@ -226,7 +226,7 @@ These appear in 黃蓉's cooking scenes. **Keep Chinese in hybrid; translate in 
 - **腳似飛龍騰萬里** = "Kick like a flying dragon spanning ten thousand li"
 - **拳似怒龍翻四海** = "Punch like an angry dragon overturning the four seas"
 
-In hybrid, format as CJK line + em-dash + English gloss on the next line. In romanised, English translation only — do not duplicate. See `STYLE.md` §19 (hybrid-variant duplication trap).
+In hybrid, format as `CJK (English gloss)` on the same line. In romanised, English translation only — do not duplicate. See `STYLE.md` §19 (hybrid-variant duplication trap).
 
 ### Meditation / qi instructions (Ep21–22)
 - **氣聚丹田** = "Qi gathers at the dantian"
@@ -407,7 +407,7 @@ In hybrid mode, names and titles must be in Chinese characters. New sessions fre
 
 Hybrid subs should include Chinese idioms inline with English glosses. New sessions tend to drop them.
 
-**Rule:** When a 四字成語 or common phrase appears in the Chinese, include it in hybrid format: `"Chinese gloss."` or `"English gloss — 中文."`
+**Rule:** When a 四字成語 or common phrase appears in the Chinese, include it in hybrid format: `"中文成語 (English gloss)"` per STYLE §9.
 
 **Examples of missed idioms (full catalogue in `STYLE.md` §10):**
 - **防不勝防** → should appear as "防不勝防." after "impossible to guard against"
@@ -443,7 +443,7 @@ Small preference differences like "Don't worry. They won't fight" vs "Don't worr
 
 3. **Hybrid means Chinese characters.** Every name, every title, every place, every idiom — Chinese characters in hybrid. Scan after building for any English proper nouns that should be Chinese.
 
-4. **Idioms are not optional.** When chi contains a 四字成語, hybrid MUST include it. Format: `"English gloss — 中文成語."` (preferred) or `"中文成語. English gloss."`.
+4. **Idioms are not optional.** When chi contains a 四字成語, hybrid MUST include it. Format: `"中文成語 (English gloss)"` per STYLE §9.
 
 5. **Read the detail.** 好像 ≠ became (it means "seemed"). 大小姐 ≠ "Miss Cheng" (it means "young mistress"). 一心一意 ≠ "just waiting" (it means "single-mindedly determined"). These nuances matter.
 

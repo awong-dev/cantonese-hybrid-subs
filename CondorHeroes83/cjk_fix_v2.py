@@ -348,6 +348,38 @@ for variant in ["jyutping", "yale"]:
         r'([^\n—]{6,}?)(\s+—\s+)([^\n—.!?]{6,}?)(?=[.!?\n])',
         collapse_dupe, content
     )
+    # v18: also collapse "X (Y)" duplicate-gloss patterns arising from the
+    # STYLE §9 `中文成語 (English gloss)` hybrid format. When build.py converts
+    # the CJK on the left of the parens, it produces an English rendering
+    # that is usually content-identical (or near-identical) to the gloss
+    # inside the parens. Example before collapse:
+    #   "better safe than sorry (better safe than sorry)"
+    #   "I've fallen short at the last gasp (I've fallen short at the last gasp)"
+    # The collapser keeps the un-parenthesised side and drops the parens
+    # phrase, using the same Jaccard-or-subset rule as the em-dash collapser.
+    #
+    # Scoping: the outer phrase match is anchored at word-start and runs up
+    # to the opening paren; the parens content is captured without inner
+    # parens. We don't fire on parens that carry genuinely new information
+    # (speaker labels, asides, numeric references) — the ≥55% Jaccard
+    # threshold protects those. We also require the parens content to be
+    # ≥6 chars so one-word asides like "(again)" aren't folded.
+    def collapse_paren_dupe(m):
+        before, inside = m.group(1), m.group(2)
+        bc = content_words(before)
+        ic = content_words(inside)
+        if not bc or not ic:
+            return m.group(0)
+        jaccard = len(bc & ic) / len(bc | ic)
+        subset = (bc.issubset(ic) or ic.issubset(bc)) and min(len(bc), len(ic)) >= 2
+        if jaccard > 0.55 or subset:
+            # Drop the parens phrase entirely; keep the pre-parens text.
+            return before.rstrip()
+        return m.group(0)
+    content = re.sub(
+        r'([^\n()]{6,}?)\s*\(([^()\n]{6,}?)\)',
+        collapse_paren_dupe, content
+    )
     with open(fp, "w", encoding="utf-8") as f:
         f.write(content)
 

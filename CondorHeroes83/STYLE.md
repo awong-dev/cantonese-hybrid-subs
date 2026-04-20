@@ -442,9 +442,9 @@ This is the pattern-specific form of the general §9 rule above, called out beca
 
 ### Hybrid: keep Chinese characters inline
 
-**Preferred format: `English gloss — 中文成語.`** (English first, em-dash, then the Chinese idiom.)
+**Preferred format: `中文成語 (English gloss)`** (Chinese idiom first, then the English gloss in parentheses.) This format is universal — use it for 四字成語, couplet idioms, classical allusions, and any entry in §10 that keeps CJK in hybrid.
 
-**Scope of the CJK+gloss format.** Reserve this format for 四字成語, poetic couplets, classical allusions, and literary phrases where the Chinese form carries meaning the English gloss alone can't fully convey and for the first-appearance of Proper Nouns and Titles in an episode. **Do not** use it for:
+**Scope of the CJK+gloss format.** Reserve this format for 四字成語, poetic couplets, classical allusions, and literary phrases where the Chinese form carries meaning the English gloss alone can't fully convey. **Do not** use it for:
 - Colloquial slang or intensifiers (抵死, 好彩, 乜嘢) — render the register in English
 - Everyday vocabulary that happens to differ between Cantonese and Mandarin — use Rule A to pick the form, render in English
 - Emotional interjections — match the tone in English
@@ -453,12 +453,12 @@ The CJK+gloss format's job is to preserve cultural/literary content the English 
 
 | RIGHT | WRONG |
 |-------|-------|
-| Who told him to look down on us — 狗眼看人低! | He looked down on us. 狗眼看人低. |
-| I fear my time has come — 劫數難逃. | I fear this is my fate — I won't escape it. |
+| 狗眼看人低 (who told him to look down on us)! | He looked down on us. 狗眼看人低. |
+| 劫數難逃 (I fear my time has come) | I fear this is my fate — I won't escape it. |
 | He damn well deserves it | He deserves it — 抵死 |
 
 **Rules:**
-- **Never gloss an idiom twice** (once in Chinese AND as a separate English expansion). The English before the dash IS the gloss.
+- **Never gloss an idiom twice** (once in Chinese AND as a separate English expansion). The English in parentheses IS the gloss; don't also write the English meaning outside the parens.
 - **Idiom on its own is fine** — if the sub is just an exclamation and the idiom is §10-catalogued (e.g. "邪中有三分正!" or "泰山北斗!"), the CJK alone is acceptable. For non-catalogued idioms, render in English.
 - **Don't inject idioms into subs where they don't appear in chi.** Only include idioms that are actually in the source text for that sub.
 
@@ -496,10 +496,10 @@ Phrases that **do** pass the gate (for reference): **塞外高人** passes as a 
 
 ### Catalogue entries
 
-- **人之將死, 其言也善** — "When a man is dying, his words are kind" (hybrid: CJK + gloss on same line). 論語 classical allusion.
+- **人之將死, 其言也善** — "When a man is dying, his words are kind" (hybrid: `人之將死, 其言也善 (when a man is dying, his words are kind)`). 論語 classical allusion.
 - **婦人之仁** — "a woman's soft-heartedness". Classical compound; the rendering retains the distinctive gendered image.
 - **劫數難逃** — "cannot escape one's fate". Buddhist 劫數 imagery; cultural weight English can't fully carry.
-- **不怕一萬, 只怕萬一** — "better safe than sorry" (hybrid couplet: *"不怕一萬, 只怕萬一 — better safe than sorry."*). Classical couplet; the ten-thousand / one-in-ten-thousand parallelism is the point, not the gloss.
+- **不怕一萬, 只怕萬一** — "better safe than sorry" (hybrid couplet: *"不怕一萬, 只怕萬一 (better safe than sorry)."*). Classical couplet; the ten-thousand / one-in-ten-thousand parallelism is the point, not the gloss.
 - **狗眼看人低** — "look down on others". Named 俗語; the dog-eye image is the idiom.
 - **邪中有三分正, 正中帶七分邪** — "The heretical are three parts righteous; the righteous are seven parts heretical!" (黃藥師's couplet about 蓉兒). Poetic couplet with named speaker. **Keep Chinese in hybrid; English translation only in romanised. Do NOT double-print Chinese + English in romanised.**
 - **秦晉之好** — "the bond of 秦晉" (hybrid) / "the bond of Chun-Zeon" (jy) / "the bond of Chun-Jeun" (yl). Classical allusion (左傳) to the marriage alliance between the states of 秦 and 晉. These are idioms-of-reference, not modern place names.
@@ -522,13 +522,13 @@ Usage notes:
 - For 一燈大師 specifically: the series uses both 南帝 (pre-ordination epithet) and 一燈 (post-ordination monastic name) — track which form the scene uses and preserve it.
 
 ### Classical laments / elegiac verse
-- **想逝者之不罪兮, 惜形中之載道** / **天蓋高而無階, 懷此恨其最苦** (Ep28) — 陸乘風's lament for 瑤迦. Format as CJK + em-dash + English gloss on the next line (Dragon-chant quartet pattern). Glosses: "my love runs deep, the dead beyond recall" / "Heaven is high but has no stair; this sorrow cuts deepest".
-- **天長地久, 人生幾何** / **譬如朝露, 去日苦短** (Ep33 subs 173–174) — 黃藥師's lament for the supposedly-dead 蓉兒. Adapted from 曹操 短歌行. Format as CJK + em-dash + English gloss on same line. Glosses: "Heaven and Earth endure; how brief a human life" / "like morning dew, the days gone are bitter and short".
-- **林升 題臨安邸** (Ep20 full + Ep1 compressed form — two-ep confirmed) — Southern Song lament over the occupied capital. Quatrain format: four lines, each a CJK line + em-dash + English gloss on same line. Canonical text: 山外青山樓外樓 / 西湖歌舞幾時休 / 暖風熏得遊人醉 / 直把杭州作汴州. Glosses: "beyond the green hills, more green hills; beyond the tower, yet another tower" / "when will the song and dance on 西湖 ever cease?" / "the warm breeze lulls the travellers drunk" / "they take 杭州 for 汴州". Ep1 uses a compressed two-line form invoking lines 2+4 as narration backdrop; render only the two lines that chi carries.
-- **滿江紅 quatrain** (Ep1 first firing, Ep15+ 武穆遺書-arc reappearance expected) — 岳飛's 靖康恥 quatrain. Format as CJK line + em-dash + English gloss on same line. Already a first-firing reference; established format under v15.
+- **想逝者之不罪兮, 惜形中之載道** / **天蓋高而無階, 懷此恨其最苦** (Ep28) — 陸乘風's lament for 瑤迦. Format as `CJK (English gloss)` — both halves on the same line if they fit, otherwise one couplet-half per line. Glosses: "my love runs deep, the dead beyond recall" / "Heaven is high but has no stair; this sorrow cuts deepest".
+- **天長地久, 人生幾何** / **譬如朝露, 去日苦短** (Ep33 subs 173–174) — 黃藥師's lament for the supposedly-dead 蓉兒. Adapted from 曹操 短歌行. Format as `CJK (English gloss)` on the same line. Glosses: "Heaven and Earth endure; how brief a human life" / "like morning dew, the days gone are bitter and short".
+- **林升 題臨安邸** (Ep20 full + Ep1 compressed form — two-ep confirmed) — Southern Song lament over the occupied capital. Quatrain format: four lines, each `CJK (English gloss)` on the same line. Canonical text: 山外青山樓外樓 / 西湖歌舞幾時休 / 暖風熏得遊人醉 / 直把杭州作汴州. Glosses: "beyond the green hills, more green hills; beyond the tower, yet another tower" / "when will the song and dance on 西湖 ever cease?" / "the warm breeze lulls the travellers drunk" / "they take 杭州 for 汴州". Ep1 uses a compressed two-line form invoking lines 2+4 as narration backdrop; render only the two lines that chi carries.
+- **滿江紅 quatrain** (Ep1 first firing, Ep15+ 武穆遺書-arc reappearance expected) — 岳飛's 靖康恥 quatrain. Format as `CJK (English gloss)` on the same line, one quatrain-line per sub. Already a first-firing reference; established format under v15 (migrated to parenthetical gloss under v18).
 
 ### 九陰真經 quotations (from 周伯通's slap-memorise teaching, Ep29+)
-- **天之道, 損有餘而補不足** — "Heaven's way: take from the surplus and replenish the lack". Adapted from 道德經 77. Hybrid: CJK + em-dash + English on next line; romanised: English only.
+- **天之道, 損有餘而補不足** — "Heaven's way: take from the surplus and replenish the lack". Adapted from 道德經 77. Hybrid: `天之道, 損有餘而補不足 (Heaven's way: take from the surplus and replenish the lack)` on the same line, or split across two lines if it doesn't fit; romanised: English only.
 - Related meditation-text fragments (任督二脈, 氣聚丹田, 百會, 大椎, 足少陽/足少陰, 十二經筋) — render per the meditation/qi subsection below.
 
 ### 內功 / 內力 / 內傷 family
@@ -547,7 +547,7 @@ Usage notes:
 - **陰柔** — "yin-soft"
 
 ### Dragon chant quartet — Ep22 subs 428–431
-In hybrid, format as CJK line + em-dash + English gloss on the next line. In romanised, English translation only (do not duplicate).
+In hybrid, format as `CJK (English gloss)` on the same line, one line per chant-line. In romanised, English translation only (do not duplicate).
 
 - 去似天龍雲飛躍 → "Go like a heavenly dragon soaring through clouds"
 - 收似降龍穩深沈 → "Retreat like a subdued dragon, steady and deep"
@@ -757,14 +757,18 @@ Added to `extras_baseline.json` under v17 (do NOT re-register):
 
 **Known firings and their current resolution:** see the bullet list above. New compounds of this family should be added to `cjk_fix_v2.py`'s `shared_concat_fixes` as they're discovered.
 
-### Hybrid-variant duplication trap (IMPORTANT — learned Ep22/23)
+### Hybrid-variant duplication trap (IMPORTANT — learned Ep22/23; format updated v18)
 
-When an idiom-plus-gloss is written in the hybrid as `ENGLISH — CJK-idiom` or `CJK-idiom — ENGLISH`, `build.py`'s romanised conversion turns the CJK into English and leaves the English gloss alongside, producing visibly-duplicated lines like:
+When an idiom-plus-gloss is written in the hybrid using the `中文成語 (English gloss)` format (§9), `build.py`'s romanised conversion turns the CJK into English and leaves the parenthesised English gloss alongside, producing visibly-duplicated lines like:
 
-> "To your success — success at the first charge"
-> "Retreat like a subdued dragon, steady and deep — Retreat like a subdued dragon, steady and deep"
+> "Retreat like a subdued dragon, steady and deep (Retreat like a subdued dragon, steady and deep)"
+> "better safe than sorry (better safe than sorry)"
 
-**Prevention:** after `build.py` and `cjk_fix_v2.py`, run a targeted pass that looks for em-dash phrases with >60% word overlap on either side and collapses them. The Ep22/23 session built a small fixer for this — consider folding it into `cjk_fix_v2.py` properly.
+The older pre-v18 em-dash form (`English gloss — 中文成語`) produced the same class of duplicate on the other side of the dash. The collapser in `cjk_fix_v2.py` handles both shapes: em-dash-separated `X — Y` where X and Y share ≥55% content words, and parenthesised `X (Y)` where the parens contents share ≥55% content words with the text preceding them. Under the parenthetical format the trap is more visually obvious (the parens make the duplication hard to miss), but the collapser catches it identically either way — when triggered, drop the parenthetical and keep the un-parenthesised side.
+
+**Prevention:** the collapser in `cjk_fix_v2.py` handles both shapes automatically; reviewer attention is needed only when:
+- The gloss and the English version of the CJK diverge (e.g. hybrid `劫數難逃 (I fear this is my fate)` produces romanised `cannot escape one's fate (I fear this is my fate)` — these are not content-word-identical but convey the same sense; the collapser will fire via subset-check and keep the longer side).
+- A short idiom's gloss is too short to meet the 6-char minimum (older pre-v17 threshold problem; v17 lowered the threshold to 6 chars to catch these).
 
 Also scan for `"the the "` (double article) and `"my the "` / `"your the "` — these happen when `降龍十八掌` → "the Eighteen Dragon-Subduing Palms" gets preceded by an existing English `my/your/the`. Simple string replacements suffice.
 
