@@ -179,6 +179,22 @@ When someone is ADDRESSED as 老伯 (vocative), keep **老伯** in CJK in hybrid
 - "The **金** are coming" NOT "The Jins are coming."
 - Same for 宋, 蒙古, 金國. Romanised: "the Song" / "Mongolia" / "Jin".
 
+### The 道長 family — title-vs-vocation rule
+Bare **道長** and its address-form variants keep CJK in hybrid. The common-noun **道士** (the religious vocation, as in "to become a Taoist") renders English. Rule of thumb: address term to/by Taoist clergy → CJK; noun for the vocation/profession → English.
+
+Forms that keep CJK in hybrid:
+- **道長** (bare vocative; "Taoist, mind my son", "What is it, 道長?")
+- **道爺** (self-form; "This 道爺 will fight to the death today")
+- **貧道** (humble form, classical clergy self-reference; "this 貧道 still has one matter weighing on him")
+- **臭道長** (vocative + insult; 蓉兒's playful insult to 丘道長)
+- Compound forms 丘道長, 馬道長, 王道長 already handled by build.py titles dict (Taoist Jau/Yau/Maa).
+
+Forms that render English:
+- **道士** (the vocation; "you want 郭靖 to be a Taoist", "I'd rather be a Taoist", "a Taoist for life")
+- **道袍** ("Taoist robe")
+
+Confirmed Ep1+Ep7+Ep8+Ep12+Ep13+Ep17+Ep19 — high-frequency across every 全真教 / 丘道長 / 馬道長 / 王道長 scene.
+
 ---
 
 ## 5. Name Rendering Table
@@ -292,6 +308,10 @@ Title and address conversions in romanised files (hybrid keeps CJK):
 | 乞兒仔 | beggar boy (yue) |
 | 乞兒窩 | beggar's den (yue) |
 | 阿彌陀佛 | Amitabha |
+| 道長 | Taoist (vocative title — keep CJK in hybrid; see §4) |
+| 道爺 | Taoist (self-form — keep CJK in hybrid) |
+| 貧道 | this poor Taoist (humble form — keep CJK in hybrid) |
+| 道士 | Taoist (common-noun vocation — render English in hybrid too) |
 
 ---
 
@@ -528,7 +548,17 @@ Usage notes:
 - **想逝者之不罪兮, 惜形中之載道** / **天蓋高而無階, 懷此恨其最苦** (Ep28) — 陸乘風's lament for 瑤迦. Format as `CJK (English gloss)` — both halves on the same line if they fit, otherwise one couplet-half per line. Glosses: "my love runs deep, the dead beyond recall" / "Heaven is high but has no stair; this sorrow cuts deepest".
 - **天長地久, 人生幾何** / **譬如朝露, 去日苦短** (Ep33 subs 173–174) — 黃藥師's lament for the supposedly-dead 蓉兒. Adapted from 曹操 短歌行. Format as `CJK (English gloss)` on the same line. Glosses: "Heaven and Earth endure; how brief a human life" / "like morning dew, the days gone are bitter and short".
 - **林升 題臨安邸** (Ep20 full + Ep1 compressed form — two-ep confirmed) — Southern Song lament over the occupied capital. Quatrain format: four lines, each `CJK (English gloss)` on the same line. Canonical text: 山外青山樓外樓 / 西湖歌舞幾時休 / 暖風熏得遊人醉 / 直把杭州作汴州. Glosses: "beyond the green hills, more green hills; beyond the tower, yet another tower" / "when will the song and dance on 西湖 ever cease?" / "the warm breeze lulls the travellers drunk" / "they take 杭州 for 汴州". Ep1 uses a compressed two-line form invoking lines 2+4 as narration backdrop; render only the two lines that chi carries.
-- **滿江紅 quatrain** (Ep1 first firing, Ep15+ 武穆遺書-arc reappearance expected) — 岳飛's 靖康恥 quatrain. Format as `CJK (English gloss)` on the same line, one quatrain-line per sub. Already a first-firing reference; established format under v15 (migrated to parenthetical gloss under v18).
+- **滿江紅 quatrain** (Ep1 first firing, Ep17 second, Ep19 third firing — three-ep stable). 岳飛's 靖康恥 quatrain. Format as `CJK (English gloss)` on the same line, one quatrain-line per sub. Canonical text used in Ep19 reprise:
+  - 憑欄處, 瀟瀟雨歇 → "I lean on the railing as the rain dies away"
+  - 抬望眼, 仰天長嘯, 壯懷激烈 → "I lift my gaze, give a long cry to the sky, my heart fierce with passion"
+  - 三十功名塵與土 → "thirty years of glory, all dust and earth"
+  - 八千里路雲和月 → "eight thousand li of road, only cloud and moon"
+  - 莫等閒, 白了少年頭, 空悲切 → "do not idle — when youthful hair turns white, the grief is empty"
+  In Ep19 the quatrain fires twice (subs 81–85 as 楊鐵心 sings during 楊兄 death scene; subs 116–118 as off-screen reprise during 包惜弱's death). Established format under v15; migrated to parenthetical gloss under v18.
+
+- **元好問 摸魚兒「問世間情為何物」** (Ep19 first firing, sub 413; closing line of episode). Classical 詞 quotation by 元好問. Format `CJK (English gloss)` on the same line:
+  - 問世間, 情為何物, 值得生死相許 → "I ask the world: what is this thing called love, that it should bind life and death together"
+  This is the famous opening line from 元好問's 摸魚兒·雁丘詞 that 金庸 also uses to open 神鵰俠侶 in the sequel; expect recurrence in this series's later 楊過/小龍女-relevant or 念慈/楊康-relevant scenes.
 
 ### 九陰真經 quotations (from 周伯通's slap-memorise teaching, Ep29+)
 - **天之道, 損有餘而補不足** — "Heaven's way: take from the surplus and replenish the lack". Adapted from 道德經 77. Hybrid: `天之道, 損有餘而補不足 (Heaven's way: take from the surplus and replenish the lack)` on the same line, or split across two lines if it doesn't fit; romanised: English only.
@@ -548,6 +578,13 @@ Usage notes:
 - **曲池穴** — "the Quchi point"
 - **會陰** — "Huiyin"
 - **陰柔** — "yin-soft"
+
+### 鉛汞 meditation formulas (全真教 內功心法 — Ep19 first firing)
+丘道長's 內功心法 transmission to 郭靖 (Ep19 subs 263–267). Format as `CJK (English gloss)` couplets per the meditation/qi convention.
+- **鉛體沉墜, 以給腎火 / 汞性流動, 以行心水** → "the lead-body sinks heavy to feed the kidney-fire; the mercury-nature flows to course as the heart-water"
+- **鉛體沉墜, 以給腎水 / 汞性流動, 以行心火** → "the lead-body sinks heavy to feed the kidney-water; the mercury-nature flows to course as the heart-fire" (corrected pairing as 郭靖 perfects the formula)
+- **此之謂鉛汞謹收藏** → "this is what is called keeping lead and mercury safely stored"
+Ep19 first firing — watch for recurrence in 周伯通 slap-memorise scene (Ep29+) and other 全真教 內功 transmission arcs.
 
 ### Dragon chant quartet — Ep22 subs 428–431
 In hybrid, format as `CJK (English gloss)` on the same line, one line per chant-line. In romanised, English translation only (do not duplicate).

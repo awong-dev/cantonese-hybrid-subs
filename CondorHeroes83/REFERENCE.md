@@ -59,6 +59,15 @@ This document is lookup material — consult when you hit a specific name, idiom
 - **後輩** → "junior" (peer/referent form).
 - Hybrid keeps CJK.
 
+### 道長 family — title-vs-vocation distinction (Ep19 user-clarified)
+The same English word "Taoist" maps to two distinct Chinese sources, only one of which keeps CJK in hybrid:
+- **As address term / honorific title** (always CJK in hybrid): bare 道長 ("道長, mind my son"); 道爺 (self-form, "this 道爺 will fight"); 貧道 (humble classical form, "this 貧道 still has one matter weighing on him"); 臭道長 (vocative + insult, 蓉兒 to 丘道長).
+- **As common-noun vocation** (always English): 道士 (monk/Taoist as profession — "you want 郭靖 to be a Taoist", "I'd rather be a Taoist", "a Taoist for life"); 道袍 ("Taoist robe").
+
+Note compound forms 丘道長 / 馬道長 / 王道長 are handled by build.py titles dict (Taoist Jau/Yau/Maa).
+
+Disambiguation principle when reading chi: ask "is this someone *being addressed* or *being described as* a Taoist?" Address → CJK. Description of profession → English.
+
 ### 阿克 (歐陽峰 addressing 歐陽克) — Whisper homophone cluster
 - Chi is canonical **阿克**. Yue ASR produces **阿赫** (`haak1`) and **阿黑** (`haak1`) — both Whisper-cluster homophones.
 - Rule B territory: chi wins by default; hybrid always 阿克. See `STYLE.md` §2.

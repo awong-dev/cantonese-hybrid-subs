@@ -1,5 +1,5 @@
 {
-  "__comment__": "v11 baseline extras — romanisation mappings shared across all episodes. Loaded by shared_extras.py and merged with an episode-specific overlay (ep{N}_extras_add.json) to produce ep{N}_extra.json for build.py. To promote a term from an episode's overlay into this baseline, add it here and remove it from the episode overlays. To change a term globally, edit here. Keep jy and yl in sync.",
+  "__comment__": "v18+1 baseline extras — romanisation mappings shared across all episodes. Loaded by shared_extras.py and merged with an episode-specific overlay (ep{N}_extras_add.json) to produce ep{N}_extra.json for build.py. To promote a term from an episode's overlay into this baseline, add it here and remove it from the episode overlays. To change a term globally, edit here. Keep jy and yl in sync.",
   "jy": {
     "歐陽": "Au-Joeng",
     "郭": "Gwok",
@@ -136,7 +136,19 @@
     "鐵心": "Tit-sam",
     "中原": "the Central Plains",
     "大漠": "the Great Desert",
-    "楊夫人": "Mrs Yang"
+    "楊夫人": "Mrs Yang",
+    "道長": "Taoist",
+    "道爺": "Taoist",
+    "貧道": "this poor Taoist",
+    "江南": "Gong-naam",
+    "江南七怪": "the Seven Freaks of Gong-naam",
+    "楊大嫂": "Mrs Yang",
+    "楊大嬸": "Aunt Yeung",
+    "柯大俠": "Hero O",
+    "大俠": "heroes",
+    "白骨爪": "the Baigu Claw",
+    "穆姊姊": "Sister Muk",
+    "華箏公主": "Princess Wa-zang"
   },
   "yl": {
     "歐陽": "Au-Yeung",
@@ -274,6 +286,18 @@
     "鐵心": "Tit-sam",
     "中原": "the Central Plains",
     "大漠": "the Great Desert",
-    "楊夫人": "Mrs Yang"
+    "楊夫人": "Mrs Yang",
+    "道長": "Taoist",
+    "道爺": "Taoist",
+    "貧道": "this poor Taoist",
+    "江南": "Gong-naahm",
+    "江南七怪": "the Seven Freaks of Gong-naahm",
+    "楊大嫂": "Mrs Yang",
+    "楊大嬸": "Aunt Yeung",
+    "柯大俠": "Hero O",
+    "大俠": "heroes",
+    "白骨爪": "the Baigu Claw",
+    "穆姊姊": "Sister Muhk",
+    "華箏公主": "Princess Wa-jang"
   }
 }
