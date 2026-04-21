@@ -375,7 +375,7 @@ The CJK requirements above are exhaustive — if a phrase isn't on one of these 
   - **禁宮** → "the palace" / "the forbidden palace" (common-noun reference to imperial quarters).
 - **Colloquial insult compounds** (intensifier + common noun) — render as English:
   - **臭丫頭** → "stinking girl" / "damned girl"
-  - **死丫頭** → "damned girl"
+  - **死丫頭** → "wretched girl"
   - **死乞兒** → "damned beggar" / "stupid beggar"
   - **臭乞兒** → "stinking beggar"
   - **臭要飯的** (chi OCR for 死乞兒) → "stupid beggar" (see §2 special cases)
