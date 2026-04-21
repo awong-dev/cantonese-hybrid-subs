@@ -296,6 +296,10 @@ OCR_NAME_COLLAPSE = {
                                                       # 央馬爺/騎馬爺 forms reduce by suffix.
     "阿勇": "阿蓉",                                   # Ep10+Ep13 two-ep chi-OCR; 郭靖's intimate
                                                       # form for 蓉兒. yue witness clean.
+    "會牲": "畜生", "會牡": "畜生",                    # Ep14+Ep24+Ep17 three-ep chi-OCR of 畜生
+                                                      # (insult "brute"). 會 OCR-corrupts 畜;
+                                                      # 牲/牡 are 生 OCR variants. Both forms
+                                                      # observed in Ep17.
 }
 for variant in ["hybrid", "jyutping", "yale"]:
     fp = f"/mnt/user-data/outputs/{ep}-eng-{variant}-v{VERSION}.srt"
