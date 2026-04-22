@@ -66,11 +66,6 @@ Confidence tier doesn't settle this — Whisper can be HIGH on garble; a LOW-tie
 - **Cantonese phonological/dialect variant** (e.g. 家散人亡 vs 家破人亡) — yue's form is the actually-spoken Cantonese variant of the same idiom. Keep yue (Rule A at dialect-form level).
 - **抵死** (Cantonese colloquial "deserve to die") — Rule A applies. Render register in English ("damn well deserves it", "serves him right"); do NOT use CJK+gloss. CJK+gloss format is reserved for 四字成語, poetic couplets, literary phrases — not colloquial slang English can carry alone.
 
-### Cross-check both tracks ALWAYS
-
-- Original English often flattens nuance from Chinese. Compare every sub against chi for lost meaning.
-- Yue guides emotional register, colloquial vs formal tone (Rule A). Not for semantic arbitration — Rule B's domain.
-
 ---
 
 ## 3. Name Rules
@@ -388,14 +383,7 @@ Cue: chi presents two balanced halves separated by comma where each has its own 
 
 ### Hybrid: keep Chinese characters inline
 
-**Preferred format: `中文成語 (English gloss)`.** Chinese first, English gloss in parentheses. Universal for 四字成語, couplets, classical allusions, any §10 CJK-kept entry.
-
-**Scope of CJK+gloss format.** Reserve for 四字成語, poetic couplets, classical allusions, literary phrases where Chinese carries meaning the English can't fully convey. **Do NOT use for:**
-- Colloquial slang/intensifiers (抵死, 好彩, 乜嘢) — render register in English
-- Everyday Cantonese-vs-Mandarin vocabulary — Rule A picks form, render English
-- Emotional interjections — match tone in English
-
-When English does the full job, skip CJK. CJK-inclusion isn't a badge of fidelity — over-using clutters the hybrid and trains readers to skim past the Chinese.
+**Preferred format: `中文成語 (English gloss)`.** Chinese first, English gloss in parentheses. Universal for 四字成語, couplets, classical allusions, any §10 CJK-kept entry. **Do NOT use CJK+gloss for colloquial slang/intensifiers, everyday Cantonese-vs-Mandarin vocabulary, or emotional interjections** (see §7 for the full list of what stays English). CJK-inclusion isn't a badge of fidelity — over-using clutters the hybrid and trains readers to skim past the Chinese.
 
 | RIGHT | WRONG |
 |-------|-------|
@@ -431,11 +419,7 @@ Not every 四字 phrase is catalogue-worthy. Before adding a new entry, check at
 3. **Named proverb / 俗語** with cultural weight English can't fully carry.
 4. **Poetic / elegiac couplet** from identifiable literary tradition (曹操 短歌行, the Dragon-chant quartet).
 
-**The primary test — the plain-prose rule.** Strip the CJK, read only the English. *If it stands alone as plain prose without losing imagery or cultural weight, it does not belong here — a consistency ledger is not reason enough.* Render English only, no CJK in hybrid. This catalogue is only for phrases whose Chinese form carries something the English gloss can't: specific image, classical source, poetic structure, culturally-weighted register.
-
-**Descriptive common-noun phrases are NOT catalogue-worthy even if they sound literary.** Test: strip the CJK, read English. If it works as plain English noun phrase ("love snake" / "first-rate expert" / "strange creature"), it's a descriptor → English. Examples that fail: **情蛇**, **一流高手** / **一流絕頂高手**, general X+高手 / X+高人 compounds where X is adjective.
-
-Pass the gate: **塞外高人** (set classical phrase — 塞外 geographic qualifier), **一代宗師** (fixed 四字 wuxia-world meaning). When in doubt, err toward English — catalogue stays tight.
+**The primary test — the plain-prose rule.** Strip the CJK, read only the English. *If it stands alone as plain prose without losing imagery or cultural weight, it does not belong here — a consistency ledger is not reason enough.* This catalogue is only for phrases whose Chinese form carries something the English gloss can't. Descriptive common-noun phrases fail even if they sound literary (情蛇, 一流高手, general X+高手/高人 compounds where X is adjective). Pass the gate: **塞外高人** (set classical phrase — 塞外 geographic qualifier), **一代宗師** (fixed 四字 wuxia-world meaning). When in doubt, err toward English — catalogue stays tight.
 
 ### Catalogue entries
 
@@ -530,16 +514,6 @@ English should feel like yue/chi — not smoothed-out English prose.
 - **Translate what's said, not more.** If Cantonese is three words, English should be comparably brief. Don't pad with filler the speaker didn't use.
 - **Don't summarise away register.** If yue says 你這種人不見棺材不流淚 (elaborate insult), keep the elaboration. Don't compress to "You'll regret it." Length is the point.
 - **Don't invent emphasis.** If yue/chi is flat, write flat. Don't add exclamation marks or intensifiers.
-
-### Examples
-
-| Yue says | RIGHT | WRONG |
-|---|---|---|
-| 去叫東西吃我很快就回來的 | Go order some food first. I'll be right back. | Why don't you go in and order something to eat first? I'll be back shortly. |
-| 又是你這臭要飯的 (yue 死乞兒) | You again, you stupid beggar! | You again, you stinking beggar! |
-| 大宋有救了 | There is hope for 大宋! | 大宋 is saved! |
-| 我搜晒翠紅樓咩都冇 | I searched every corner of 翠紅樓. There was nothing there. | I searched all over 翠紅樓 just now but found nothing. |
-| 做人千萬不要太好心, 好心遭雷劈 | It's extremely important that a person isn't too kind. Good hearts get struck by lightning — 好心遭雷劈. | Don't be too kind. 好心遭雷劈. |
 
 ---
 
@@ -653,73 +627,41 @@ Sweep hybrid and romanised. All must be fixed before present:
 
 ## 19. Recurring CJK Fix Patterns (apply via sed after build)
 
-Leaks that appear episode after episode; fix in targeted pass after build.py / cjk_fix_v2.py:
-
-- `江南七怪` → "the Seven Freaks of Jiangnan"
-- `大Master` → "First Master"
-- `康,` → "Hong," (bare 康 in vocative context)
-- Bare `鐵心` → "Tiexin"
-- `Brother 鐵心` → "Brother Tiexin"
-- `Yeung叔叔` → "Uncle Yeung"
-- `Yeung兄` → "Brother Yeung"
-- Classical Chinese phrases left in romanised → translate to English
-
-Bulk of recurring concat-trap and OCR-collapse patterns handled by cjk_fix_v2.py (`shared_concat_fixes`, `yale_concat_fixes`, `OCR_NAME_COLLAPSE`). Active set is source of truth; consult script. Promote new patterns once fired in 2+ eps without contradiction.
+Leaks that appear episode after episode (江南七怪→"Seven Freaks of Jiangnan", 大Master→"First Master", 康,→"Hong,", 鐵心→"Tiexin", Yeung叔叔→"Uncle Yeung", classical Chinese in romanised→translate) fix via targeted pass after build.py / cjk_fix_v2.py. Active set lives in `cjk_fix_v2.py`'s `shared_concat_fixes`, `yale_concat_fixes`, `OCR_NAME_COLLAPSE` — source of truth, consult script. Promote new patterns once fired in 2+ eps without contradiction.
 
 ### The `<titles-key>+<suffix>` cross-stage trap — structural rule
 
 **Rule:** registering a compound in `extras_baseline.json` or episode overlay is insufficient when `build.py`'s titles stage contains a shorter-key match that is a substring of the compound. Titles (stage 3) fires before extras (stage 5), so shorter key converts first and strands remaining prefix/suffix as CJK.
 
-**Examples:**
-- `爹` (titles: "Father") + overlay `我爹 → my father` ⇒ produces `我Father` — post-build `我Father → my father` fix.
-- `幫主` (titles: "the Chief") + overlay `幫主萬福 → Good fortune to the Chief` ⇒ `the Chief萬福`.
-- `金國` (baseline: "Jin") + overlay `大金國 → the great Jin empire` ⇒ `大Jin`.
-- `公主` (titles: "the Princess") + overlay `報告公主 → Your report, Princess` ⇒ `報告the Princess`.
-- `七公` (titles: "Seven Elder") + CSV `洪七公 → Hung Cat-gung` ⇒ `洪Seven Elder`.
+Examples: `爹`/我爹, `幫主`/幫主萬福, `金國`/大金國, `公主`/報告公主, `七公`/洪七公, `大哥`/張大哥, `前輩`/裘老前輩, `將軍`/岳飛將軍.
 
-**Tools:**
-1. If compound's semantic target is titles-stage output plus modifier (我爹 = "my" + "Father"), post-build `cjk_fix_v2.py` entry `<stranded-CJK><titles-output> → <full-English>`.
-2. If compound needs wholly different English rendering, either (a) promote into build.py idioms stage (stage 1) so it wins by ordering, or (b) post-build-fix in cjk_fix_v2.
-3. (a) is structurally cleaner but requires editing build.py and re-checking; (b) is lower-risk for one-off entries.
-
-New compounds added to `cjk_fix_v2.py`'s `shared_concat_fixes` as discovered.
+Remediation: post-build `cjk_fix_v2.py` entry `<stranded-CJK><titles-output> → <full-English>` for the common case. If compound needs wholly different English, promote into build.py idioms stage (stage 1 wins by ordering). Promote via stage 1 for structural cleanliness; use cjk_fix_v2 for lower-risk one-offs. New compounds added to `cjk_fix_v2.py`'s `shared_concat_fixes` as discovered.
 
 ### Hybrid-variant duplication trap
 
-When an idiom-plus-gloss is written in hybrid using `中文成語 (English gloss)` format, `build.py`'s romanised conversion turns CJK into English, leaving the parenthesised gloss alongside and producing duplicated lines:
+When an idiom-plus-gloss is written as `中文成語 (English gloss)`, `build.py`'s romanised conversion turns CJK into English, leaving the parenthesised gloss alongside and producing "better safe than sorry (better safe than sorry)"-style duplicates. Older em-dash form (`English gloss — 中文成語`) produces the same on the dash's other side. Collapser in `cjk_fix_v2.py` handles both (≥55% content-word overlap triggers; drop parenthetical, keep longer side).
 
-> "Retreat like a subdued dragon, steady and deep (Retreat like a subdued dragon, steady and deep)"
-> "better safe than sorry (better safe than sorry)"
+Reviewer attention needed when gloss and English-from-CJK diverge (`劫數難逃 (I fear this is my fate)` → romanised `cannot escape one's fate (I fear this is my fate)` — subset-check fires, keeps longer side) or when short-idiom gloss falls below v17's 6-char minimum.
 
-Older em-dash form (`English gloss — 中文成語`) produced same class on dash's other side. Collapser in `cjk_fix_v2.py` handles both: em-dash `X — Y` where X and Y share ≥55% content words, and parenthesised `X (Y)` where parens contents share ≥55% with preceding text. When triggered, drop parenthetical, keep un-parenthesised side.
-
-**Reviewer attention needed when:**
-- Gloss and English-from-CJK diverge (hybrid `劫數難逃 (I fear this is my fate)` → romanised `cannot escape one's fate (I fear this is my fate)` — not content-word-identical but same sense; collapser fires via subset-check, keeps longer side).
-- Short idiom's gloss too short for 6-char minimum (v17 threshold).
-
-Also scan for `"the the "` (double article) and `"my the "` / `"your the "` — happen when 降龍十八掌 → "the Eighteen Dragon-Subduing Palms" gets preceded by existing English `my/your/the`. Simple string replacements suffice.
+Also scan `"the the "` (double article) and `"my the "` / `"your the "` — happen when 降龍十八掌 → "the Eighteen Dragon-Subduing Palms" follows existing English `my/your/the`. Simple string replacements suffice.
 
 ---
 
 ## 20. Known Recurring Issues
 
-- **Pinyin leakage** — scan hybrid for Pinyin names (Guo Jing, Rong-er).
-- **CJK in romanised** — scan jyutping/yale for remaining Chinese characters.
-- **`go-go` dash** — verify all `gogo` compounds have no extra dash.
-- **Bare surname fragments** — `洪Seven Elder` → must be `Hung Seven Elder` (jy) / `Huhng Seven Elder` (yl).
-- **康 bare character** — when 楊康 is called just 康, romanised must be "Hong" (NOT CJK, NOT "Kang").
+Scan hybrid for Pinyin leakage (Guo Jing, Rong-er); scan jyutping/yale for residual CJK; verify `gogo` compounds have no extra dash; check bare-surname fragments (洪Seven Elder → Hung Seven Elder jy / Huhng Seven Elder yl); 楊康 called just 康 → "Hong" in romanised (not CJK, not "Kang"). Full banned-term list §18; fix patterns §19.
 
 ---
 
 ## 21. Anti-Patterns (What NOT to Do)
 
-1. **Don't pad short subs.** One short chi sentence → one short English sentence.
+1. **Don't pad short subs.** Match source length.
 2. **Don't inject idioms into subs where they don't appear in chi.**
-3. **Don't translate 老伯 / 少爺 / 公子 / 長老 to English in hybrid.** Address terms.
-4. **Don't write "the Song dynasty" when you can write 大宋.** Hybrid means CJK.
-5. **Don't use excessive `!`.** §13 quota.
+3. **Don't translate 老伯 / 少爺 / 公子 / 長老 / 大俠 to English in hybrid** (address terms — §7).
+4. **Don't write "the Song dynasty" when you can write 大宋.** Hybrid means CJK for §7 content.
+5. **Don't use excessive `!`.** ~5% quota; §13.
 6. **Don't treat Step 3 output as a translation.** Mechanical preprocessing only — examine each sub against chi/yue per PIPELINE Step 4.
 7. **Don't gloss an idiom twice** (CJK AND separate English expansion — §9).
 8. **Don't treat original English as untouchable, or as disposable.** Priority yue > chi > eng: examine against both, override when mismatched. When draft is faithful, leave alone.
-9. **Don't keep CJK for common wuxia vocabulary or colloquial insults.** 武功/武林/江湖/內力/內功/輕功/功力 go English. Colloquial 臭丫頭/死乞兒/王八蛋 go English. CJK reserved for proper-noun-like content.
+9. **Don't keep CJK for common wuxia vocabulary or colloquial insults** (武功/武林/江湖/內力/內功/輕功/功力 English; 臭丫頭/死乞兒/王八蛋 English). CJK reserved for proper-noun-like content (§7).
 10. **Don't use 叫化子 in hybrid.** Use Cantonese 乞兒 or English "beggar".

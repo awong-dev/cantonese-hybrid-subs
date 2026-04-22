@@ -41,52 +41,32 @@ Before beginning work on any episode, the assistant reports the context state:
 
 FULL is the target quality. PARTIAL and MECHANICAL-ONLY are named failure modes — they exist so a degraded delivery can be honestly labelled. Always aim for FULL; if the realistic outcome is PARTIAL or MECHANICAL-ONLY, say so in the Step 0 report so the user can decide how to proceed.
 
-| Outcome | Description | When it happens |
-|---------|-------------|-----------------|
-| **FULL** (target) | Every sub examined against chi and yue; overrides written where content or register mismatches; OCR corrections via yue-as-witness, yue-authority overrides applied, idiom injection, characterisation preserved. | Step 4 examination loop completed for every sub. |
-| **PARTIAL** (failure mode) | Step 3 preprocessing applied to all subs; Step 4 examination completed for roughly 20–60% of subs before aborting. Names/titles/idioms mechanically correct throughout; the unexamined subs retain whatever Step 3 produced, unchecked against chi and yue for meaning/register. | Step 4 had to abort partway — typically because context ran out mid-examination, or the assistant hit an output-length limit on a large override pass. Acknowledge the outcome honestly in delivery; flag which sub-range was examined and which wasn't. |
-| **MECHANICAL-ONLY** (failure mode) | Step 3 preprocessing applied to all subs; Step 4 examination barely started (<20% of subs examined) or didn't run at all. Mechanical CJK substitutions and idiom injections are good, but meaning and register are not systematically checked. | Step 4 aborted very early, or the session delivered output after only running Steps 1–3. Acknowledge the outcome honestly in delivery. |
+- **FULL** (target) — Step 4 examination loop completed for every sub. Overrides written where content or register mismatches; OCR corrections via yue-as-witness; yue-authority overrides applied; idiom injection; characterisation preserved.
+- **PARTIAL** (failure mode) — Step 4 examined roughly 20–60% of subs before aborting (context ran out, or output-length limit on a large override pass). Names/titles/idioms mechanically correct throughout; unexamined subs retain whatever Step 3 produced. Acknowledge honestly in delivery; flag which sub-range was examined.
+- **MECHANICAL-ONLY** (failure mode) — Step 4 barely started (<20%) or didn't run. Mechanical CJK substitutions and idiom injections are good, meaning and register not systematically checked. Acknowledge honestly.
 
 ---
 
 ## Narration Discipline
 
-Status output has a context cost. Long conversational summaries between tool calls — "Here's what I've done so far", "Summary of Step 4 work", "Candidates to promote", "Watch List additions" — consume roughly 15–25% of the session's budget during a FULL pass and largely repeat information the user already sees in tool output and the delivered SRTs. Keep conversational output minimal.
+Conversational summaries between tool calls consume ~15–25% of session budget and repeat tool output. Keep conversational output minimal.
 
 ### Required output (keep)
-- **Step 0 context baseline report.** Required before any tool call. Format per Step 0.
-- **Step 8.5 SESSION-NOTES update and present.** Required after the three SRTs are presented. Format per Step 8.5.
-- **Step 9 ending context report.** Required after the SESSION-NOTES `present_files`. Format per Step 9.
-- **User-directed questions** when a genuine ambiguity requires a decision (rare in a FULL pass).
-- **The final `present_files` call** with the three SRTs.
+- **Step 0 context baseline report** before any tool call.
+- **Step 8.5 SESSION-NOTES update and present** after the three SRTs.
+- **Step 9 ending context report** after the SESSION-NOTES `present_files`.
+- **User-directed questions** for genuine ambiguity (rare in FULL pass).
+- **Final `present_files`** with the three SRTs.
 
 ### Cut (don't produce)
-- **Mid-turn "progress report" blocks** between script runs. The tool outputs already say "applied 420 overrides" or "✓ jyutping: clean" — don't restate.
-- **"Let me now run X" / "Let me check Y" narration** before tool calls. Just run the tool.
-- **End-of-turn recaps** that list what each step produced. The files produced are visible to the user; the TSV and overlay are in `/home/claude/` and reachable if needed.
-- **Speculative interpretive commentary** on tool output ("Build guard caught...", "The lint warning is a false positive because..."). If the finding is actionable, act on it silently; if it's not, don't mention it.
-- **"Candidates to promote" / "Watch List additions"** lists at the end of an episode. These belong in the `SESSION-NOTES.md` file that Step 8.5 writes and presents, not in chat. Make the edit, present the file, and stop — don't also list what you put in it.
+- Mid-turn progress-report blocks between script runs — tool output already says "applied 420 overrides" / "✓ jyutping: clean".
+- "Let me now run X" narration before tool calls. Just run the tool.
+- End-of-turn recaps of what each step produced — files are visible to the user.
+- Speculative interpretive commentary on tool output. If finding is actionable, act silently; if not, don't mention.
+- "Candidates to promote" / "Watch List additions" lists at end of episode — those belong in `SESSION-NOTES.md` written by Step 8.5.
 
 ### Exception — real issues
-If something actually went wrong — a Step that couldn't complete, a source file that was malformed, a validation failure that required a non-trivial workaround — surface it in a short issues list at the end. One line per issue. Use plain phrasing, not section headers.
-
-### Model for a Step 4 → present cycle
-
-Good:
-> *[runs pipeline.py, shared_extras.py, auto_override_v2.py silently]*
-> *[reads dump in ranges, writes TSV silently]*
-> *[runs apply_overrides, shared_extras, lint, build, cjk_fix_v2 silently]*
-> *[runs validation silently]*
-> *[calls present_files with the three SRTs]*
->
-> Ep27 complete. 503 subs, 420 overrides applied. One issue: cjk_fix_v2's duplicate-gloss collapser has an 8-char-per-side minimum that missed "crafty — crafty"; post-cleaned.
->
-> *[edits SESSION-NOTES.md: moves Ep27 to Completed table, adds 2 Watch List items, promotes 1 stable entry out]*
-> *[calls present_files with the updated SESSION-NOTES.md]*
->
-> [Step 9 context report]
-
-Bad: narrating every step ("Let me now read STYLE.md...", "Step 3 complete — only 19 AUTO-KEEPs, which makes sense because..."), emitting progress-report blocks between script runs, and duplicating at end-of-turn the Watch-List / promotion lists that belong in SESSION-NOTES.md.
+If something actually went wrong (Step couldn't complete, source file malformed, validation failure needing non-trivial workaround) — short issues list at end, one line per issue, plain phrasing.
 
 ---
 
@@ -191,8 +171,8 @@ The `<flags>` column carries per-sub priority signals computed by `auto_override
 - `i` — chi contains an idiom from the injection set
 - `@` — chi has an address term (師父, 前輩, 老伯…) missing from the Step 3 output
 - `o` — chi contains an OCR artifact (garbled quote marks, stray Latin letters amid CJK)
-- `r` — **reflow risk**. Chi is thin (empty, ≤3 CJK chars) AND eng is substantive AND an adjacent sub has empty eng or chi. This is the signature of chi-spine alignment pulling eng content from a neighbouring beat into this sub's window. **When examining an `r`-flagged sub, do not call the eng fabrication without reading the adjacent subs first** — eng is probably legitimate dialogue that got reflowed here because its native window had no chi. Canonical case: Ep1 sub 18 (chi `上`, eng "What do you want?" — the victim's retort reflowed from the previous beat).
-- `y` — **yue-solo**. Chi AND eng are both thin but yue is substantive at HIGH confidence. Either real dialogue lost from chi+eng (reflow stranded it, or the other two tracks skipped a beat) or Whisper ASR hallucination (invented plausible-sounding speech during music/silence/noise). Apply Rule C intelligibility gate + scene-context plausibility. If yue parses as real dialogue AND fits the scene, consider adding to hybrid; if yue is plausible-sounding but doesn't fit (theme-song lyrics during credits, crowd noise), treat as hallucination and ignore. **When in doubt, do not invent dialogue from yue alone.** Mutually exclusive with `r` (which takes priority when signatures overlap). HIGH-confidence-only by design — MEDIUM yue with richer content than chi+eng gets caught by normal Rule A register-examination in Step 4.
+- `r` — **reflow risk**. Chi thin (empty, ≤3 CJK chars) AND eng substantive AND adjacent sub has empty eng or chi — signature of chi-spine alignment pulling eng content from a neighbouring beat. **Do not call the eng fabrication without reading adjacent subs first.** Canonical case: Ep1 sub 18 (chi `上`, eng "What do you want?" — victim's retort reflowed from previous beat).
+- `y` — **yue-solo**. Chi AND eng both thin but yue substantive at HIGH. Either real dialogue lost from chi+eng OR Whisper ASR hallucination (music/silence/noise). Apply Rule C intelligibility gate + scene-context plausibility. **When in doubt, do not invent dialogue from yue alone.** Mutually exclusive with `r` (which takes priority). HIGH-only by design — MEDIUM yue gets caught by normal Rule A examination in Step 4.
 
 A blank flags column means "no priority signal" — scan quickly unless something else jumps out. Flags are priority signals, not gates: every sub must still be read, but time concentrates on non-blank flags.
 
@@ -222,21 +202,11 @@ python3 shared_extras.py <N>
 python3 auto_override_v2.py <N>
 ```
 
-This is a **preprocessing pass**, not a translation attempt. It operates on the text's mechanical form — not its meaning — and its job is to get the tedious, error-prone substitutions right so Step 4 can focus on content and register. Specifically, it:
+**Preprocessing pass, not translation** — operates on text's mechanical form to get substitutions right so Step 4 can focus on content and register. Substitutes Pinyin → CJK, English titles/places → CJK when chi has CJK (White Camel Mountain → 白駝山, "teacher" → 師父), injects address terms and 四字成語 from chi where eng dropped them, fixes common OCR artifacts. Output saved to `ep{N}_h_all.json` — original English with mechanical substitutions only. Meaning/nuance/register is Step 4's job.
 
-- Substitutes Pinyin → CJK (Guo Jing → 郭靖, Rong-er → 蓉兒)
-- Substitutes English titles/places → CJK when chi has the CJK (White Camel Mountain → 白駝山, "teacher" → 師父 when 師父 is in chi)
-- Injects address terms (仙姑, 前輩, 師父, etc.) where chi has them and eng dropped them
-- Injects 四字成語 from chi that are missing in eng
-- Fixes common OCR artifacts (`|` → `I`, etc.)
+**Baseline + overlay split.** `shared_extras.py` reads `extras_baseline.json` (bundled) + optional `ep{N}_extras_add.json` overlay (reviewer writes in Step 5), merges → `ep{N}_extra.json` for `build.py`. Overlay keys override baseline on collision.
 
-The output is saved to `ep{N}_h_all.json`. **This output is not a draft translation — it's the original English with mechanical substitutions applied.** It does NOT attempt to fix meaning, nuance, or register. That is Step 4's job.
-
-Think of Step 3 as "setting up the hybrid's CJK scaffolding so the human isn't retyping 白駝山 or remembering to inject 奮不顧身 themselves."
-
-**Baseline + overlay split.** `shared_extras.py` is a thin merger: it reads `extras_baseline.json` (ships with the bundle) and optionally `ep{N}_extras_add.json` (per-episode overlay — the reviewer writes this in Step 5), merges them, and writes `ep{N}_extra.json` for `build.py` to consume. A reviewer with nothing new to add can skip the overlay file; `shared_extras.py` still works. Overlay keys override baseline keys on collision.
-
-**AUTO-KEEP heuristic.** `auto_override_v2.py` annotates each sub in `ep{N}_confidence.json` with an `auto_keep: true/false` flag. `auto_keep: true` means the sub passed all seven conservative gates (all tracks non-empty, yue HIGH/MEDIUM, no fabrication-risk markers, no idioms in chi, no missing address terms, ≤1.5× length ratio, ≥0.7 content-word overlap) — likely already faithful. AUTO-KEEP is a **priority signal, not a gate**: Step 4 still reads every sub, but concentrates examination time on the NEEDS REVIEW set (anything not flagged AUTO-KEEP). The heuristic is deliberately false-negative-biased: a false positive (flagging a subtly-flawed sub faithful) would silently degrade quality; a false negative just costs a quick-confirm examination.
+**AUTO-KEEP heuristic.** `auto_override_v2.py` annotates each sub in `ep{N}_confidence.json` with `auto_keep: true/false`. True means the sub passed all seven conservative gates (all tracks non-empty, yue HIGH/MEDIUM, no fabrication-risk markers, no idioms in chi, no missing address terms, ≤1.5× length ratio, ≥0.7 content-word overlap). A **priority signal, not a gate** — Step 4 still reads every sub; concentrate time on NEEDS REVIEW. Deliberately false-negative-biased (false positive silently degrades quality; false negative just costs a quick-confirm).
 
 ### Step 4 — Examine Every Sub; Override When Warranted
 
@@ -252,7 +222,7 @@ For every sub, walk this checklist:
 6. If yue's register is sharper/warmer/more colloquial than the draft → **REWRITE** to match yue's register (Rule A on a register-only difference).
 7. If chi or yue has an address term Step 3 didn't catch → ensure it's **CJK in hybrid**.
 8. If chi or yue has an idiom Step 3 didn't catch → ensure it's **in the hybrid sub**.
-9. **Common-noun CJK sweep** — before finalising, check none of the following have been left as CJK in hybrid (see `STYLE.md` §7 "What does NOT get CJK" for the full list): generic wuxia vocabulary (武功/武林/江湖/內力/內功/輕功/功力), colloquial insult compounds (臭丫頭/死丫頭/死乞兒/臭乞兒/王八蛋/禁宮), Mandarin 叫化子 (use Cantonese 乞兒 or English "beggar"), descriptive common-noun metaphors (情蛇, 一流高手, X+高人/高手/蛇). Named techniques (九陰真經, 降龍十八掌, etc.) remain CJK. `lint_overrides.py`'s common-noun heuristic catches many automatically, but reviewer judgment is the final arbiter.
+9. **Common-noun CJK sweep** — before finalising, verify none of STYLE §7's "What does NOT get CJK" list (generic wuxia vocab, colloquial-insult compounds, Mandarin 叫化子, descriptive common-noun metaphors) is left as CJK in hybrid. Named techniques (九陰真經, 降龍十八掌, etc.) remain CJK. `lint_overrides.py`'s Check 2 catches many; reviewer judgment is the final arbiter.
 10. If none apply → **leave the sub alone**; the draft is faithful.
 11. Collect corrections into `ep{N}_overrides.tsv` (format below) and apply with `apply_overrides.py`.
 
@@ -325,7 +295,7 @@ python3 lint_overrides.py <N>
 
 Runs two diagnostic checks on `ep{N}_h_all.json` and `ep{N}_extras_add.json`:
 
-**Check 1 — concat-trap patterns.** Scans the hybrid for known CJK-leak concat patterns catalogued in `STYLE.md` §19 and the `SESSION-NOTES.md` Watch List. Catalogued patterns include `裘老前輩` / `裘前輩` (surname+title), `X大哥` (surname+Brother), `我爹` / `你爹` (possessive+kinship), `大金國` / `大宋` (dynasty prefix), `我<FullName>` (emphatic self-reference), `大師父`. Running this before `build.py` lets the reviewer register missing compounds in the overlay once rather than iterating after build.
+**Check 1 — concat-trap patterns.** Scans the hybrid for known CJK-leak concat patterns (surname+title, possessive+kinship, dynasty-prefix, emphatic-self-reference, etc — active catalogue in `lint_overrides.py RULES`). Running this before `build.py` lets the reviewer register missing compounds in the overlay once rather than iterating after build.
 
 **Check 2 — common-noun-rendering heuristic.** Scans overlay entries (`ep{N}_extras_add.json`) and flags any whose English rendering looks like a common noun (lowercase-starting, or article-plus-lowercase, or Capital-plus-lowercase-words). Enforces STYLE.md §7's exhaustive-lists rule: hybrid CJK is for names/titles/places/idioms/terms-of-art, not common nouns. Catches the Ep20-style "如意燈 kept as CJK when it should have been 'lucky lanterns' in English" failure.
 
@@ -438,11 +408,4 @@ Upload ALL of these to start a new session — **15 bundle files + 3 per-episode
 
 ## Quick-Start for New Chat
 
-1. Upload the 15 bundle files + 3 per-episode sources above.
-2. Say: *"Process episode N with full source-authority rewriting (FULL standard)"* — i.e. examine every sub against chi and yue per the priority chain in `STYLE.md` §2.
-3. The assistant runs Steps 0 through 9 as specified in [The Pipeline](#the-pipeline) above. Step 0 context baseline is reported before any tool call; Steps 1–8 run silently between reports; Step 8.5 updates and presents `SESSION-NOTES.md`; Step 9 reports ending context.
-
-**Hard rules:**
-- **ONE EPISODE PER REQUEST for FULL quality.** If multiple episodes are uploaded, pick one and state the choice.
-- **Follow [Narration Discipline](#narration-discipline).** Run tools silently between the Step 0 and Step 9 reports; surface only actual issues (one line each) and the final `present_files`. No mid-turn progress recaps, interpretive commentary on tool output, or end-of-episode "candidates to promote" summaries — those edits go in `SESSION-NOTES.md`.
-- **Expect 3+ turns.** A FULL pass to completion often takes 3+ turns.
+Upload the 15 bundle files + 3 per-episode sources. Say: *"Process episode N with full source-authority rewriting (FULL standard)"*. Assistant runs Steps 0–9 as specified. ONE EPISODE PER REQUEST for FULL quality. Expect 3+ turns.
