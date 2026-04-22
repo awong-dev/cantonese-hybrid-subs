@@ -46,6 +46,7 @@ fixes = {
     "師父": "Master", "師兄": "Senior Brother", "師弟": "Junior Brother",
     "師姊": "Senior Sister", "師妹": "Junior Sister",
     "師叔": "Martial Uncle", "師姑": "Taoist Nun",
+    "公子": "Young Master", "姑娘": "Miss",  # v21 Ep27 promotion — §7 address terms missing from build.py titles
     "閻王爺": "King of Hell", "七兄": "Brother Seven",
     "藥師兄": "Brother Joek-si", "阿衡": "Aa-Hang",
     "前輩": "senior", "祖師爺": "Grand Teacher",
@@ -126,6 +127,7 @@ fixes = {
     "程": "Cing", "楊": "Yeung", "黃": "Wong",
     "洪": "Hung", "周": "Zau", "梅": "Mui",
     "穆": "Muk", "完顏": "Jyun-Ngaan",
+    "黎": "Lai",  # v21 — Ep27 black-raven character 黎生
 }
 
 # Shared concat-trap post-build fixes (applied to BOTH romanised variants after
@@ -193,6 +195,37 @@ shared_concat_fixes = {
     "飛天蝙蝠O Zan-ngok": "Flying Bat O Zan-ngok",
     # Ep33 Big Brother-family compound (大哥 titles stage eats it):
     "Zau Baak-tungBig Brother": "Brother Zau Baak-tung",
+    # v21 — `<CSV-name>+大哥` concat class confirmed 3-ep (Ep22 華箏公主
+    # first, Ep24 拖雷大哥 second, Ep26 張大哥/馬大哥 third). Structural
+    # class: names stage 4 fires CSV name → romanised before extras stage 5
+    # can match the compound. Promoted per SESSION-NOTES Ep24/Ep26 entries.
+    "To-leoiBig Brother": "Brother To-leoi",         # 拖雷大哥 Ep24
+    "ZoengBig Brother": "Brother Zoeng",             # 張大哥 Ep26
+    "MaaBig Brother": "Brother Maa",                 # 馬大哥 Ep26
+    # v21 — `<surname>+老+前輩` class (Ep26 裘老前輩; 前輩→senior in titles
+    # eats the compound, stranding Kau-老). Partial prior form KauElder
+    # above covered the Ep22-like no-老 form; this is the with-老 variant.
+    "Kau老senior": "Elder Kau",                      # 裘老前輩 Ep26
+    # v21 — 岳飛將軍 (Ep26); 岳飛 in CSV converts first leaving 將軍
+    # stranded. Novel `<CSV-full-name>+將軍` class.
+    "Ngok Fei將軍": "General Ngok Fei",              # 岳飛將軍 Ep26
+    # v21 — 謝幫主 / 報告幫主 (Ep20+Ep21 two-ep confirmation); 幫主→the Chief
+    # in titles stage converts before the compound can resolve.
+    "謝the Chief": "Thank you, Chief",                # 謝幫主
+    "報告the Chief": "Reporting, Chief",              # 報告幫主
+    # v21 — `<surname>+前輩` class additions (Ep23 黃前輩 already present
+    # as Wongsenior above; Ep27 黎前輩 novel firing in same class).
+    "黎senior": "Senior Lai",                         # 黎前輩 Ep27
+    # v21 — `<surname>+師姊` class (Ep16+Ep26+Ep27 three-ep, 師姊→Senior
+    # Sister in titles stage eats the compound).
+    "梅Senior Sister": "Senior Sister Mui",          # 梅師姊 Ep16/26/27
+    # v21 — `<Romanised-CSV-name>+姑娘` novel cross-stage (Ep27). 娘
+    # bare-kinship in titles→Mother stage 3 converts FIRST, producing
+    # `<Name>姑Mother`. `Cing姑Mother → Miss Cing` in the v11 block above
+    # covered the English-only output; now add variants for full-name
+    # compounds that build.py leaves as `<CSV-name>姑娘` where bare surname
+    # plus 姑娘 → `<CSV-name>姑Mother`. Jyutping handled; Yale parallels
+    # appended below.
 }
 
 yale_fixes = {
@@ -208,6 +241,7 @@ yale_fixes = {
     "蓉兒": "Yuhng-yi", "阿靖": "Aa-Jing",
     "歐陽": "Au-Yeung", "洪": "Huhng", "周": "Jau",
     "完顏": "Yun-Ngaan", "程": "Ching",
+    "黎": "Laih",  # v21 — Ep27
     "丘道長": "Taoist Yau", "洪前輩": "Senior Huhng",
 }
 
@@ -233,6 +267,16 @@ yale_concat_fixes = {
     "飛天蝙蝠O Jan-ngok": "Flying Bat O Jan-ngok",
     # Ep33 Yale counterpart:
     "Jau Baak-tungBig Brother": "Brother Jau Baak-tung",
+    # v21 — Yale parallels for v21 <CSV-name>+<titles-key> promotions.
+    # Most concat-trap English outputs are variant-neutral; Yale overrides
+    # below are the ones where Yale spelling differs from Jyutping.
+    "To-leuihBig Brother": "Brother To-leuih",       # 拖雷大哥 Ep24 yl
+    "JeungBig Brother": "Brother Jeung",             # 張大哥 Ep26 yl
+    "MaBig Brother": "Brother Ma",                   # 馬大哥 Ep26 yl
+    "Kauh老senior": "Elder Kauh",                    # 裘老前輩 Ep26 yl
+    # 岳飛 and 謝/報告the Chief are variant-neutral — already handled.
+    "黎senior": "Senior Laih",                        # 黎前輩 Ep27 yl
+    "梅Senior Sister": "Senior Sister Muhk",         # 梅師姊 Ep27 yl
 }
 
 # Name-variant OCR collapse — runs on ALL THREE variants before variant-specific

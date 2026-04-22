@@ -39,6 +39,7 @@ Row budget: Completed rows target ≤500 chars, hard cap ≤800. Format spec in 
 | 24 | v19 | 364 | 蓉兒 boat departure + 華箏 drunken-persistence + 靖 inn-drunk confusion + 小保 cake theft + 楊康/念慈 repentance + 拖雷 refuses antidote + 黃帝內經 doctor scene. First FULL firing for: 禽獸不如, 故態復萌, 視日無多 (§10 crit 1 catalogue 1st). Cross-ep: 小保 NOT 小寶 (REFERENCE §2 confirmed); 推宮換血 Rule B case vs yue 推功換血 (REFERENCE §2 stable); 忘恩負義/後會有期/拖泥帶水/事到如今/痛改前非 baseline 2nd firing stable; 軟蝟甲 5-ep stable; 甘心被你欺騙 plain-prose fail (English-only). Chi-OCR: 其兒/鞭兒→蓉兒, 郭蜻→郭靖, 网康→阿康, 划古→蒙古 (all OCR_NAME_COLLAPSE fired); 境負→辜負, 希章→希望, 會牲→畜生; 皇帝內經→黃帝內經 (Rule B 皇/黃 `wong4` homophone); 華珍→華箏 yue ASR. Concat-trap: 拖雷大哥 (sub 135) — `<CSV-name>+大哥` class, 2nd firing after Ep22 華箏公主. Post-build sed'd; promote to cjk_fix_v2 next bundle. |
 | 25 | v19 | 423 | 華箏 frees 郭靖 + 念慈/楊康 reunion + 宜興 程陸 match + 歸雲莊/桃花陣 trespass. First FULL firing for: 羞花亭, 千年蔘王, 方掌櫃, 程瑤宗, 頤王 (大衍數 step), 仙翁, 忘年之交, 神機妙算, 長恨歌 quatrain (§10 白居易, Ep17 precedent), 人有相似/物有相同, 黑鍋, 勢不兩立. Cross-ep: 推宮換血 Ep24+25 Rule B; 金國太子 Ep11+14+25 §7; 幫人幫到底/送佛送到西 Ep24+25 §10; 男歡女愛/天公地道 Ep3+25 §10; v14 overlay names→baseline. Chi-OCR novel: 仙乳→仙翁, 千年鞭王→千年蔘王, 馮兄→陸兄. §7 common-noun→English: 畜生 Ep17+25→"beast", 奸夫淫婦/淫賊/如狼似虎 plain prose. Post-build sed sub 1 `, the Prince Consort`. Slip sub 317 武林→"martial world". |
 | 26 | v19 | 471 | 歸雲莊 arc — painting-critique opening, 太湖 黃河四鬼 oath, 楊康 capture + 念慈 prison-scene, 歐陽克/穆念慈, 裘千仞 false 黃藥師-death claim, 七怪+梅超風 arrival, 陸乘風 disciple-reveal + 老賊 grief. First FULL firing for: 歸雲莊, 陸乘風, 陸莊主, 陸少莊主, 陸公子, 裘千仞, 裘老前輩, 裘前輩, 鐵掌水上飄, 九花玉露丸, 鐵八卦, 黃河四鬼, 馬青雄/馬大哥, 張寨主/李寨主, 史丞相, 阿福, 歸雲山莊, 繡花園, 無錫, 蘇州, 泰山; §10-rejected (plain-prose pass): 壯志難伸/徬徨無計, 憂國憂民, 不義之財, 民脂民膏, 世外高人, 盜亦有道, 惡有惡報, 識時務者為俊傑, 順天者昌/逆天者亡, 榮華富貴, 恭敬不如從命, 清理門戶, 死無葬身之地, 一筆勾銷, 豈有此理. Cross-ep: 老賊 5-ep (Ep3+16+22+23+26 — §5 stable REFERENCE §1); 有福同享/有難同當 Ep3+Ep26 §10 stable; 梅師姊 Ep16+26 stable; 穆姑娘/程姑娘 baseline; 桃花陣 Ep25+26 stable; 土地廟 Ep11+26 baseline; 大金國 trap 5-ep cjk_fix stable; 大宋/宋 trap 3-ep baseline. Chi-OCR: 其兒/鞭兒→蓉兒 (collapse fired), 郭蜻→郭靖, 網康→阿康, 量有此理→豈有此理, 天老前輩/救老英雄/瑚前輩/靜前募/求老前輩→裘老前輩 (novel OCR cluster), 堆千島/求千似/琢千島/炒千師→裘千仞 (novel), 陸勝鋒/陸成風/陸成峰/陸承鋒→陸乘風, 歸雲蔣/歸雲座→歸雲莊, 士地廟→土地廟, 中式物→裝飾品, 寒龍十八掌→降龍十八掌, 呈將軍→岳將軍, 東斜西道→東邪西毒, 北瑟→北丐, 盲匪/量子→瞎子, 皇帝 stays as 黃 in other contexts. Concat-traps (post-build sed): 岳飛將軍→"Ngok Fei將軍" (novel — CSV-name+title eats compound); 張大哥/馬大哥→"<name>Big Brother" (same class as Ep22+24 — `<name>+大哥` 3-ep); 裘老前輩→"Kau老senior" (`<surname>+老+前輩` novel). Promoted: 大師父→First Master (stable 5-ep, drop watch). |
+| 27 | v21 | 503 | 歸雲莊 finale — 陸/梅超風 negotiation, 段天德 kneeling-death, 楊康 repentance + sworn-brotherhood, 陸冠英/程瑤迦 forbidden-romance, 歐陽克 wedding-raid foiled, 蓉兒-as-帶喜 + 苦肉計 snake plot. First FULL firing for: 帶喜, 丁伯, 黎前輩, 郭大爺, 郭義士, 金國小王爺, 鍾無艷, 冤有頭債有主, 門當戶對, 苦肉計. Cross-ep→baseline: 陸乘風 cluster (13 entries incl 陸冠英/程瑤迦/程姑娘) Ep26+27 2-ep; 九花玉露丸 2-ep; 梅師姊 3-ep; 認賊作父 4-ep; 家破人亡 5-ep; 有福同享/有難同當 4-ep. Chi-OCR novel: 六冠鷹/陸半鷹→陸冠英; 程遙迥/伯迥/姚家→程瑤迦 cluster; 歐陽客/歐陽黑/歐陽赫→歐陽克 haak1 (REFERENCE §1); 孫不怡/孫不義→孫不二. Concat-traps (post-build sed): 程姑娘 (novel `<CSV-name>+姑娘` — 娘 bare eats compound); 梅師姊 3-ep; 黎前輩 (Ep26 裘老前輩 class). Missing from build.py titles: 師叔/師兄/師弟/師姑/公子/姑娘 — post-build sed'd, promote to build.py next bundle. |
 | 28 | v10 | 515 | 程家 snake-bite + 陸乘風 reveal at 黃藥師 reunion + 華箏 finds drunken 郭靖. First FULL firing for: 陸冠英/程瑤迦 betrothal, 想逝者/天蓋高 classical lament (§10). Cross-ep: Sub 22 case (PIPELINE §4, REFERENCE §8) — eng correct vs OCR chi, yue 每日用一隻毒蝎嚟養大 witness. |
 | 29 | v10 | 408 | 桃花島 drunken-郭靖/華箏 farewell + 周伯通 sworn-brotherhood + 歐陽峰/歐陽克 marriage proposal. First FULL firing for: 桃花陣 sworn-brotherhood (REFERENCE §3), 天之道/損有餘而補不足 (§10), 秦晉之好 (§10). Cross-ep: 我爹/你爹 and 週大哥 promotions confirmed. |
 | 30 | v11 | 507 | 桃花島 三試 (武鬥/文鬥/九陰真經) for 蓉兒 + 歐陽峰/歐陽克 ambush on 阿衡. First FULL firing for: 積翠亭, 梅花樁, 碧海潮生曲, 文鬥, 奇門八卦, 神龍擺尾. Promoted: 叔叔/武功/走火入魔→baseline; cross-stage concat traps→v11. |
@@ -55,7 +56,6 @@ Subs column is eng-derived approximation (chi-spine typically 5-15% smaller).
 | Episode | Subs (approx) | Status / Content Preview |
 |---------|---------------|--------------------------|
 | 18 | — | Not yet re-processed under current bundle. |
-| 27 | — | Likely 陸乘風 manor aftermath + 歐陽克 scheming + 桃花島 connections. |
 | 34–54 | — | Prior mechanical only — below current FULL standard. Re-process. |
 | 55–59 | — | Not yet processed. |
 
@@ -106,7 +106,7 @@ Items pending promotion. Format: `**term** (Ep firings) — note`. Promote on 2-
 
 **Ep9:**
 - **西毒/華山論劍/赤頂青蛇/大力金剛指/妙手雙飛/少林寺/嘉興/醉仙樓** — promote as they recur (西毒/華山論劍 Ep15+).
-- **Dishes** 釀鴨舌/珍珠魚目羹/豆腐絲擺麵/豆腐絲/女兒紅 — Ep9+Ep21 2-ep confirmed; promote to baseline next bundle.
+- **Dishes** 釀鴨舌/珍珠魚目羹/豆腐絲擺麵/豆腐絲/女兒紅 — Ep9+Ep21 2-ep confirmed; promoted to baseline v21 (partial — some already there).
 - **小叫化子 policy** — "little beggar" English per §18; flag if 乞兒仔 direct.
 
 **Ep10:**
@@ -146,7 +146,7 @@ Items pending promotion. Format: `**term** (Ep firings) — note`. Promote on 2-
 - **翠紅樓/獅子林/山神廟** — places, baseline 2nd firing.
 - **西湖/杭州/汴州** — 臨安 geography from 題臨安邸 quatrain, baseline 2nd firing.
 - **長白山** (Ep1 白山 ref+Ep20 standalone) — baseline.
-- **簡長老/彭長老** — 丐幫 Elders. 彭長老 Ep20+21 2-ep confirmed; promote to baseline next bundle. 簡長老 single-ep (Ep20 only) — watch.
+- **簡長老** — single-ep (Ep20 only), watch. **彭長老** Ep20+21 — promoted to baseline v21.
 - **公子** (歐陽克 self-nominated) — identity-cover form, hybrid CJK per §7.
 - **長老 (bare)** — overlay `Elder`; baseline 2nd firing.
 - **Idioms 2nd-firing→§10**: 精忠報國 (岳飛 motto, crit 3), 皇天不負有心人 (crit 3), 好心遭雷劈 (§11 example).
@@ -161,7 +161,7 @@ Items pending promotion. Format: `**term** (Ep firings) — note`. Promote on 2-
 
 **Ep21:**
 - **鄂州, 鄭州, 天香樓, 樞密院, 藏經閣, 鄭大人, 阿來, 小福** — Ep21 overlay, place/character candidates. Promote 2nd firing→baseline.
-- **謝幫主/幫主萬福/報告幫主/報告公主/多謝小王爺** — titles+suffix compounds. Ep21 overlay handles hybrid; romanised needed post-build sed for 謝幫主/報告幫主 (2nd firing confirmed — 2-ep trap, promote to cjk_fix_v2 `shared_concat_fixes` next bundle).
+- **謝幫主/幫主萬福/報告幫主/報告公主/多謝小王爺** — titles+suffix compounds. Ep21 overlay handles hybrid; **謝幫主/報告幫主** promoted to cjk_fix_v2 shared_concat_fixes v21.
 - **老伯伯** — yue-emphatic vocative of 老伯. Keep CJK per §7 address-terms-in-direct-speech. 2nd firing→STYLE §6.
 - **子翁** (bare 梁子翁) — address-form, 2nd firing→baseline.
 - **龍虎鳳 reveal ingredients** (百花蛇/果子狸/竹絲雞) — §7 plain-prose English confirmed; lint Check 2 catches them cleanly. Ep21 closes REFERENCE §4 Dish Names as Case Done.
@@ -169,8 +169,8 @@ Items pending promotion. Format: `**term** (Ep firings) — note`. Promote on 2-
 - **心腹大患** (§10 crit 1 — classical imagery, catalogue 1st) — 2nd firing decides.
 - **神注印堂** — meditation parallel to 氣聚丹田 (baseline). Ep21 1st firing.
 - **不見棺材不流淚** Ep20+21 2-ep §10 confirmed — stable, drop from watch.
-- **彭長老** Ep20+21 2nd — promote to baseline.
-- **梁子翁** Ep20+21 — confirm CSV stable.
+- **彭長老** Ep20+21 — promoted to baseline v21.
+- **梁子翁** Ep20+21 — promoted to baseline v21.
 - **Plain-prose English confirmed (fail §10 gate)**: 事不宜遲, 英明神武, 群龍無首, 成事不足敗事有餘, 豈有此理, 後患無窮, 自作自受, 大敵當前, 刁蠻任性, 蠻不講理, 心高氣傲, 以牙還牙. English-only going forward.
 - **Common-noun wuxia-vocab hybrid-leak regression** — 武功/輕功/內力/江湖 slipped into hybrid via literal-chi rendering at Step 4; post-build sed'd. Reminder: even when chi uses them, STYLE §18 bans as CJK in hybrid. Add to Step 4 mental checklist alongside §7 common-noun sweep.
 
@@ -178,8 +178,8 @@ Items pending promotion. Format: `**term** (Ep firings) — note`. Promote on 2-
 - Resolved in v19 FULL pass (see Completed row). 沙通天/彭連虎 promoted to baseline; 降龍有悔/躍龍在淵 §10-stable.
 
 **Ep23:**
-- **老賊** (Ep3+16+22+23 4-ep) — STYLE §5 stable; REFERENCE §1 genesis. Drop watch.
-- **女魔頭** (Ep8+23 2-ep) — STYLE §5 catalogued; baseline-promote next bundle.
+- **老賊** (Ep3+16+22+23 4-ep) — promoted to baseline v21; REFERENCE §1 genesis. **Drop.**
+- **女魔頭** (Ep8+23 2-ep) — promoted to baseline v21.
 - **雪蓮玉露丸/雪蓮, 黃小邪, 死老邪, 黃世伯/世伯, 黃老伯, 黃前輩, 洪師父, 黃姑娘, 邪中有三分正/正中帶七分邪 couplet** — v23 FULL confirms v14 overlay renderings. Promote to baseline/§5/§10 on 2nd firing.
 - **Plain-prose English confirmed (fail §10 gate)**: 寶刀未老, 彼此彼此, 爐火純青, 抱頭痛哭, 假仁假義, 沒齒難忘, 清理門戶, 一人做事一人當, 英明神武. English-only going forward.
 - **要飯婆/乞姨婆 Rule A** (sub 113/115 梅超風 monologue) — both beggar-compounds, STYLE §18 → English "beggar woman". Chi 要飯婆 vs yue HIGH 乞姨婆 — same pattern as Ep20 臭要飯的/死乞兒.
@@ -188,23 +188,42 @@ Items pending promotion. Format: `**term** (Ep firings) — note`. Promote on 2-
 - **燕尾甲→軟蝟甲 yue-ASR, 華珍→華箏 yue-ASR** — OCR_NAME_COLLAPSE 2nd firing.
 - **皇帝內經→黃帝內經 yue-ASR** (sub 341) — 皇/黃 `wong4` homophone, Rule B chi wins. Classical medical text (黃帝內經) — stable CJK in hybrid. Single firing, watch for recurrence.
 - **禽獸不如, 故態復萌, 視日無多** (§10 crit 1 1st firing) — all fixed 四字成語 kept as CJK+gloss. Common-noun lint flagged as heuristic. 2nd firing decides §10 promotion vs English-only.
-- **`<CSV-name>+大哥` concat class** — Ep24 sub 135 (拖雷大哥) 2nd firing after Ep22 華箏公主 (`<CSV-name>+公主`, same class). names/titles stages eat the compound before extras-stage fires. Post-build sed'd. Promote to cjk_fix_v2 `shared_concat_fixes` next bundle; add both jy (To-leoiBig Brother→Brother To-leoi) and yl (To-leuihBig Brother→Brother To-leuih) entries.
+- **`<CSV-name>+大哥` concat class** — Ep22 華箏公主 + Ep24 拖雷大哥 + Ep26 張大哥/馬大哥 3-ep. Promoted to cjk_fix_v2 `shared_concat_fixes` v21 (To-leoiBig Brother → Brother To-leoi; ZoengBig Brother → Brother Zoeng; MaaBig Brother → Brother Maa + Yale parallels).
 
 **Ep26:**
-- **裘千仞/裘老前輩/裘前輩/水上飄** (Ep26 1st, 鐵掌水上飄) — overlay rendering. Promote to baseline on 2nd firing (expected Ep33 per Completed row). 陳玄未盡 ("prime not yet spent") single-firing watch.
-- **陸乘風/陸莊主/陸少莊主/陸公子/陸師兄/歸雲莊/歸雲山莊** — Ep26 1st firing. 2-ep stable (Ep26+Ep28 per Completed Ep28 row mentions 陸乘風). Promote cluster to baseline next bundle.
+- **裘千仞/裘老前輩/裘前輩/水上飄** (Ep26 1st, 鐵掌水上飄) — overlay rendering. Promote to baseline on 2nd firing (expected Ep33). 陳玄未盡 ("prime not yet spent") single-firing watch. 裘老前輩 concat-trap promoted to cjk_fix_v2 v21 (Kau老senior → Elder Kau).
+- **陸乘風 cluster** (陸乘風/陸莊主/陸少莊主/陸公子/陸師兄/歸雲莊/歸雲山莊) — Ep26+Ep27 2-ep. Promoted to baseline v21.
 - **黃河四鬼/馬青雄/張寨主/李寨主** — 太湖 gang arc, Ep26 1st. Watch for Ep27+ reappearance.
 - **史丞相** (Ep26 1st, 楊康's 金國 political contact) — single-firing, watch.
-- **九花玉露丸 / 鐵八卦** — 陸乘風-linked items, 九花玉露丸 likely 桃花島 pharmaceutical. Watch for recurrence at 桃花島 arc.
+- **九花玉露丸** (Ep26+Ep27 2-ep) — promoted to baseline v21.
+- **鐵八卦** (Ep26 1st) — 陸乘風-linked item. Watch.
 - **繡花園 / 無錫 / 蘇州** — 宜興/太湖-region geography. Baseline on 2nd firing.
-- **有福同享/有難同當** Ep3+Ep8+Ep26 — STYLE §10 catalogued, stable (≥3-ep). Drop from watch.
-- **老賊** (Ep3+16+22+23+26 5-ep) — REFERENCE §1 stable. Drop from watch (already stable).
-- **梅師姊** (Ep16+Ep26 2-ep) — STYLE §5 stable. Promote to baseline next bundle.
-- **穆姑娘 / 程姑娘** — both in build.py titles (穆姑娘) or baseline. 程姑娘 Ep25+Ep26 2-ep — promote overlay→baseline next bundle.
+- **有福同享/有難同當** Ep3+Ep8+Ep26+Ep27 — §10 stable, promoted to baseline v21. **Drop.**
+- **老賊** Ep3+16+22+23+26+27 6-ep — promoted to baseline v21. **Drop.**
+- **梅師姊** (Ep16+Ep26+Ep27 3-ep) — promoted to baseline v21. **Drop.**
+- **穆姑娘 / 程姑娘** — 穆姑娘 already in build.py titles. 程姑娘 promoted to baseline v21 (Ep25+26+27 3-ep). **Drop.**
 - **Plain-prose English confirmed (fail §10 gate)**: 壯志難伸/徬徨無計 (paired couplet, plain-prose works — "great ambitions unfulfilled, pacing with no plan"), 憂國憂民, 不義之財 ("ill-gotten gains"), 民脂民膏 ("the people's flesh and blood"), 世外高人 ("masters beyond the world"), 盜亦有道 ("thieves too have a code"), 惡有惡報, 識時務者為俊傑 ("the wise man reads the times"), 順天者昌/逆天者亡 (plain-prose paired), 榮華富貴 ("glory and wealth"), 恭敬不如從命, 清理門戶 (Ep7+Ep23+Ep26 3-ep plain-prose stable), 死無葬身之地, 一筆勾銷, 豈有此理 (Ep21+Ep26 plain-prose). English-only going forward.
 - **Chi-OCR novel (裘千仞/裘老前輩 cluster)** — 堆千島/求千似/琢千島/炒千師/求千人→裘千仞; 天老前輩/救老英雄/瑚前輩/靜前募/求老前輩/裘老英雄→裘老前輩; 陸勝鋒/陸成風/陸成峰/陸承鋒→陸乘風; 歸雲蔣/歸雲座→歸雲莊; 士地廟→土地廟; 中式物→裝飾品; 寒龍十八掌→降龍十八掌; 呈將軍→岳將軍; 東斜西道→東邪西毒; 北瑟→北丐; 盲匪/量子→瞎子. 2nd firing→OCR_NAME_COLLAPSE.
-- **Concat-traps — 3-ep class confirmation** for `<CSV-name>+<titles-key>` trap: Ep22 華箏公主 + Ep24 拖雷大哥 + Ep26 張大哥/馬大哥 + Ep26 裘老前輩 (`<surname>+老+前輩`). Also novel: **岳飛將軍** — 岳飛 in PersonalNames converts leaving 將軍 stranded. Promote entire class to cjk_fix_v2 `shared_concat_fixes` next bundle with entries: jy `張Big Brother → Brother Zoeng`, `馬Big Brother → Brother Maa`, `Kau老senior → Elder Kau`, `Ngok Fei將軍 → General Ngok Fei`; yl parallels.
+- **Concat-traps — 3-ep class** for `<CSV-name>+<titles-key>` trap (Ep22 華箏公主 + Ep24 拖雷大哥 + Ep26 張大哥/馬大哥/裘老前輩/岳飛將軍). Promoted to cjk_fix_v2 `shared_concat_fixes` v21: ZoengBig Brother, MaaBig Brother, Kau老senior, Ngok Fei將軍, 謝the Chief, 報告the Chief + Yale parallels.
 - **Reviewer-discipline note — common-noun-CJK over-inclusion** — Step-4 reviewer initially kept ~30 common-noun phrases (老夫, 兩條腿, 妖女, 啟稟, 我師父, etc.) as CJK in hybrid that STYLE §7 requires to be English. Lint Check 2 caught them; remediation required 47 post-write English rewrites + 14 duplicate-gloss collapses (the CJK→English rewrite created "English (English)" patterns from the original `CJK (English gloss)` format). For future sessions: during Step 4, apply the §7 common-noun sweep BEFORE writing the TSV, not after. The 老夫 case is particularly instructive — "this old one" reads as plain prose; keeping 老夫 as CJK in hybrid trains readers to skim past CJK that carries no cultural weight the English can't convey.
+
+**Ep27:**
+- **帶喜** (Ep27 1st) — 蓉兒's fake-maid alias in 苦肉計 plot. Single-arc, unlikely to recur. Watch.
+- **丁伯** (Ep27 1st) — 程家 steward. Single-ep watch.
+- **黎前輩** (Ep27 1st) — Li Sheng, 丐幫 elder. Concat-trap promoted to cjk_fix_v2 v21 (黎senior → Senior Lai/Laih). Watch for recurrence.
+- **金國小王爺** (Ep27 1st) — compound; overlay. Watch.
+- **郭義士** (Ep27 1st) — 郭嘯天's honorific. Watch.
+- **鍾無艷** (Ep27 1st) — 齊宣王's famously ugly queen, 蓉兒's self-disparaging allusion. Single-firing watch.
+- **陸乘風 cluster** (Ep26+27 2-ep) — promoted to baseline v21. **Drop.**
+- **九花玉露丸** (Ep26+27 2-ep) — promoted to baseline v21. **Drop.**
+- **冤有頭債有主** (Ep27 1st §10 crit 3) — named 俗語. English "every grievance has its source" is plain-prose-ish but 1:1 aphoristic cadence matters. Watch 2nd firing for §10 promotion.
+- **門當戶對** (Ep27 1st §10 crit 1) — fixed 四字 marriage idiom. Watch 2nd firing for §10 promotion.
+- **苦肉計** (Ep27 1st §10 crit 1+2) — named 三十六計 stratagem (#34). Watch 2nd firing for §10 promotion.
+- **Common-noun→English confirmed (fail §7)**: 大英雄 (14× — flattery not title), 老爺 bare (vs 程老爺 compound CJK), 小姐/大小姐 bare (vs 程大小姐 compound CJK), 大姑/大爺/相公/主人/姑娘 bare, 奴婢/在下/師門/傳人/丫頭/本姑娘/夫人 bare/陰德 bare, 啟稟/稟告 (Ep26+Ep27 2-ep reconfirmed). English-only going forward.
+- **Plain-prose English confirmed (fail §10 gate)**: 倒行逆施, 天生麗質, 稍安勿躁, 一刀兩斷, 奮不顧身, 不知羞恥, 兵來將擋/水來土掩, 為非作歹, 仗義相救, 頂天立地 (Ep5+Ep27), 胡作非為, 孤苦零丁, 英雄救美, 江山易改本性難移 (§9 Western-equiv concept-map). English-only going forward.
+- **Chi-OCR novel**: 六冠鷹/陸半鷹→陸冠英; 程遙迥/伯迴/伯迥/程耀家/程瑤家/姚家/和伯迥→程瑤迦 cluster; 歐陽客/歐陽黑/歐陽赫→歐陽克 (Rule B chi wins, REFERENCE §1 haak1 reconfirmed); 孫不怡/孫不義→孫不二; 旺有此理/量有此理→豈有此理 (collapse fired, 3-ep Ep21+26+27); 陸承鋒/陸勝鋒→陸乘風 (Ep26+Ep27 collapse fired).
+- **Concat-traps promoted v21** — 梅師姊 (3-ep → 梅Senior Sister), 黎前輩 (novel → 黎senior), 程姑娘 (already handled by prior Cing姑Mother entry plus baseline promotion). **Drop.**
+- **§7 address-terms-missing-from-build.py** — 公子, 姑娘 added to cjk_fix_v2 `fixes` dict v21 as backup (師叔/師兄/師弟/師姑/師姊 already present). **Drop.**
 
 **Ep31:** 一陽指, 華山論劍, 激將法, 過目不忘, 玉石俱焚, 雞鳴狗盜, 水能載舟亦能覆舟, 李白 將進酒, 女大不中留, 夫復何言, 圓寂, 陽壽已盡, 冰窒, 起死回生, 入土為安 — §10 gate 2nd firing.
 
