@@ -307,6 +307,8 @@ All 四字成語 in chi must appear as CJK in hybrid. See §10 catalogue.
   - **臭乞兒** → "stinking beggar"
   - **臭要飯的** (chi OCR for 死乞兒) → "stupid beggar"
   - **王八蛋** → "bastard" / "scoundrel"
+  - **畜生** → "beast" / "brute" (bare compound, not intensifier+noun, but same class — a common-noun insult that English carries fully. Often chi-OCR as 會牲.)
+  - **淫賊** → "lecherous scoundrel" (occasional pairing **奸夫淫婦** → "adulterous lovers" / "adulterous pair" — plain prose, no CJK).
   - Rule: intensifier + common-noun-insult → English. Contrast intensifier + proper-nickname (**死老邪**, **老毒物**, **老頑童**) which stays CJK because X is a proper nickname.
 - **Colloquial slang/intensifiers** (抵死, 好彩, 乜嘢, 放肆) — render register in English, no CJK.
 - **Everyday Cantonese-vs-Mandarin vocabulary** that isn't a proper noun, title, idiom, or term-of-art — Rule A picks the form, rendering is English.
@@ -450,6 +452,7 @@ Pass the gate: **塞外高人** (set classical phrase — 塞外 geographic qual
 - **精忠報國** — "utmost devotion to the country". 岳飛's tattoo motto; cultural weight.
 - **好心遭雷劈** — "good hearts get struck by lightning". Named 俗語.
 - **皇天不負有心人** — "Heaven never fails the determined". Named 俗語.
+- **忘年之交** — "old friends despite their years". 2-ep stable (Ep12+Ep25). Age-crossing friendship — the specific image English gloss flattens to plain "old friends"; the 忘年 ("disregarding years") is the point. Format: `忘年之交 (old friends despite their years)` on first use; short form on later uses.
 
 ### Five Greats (五絕) epithets
 
@@ -477,6 +480,13 @@ Usage: epithets appear standalone ("東邪 黃藥師, only has one daughter") an
 - **元好問 摸魚兒「問世間情為何物」** (Ep19, closing line). Classical 詞 by 元好問:
   - 問世間, 情為何物, 值得生死相許 → "I ask the world: what is this thing called love, that it should bind life and death together"
   Famous opening from 摸魚兒·雁丘詞 that 金庸 also uses to open 神鵰俠侶.
+- **白居易 長恨歌 fragment** (Ep17 compressed + Ep25 full — two-ep stable) — 唐 classical elegy for 楊貴妃; 蓉兒/郭靖 use it as poetry-practice banter in Ep25, 陸冠英/程瑤迦 tryst as backdrop. Format `CJK (English gloss)`, one line per sub or paired. Canonical lines encountered:
+  - Ep17: 芙蓉帳暖度春宵 / 明月當空 → "the hibiscus-curtained bed is warm through the spring night" / "the bright moon stands in the sky"
+  - Ep25: 淚濕羅巾夢不成 → "tears dampen the kerchief, no dream comes"
+  - Ep25: 袍深前殿按歌聲 → "beyond the robes, the front palace sings on"
+  - Ep25: 紅顏未老恩先斷 → "her youth unfaded, his favour already done"
+  - Ep25: 斜倚薰籠坐到明 → "she leans on her incense pillow till dawn"
+  Note: Ep25 sub 233–236 has 蓉兒 parodying 淚濕羅巾 as 淚濕羅布 ("tears dampen the laundry" — 巾/布 pun). Keep the parody CJK-preserved; 郭靖 corrects her 羅布 → 羅巾.
 
 ### 九陰真經 quotations (Ep29+ 周伯通 slap-memorise)
 - **天之道, 損有餘而補不足** — "Heaven's way: take from the surplus and replenish the lack" (道德經 77).
