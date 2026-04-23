@@ -60,6 +60,12 @@ Confidence tier doesn't settle this — Whisper can be HIGH on garble; a LOW-tie
 2. Yue agrees semantically with chi? Yes → go to 3. No → Rule B: chi wins unless eng/cross-ep/OCR corroborates yue. Stop.
 3. Yue more vivid/colloquial/register-appropriate than chi? Yes → use yue. No → keep chi.
 
+### Citation discipline for Rule A
+
+When Rule A fires — you override chi because yue is more vivid — the Step 4 log entry (`PIPELINE.md` Step 4) must quote the yue phrase that triggered the override. "Rule A applied" is a gesture; "yue 大蝦勢 (Cantonese 'bullying-posture') more vivid than chi 以大欺小" is the real application.
+
+The citation requirement exists because Rule A is the most abusable rule in the priority chain: it permits chi to be overridden on register grounds, which sounds subjective and invites hand-waving. Forcing a quoted yue phrase in the log keeps Rule A honest — if you can't quote the yue phrase, you aren't applying Rule A, you're writing from plot memory.
+
 ### Special cases
 
 - **臭要飯的** (chi OCR) → actual Cantonese is **死乞兒**. Both chi and yue ASR transcribe incorrectly. Render as **"stupid beggar"** in all three variants (not CJK in hybrid).
@@ -420,6 +426,12 @@ Not every 四字 phrase is catalogue-worthy. Before adding a new entry, check at
 4. **Poetic / elegiac couplet** from identifiable literary tradition (曹操 短歌行, the Dragon-chant quartet).
 
 **The primary test — the plain-prose rule.** Strip the CJK, read only the English. *If it stands alone as plain prose without losing imagery or cultural weight, it does not belong here — a consistency ledger is not reason enough.* This catalogue is only for phrases whose Chinese form carries something the English gloss can't. Descriptive common-noun phrases fail even if they sound literary (情蛇, 一流高手, general X+高手/高人 compounds where X is adjective). Pass the gate: **塞外高人** (set classical phrase — 塞外 geographic qualifier), **一代宗師** (fixed 四字 wuxia-world meaning). When in doubt, err toward English — catalogue stays tight.
+
+### Gate-naming requirement (Step 4 discipline)
+
+When Step 4 keeps a non-catalogued idiom as CJK+gloss in hybrid, the Step 4 log entry must name the criterion (1/2/3/4) it passes, OR mark it `plain-prose → English` and render the hybrid sub in English. There is no unnamed middle ground — every CJK-kept idiom has passed a specific criterion, or it should not be CJK.
+
+The rule exists because the admission gate is easy to gesture at and skip. Ep1 莫須有 was the canonical failure: a phrase with real historical pedigree (秦檜's charge against 岳飛) that nonetheless failed the gate because its standard English ("trumped-up") is plain-prose. Historical provenance alone does not qualify. Naming the criterion forces the check to happen.
 
 ### Catalogue entries
 

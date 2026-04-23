@@ -41,9 +41,17 @@ Before beginning work on any episode, the assistant reports the context state:
 
 FULL is the target quality. PARTIAL and MECHANICAL-ONLY are named failure modes — they exist so a degraded delivery can be honestly labelled. Always aim for FULL; if the realistic outcome is PARTIAL or MECHANICAL-ONLY, say so in the Step 0 report so the user can decide how to proceed.
 
-- **FULL** (target) — Step 4 examination loop completed for every sub. Overrides written where content or register mismatches; OCR corrections via yue-as-witness; yue-authority overrides applied; idiom injection; characterisation preserved.
-- **PARTIAL** (failure mode) — Step 4 examined roughly 20–60% of subs before aborting (context ran out, or output-length limit on a large override pass). Names/titles/idioms mechanically correct throughout; unexamined subs retain whatever Step 3 produced. Acknowledge honestly in delivery; flag which sub-range was examined.
+- **FULL** (target) — Step 4 examination loop completed for every sub **and evidenced in `ep{N}_step4_log.txt`** (see Step 4 below). Overrides written where content or register mismatches; OCR corrections via yue-as-witness; yue-authority overrides applied with quoted yue phrase in the log; idiom injection with §10 gate criterion named; characterisation preserved.
+- **PARTIAL** (failure mode) — Step 4 examined roughly 20–60% of subs before aborting (context ran out, or output-length limit on a large override pass). Names/titles/idioms mechanically correct throughout; unexamined subs retain whatever Step 3 produced. Acknowledge honestly in delivery; flag which sub-range was examined (the log makes this concrete — "log covers subs 1–220").
 - **MECHANICAL-ONLY** (failure mode) — Step 4 barely started (<20%) or didn't run. Mechanical CJK substitutions and idiom injections are good, meaning and register not systematically checked. Acknowledge honestly.
+
+### The forcing-function rule — writing is not examination
+
+Step 4 has historically collapsed into Step 3 + fast rewriting: the assistant reads the dump quickly, writes a TSV of overrides, and calls it done. This satisfies the letter of "examine every sub" while skipping the per-sub yue/chi/eng comparison that Rules A/B/C demand. The pattern has recurred across sessions.
+
+**The rule: no override is written until `ep{N}_step4_log.txt` for that sub's batch exists.** The log is the artifact that evidences examination. A sparse TSV with no log is indistinguishable from a fast-written TSV; a log with one line per HIGH-yue sub is visible work. Writing fluent overrides from plot knowledge rather than source comparison is the failure mode — the log is what makes that failure mode visible.
+
+If context is tight enough that the log can't be written honestly, say so in Step 0 and deliver PARTIAL with the log as evidence of what was actually examined. **Do not skip the log to save tokens** — a PARTIAL with a log beats a nominal-FULL without one.
 
 ---
 
@@ -53,6 +61,7 @@ Conversational summaries between tool calls consume ~15–25% of session budget 
 
 ### Required output (keep)
 - **Step 0 context baseline report** before any tool call.
+- **Step 4 log batches and pressure-test answers** as Step 4 proceeds. The log batches are tool calls, not chat narration — don't narrate each batch; the log file is the artifact. The three pressure-test answers at the end of Step 4 are chat text, concrete and concise (one to two lines per answer).
 - **Step 8.5 SESSION-NOTES update and present** after the three SRTs.
 - **Step 9 ending context report** after the SESSION-NOTES `present_files`.
 - **User-directed questions** for genuine ambiguity (rare in FULL pass).
@@ -116,6 +125,10 @@ Context baseline — Episode N
 ```
 
 **How to make the call.** Conservative sub-count estimates: ~25% of context for a 400-sub episode during Step 4, ~40% for a 600-sub episode. If `baseline + expected delta` exceeds ~90%, project the outcome as borderline or likely-degraded. These estimates assume the file-based flow (reading `ep{N}_dump.txt` via `view` ranges rather than re-dumping via `python3 -c`) — reverting to stdout-and-echo patterns inflates usage significantly.
+
+**Turn budgeting — hard rule for ≥400 subs.** For episodes with ≥400 chi-spine subs, **Turn 1 ends after the Step 4 log is complete and presented**; TSV writing, mechanics (Steps 5–8), and SRT delivery happen on Turn 2. This is structural, not negotiable: Step 4 on a 400+ sub episode needs a full turn of attention, and collapsing it with TSV-writing in the same turn is the failure pattern the forcing-function rule exists to prevent. For smaller episodes (<400 subs) a single turn can cover Steps 1–8 if context allows.
+
+The rule applies even when the user says "always continue", "don't stop", or "full quality in one pass." Those instructions push toward the collapse failure mode. Completing Step 4 honestly in Turn 1 and delivering SRTs in Turn 2 *is* full quality; compressing them into one turn is how the quality degrades. State in the Step 0 report: "Episode size ≥400 subs → Turn 1 is Step 4 log only; SRTs come in Turn 2."
 
 ### Step 1 — Parse & Align
 
@@ -208,27 +221,83 @@ python3 auto_override_v2.py <N>
 
 **AUTO-KEEP heuristic.** `auto_override_v2.py` annotates each sub in `ep{N}_confidence.json` with `auto_keep: true/false`. True means the sub passed all seven conservative gates (all tracks non-empty, yue HIGH/MEDIUM, no fabrication-risk markers, no idioms in chi, no missing address terms, ≤1.5× length ratio, ≥0.7 content-word overlap). A **priority signal, not a gate** — Step 4 still reads every sub; concentrate time on NEEDS REVIEW. Deliberately false-negative-biased (false positive silently degrades quality; false negative just costs a quick-confirm).
 
-### Step 4 — Examine Every Sub; Override When Warranted
+### Step 4 — Examine Every Sub; Log First, Override Second
 
-Read `ep{N}_h_all.json` (populated with Step 3's CJK substitutions) alongside the chi track, the yue track, and `ep{N}_confidence.json`. Examine EVERY sub against the priority chain (**yue HIGH > chi > eng**) per `STYLE.md` §2 — which defines the Rule A register override, the Rule B semantic-disagreement default, and the Rule C intelligibility gate. If the Step 3 output already matches source content and register faithfully, default to it. Override only when content or register mismatches.
+Step 4 has two outputs, produced in this order: (1) `ep{N}_step4_log.txt`, written in batches of ~50 subs as you work through the dump; (2) `ep{N}_overrides.tsv`, derived from the log. **The log is mandatory and is written before the TSV.** Writing the TSV first and back-filling the log defeats the purpose — the log exists to make examination visible, which only works if it records what you actually thought while examining.
 
-For every sub, walk this checklist:
+Read `ep{N}_h_all.json` (populated with Step 3's CJK substitutions) alongside the chi track, the yue track, and `ep{N}_confidence.json`. Examine EVERY sub against the priority chain (**yue HIGH > chi > eng**) per `STYLE.md` §2.
+
+#### The Step 4 log format
+
+One line per sub. Every sub gets a line — not just the ones that will become overrides. The shape:
+
+```
+<idx> <conf> <flag> <decision> <reason>
+```
+
+- `<idx>` — sub number
+- `<conf>` — HIGH / MEDIUM / LOW / N/A (from `ep{N}_confidence.json`)
+- `<flag>` — the Step 2 dump flag column (`•!i@ory` or blank)
+- `<decision>` — one of:
+  - `KEEP` — Step 3 output is faithful, no override
+  - `YUE-A` — Rule A fired (yue more vivid/colloquial synonym)
+  - `YUE-B` — Rule B override (chi-OCR visible, eng corroborates yue, or prior FULL-ep precedent — must be one of these)
+  - `CHI` — chi wins over yue (Rule B default, semantic disagreement with no independent corroboration)
+  - `REFLOW` — `r`-flag case, content preserved from adjacent sub per §13 em-dash split
+  - `IDIOM` — idiom injection from chi that Step 3 missed; name §10 criterion (1/2/3/4) or mark `plain-prose → English`
+  - `ADDR` — address term (師父/前輩/老伯/etc) Step 3 dropped
+  - `FAB` — eng fabrication removed, neither chi nor yue supports
+  - `OCR` — chi-OCR canonicalisation (e.g. `老示童 → 老頑童`)
+  - `FILL` — empty Step 3 output populated from chi
+- `<reason>` — one short phrase. For YUE-A: **quote the yue phrase** that triggered the override (e.g. `yue 大蝦勢 vivid over chi 以大欺小`). For YUE-B: name the corroboration (eng/cross-ep/OCR). For IDIOM: name the §10 criterion or write `plain-prose → English`. For KEEP, a terse note is fine (`Step 3 faithful`, `bare name, no content to examine`).
+
+AUTO-KEEP subs (`•` flag + `auto_keep: true` in confidence.json) can take the shortest form: `<idx> HIGH • KEEP auto-keep faithful`. The seven-gate heuristic has already done real checking — don't perform theatre on these. NEEDS-REVIEW subs must state the Rule A/B/C call explicitly.
+
+**Batch discipline.** Write the log in batches of ~50 subs, appending as you go. Do not write all 400 lines in one `create_file` call at the end — that lets the log be back-filled from the TSV, defeating the forcing function. The correct pattern is: read dump lines 1–200 → write log entries 1–50 → read 200–400 → write log entries 51–100 → and so on. Each batch is a real examination pass on a bounded range.
+
+#### Worked log examples
+
+```
+1 HIGH    KEEP    Step 3 faithful
+10 HIGH    OCR    chi 鞭兒 → 蓉兒 (OCR batch, REFERENCE §1)
+15 HIGH    IDIOM  想逝者 lament (§10 crit 4; chi 誰訴 variant, not Ep28 最苦)
+39 HIGH i  IDIOM  女大不中留 §10 crit 3 (Ep30+31 2-ep promotion)
+169 MEDIUM YUE-A  yue 大蝦勢 Cantonese "bullying-posture" — chi 以大欺小 flat
+182 MEDIUM  §7  武功 → "skill" (STYLE §18 ban)
+280 HIGH •  KEEP   "be calm" — yue 稍安勿躁 plain-prose fail §10 gate
+324 HIGH    IDIOM  雞鳴狗盜 §10 crit 2 (史記 allusion, Lord Mengchang)
+374 MEDIUM  KEEP   藥哥 intimate-address; needs overlay (not §7 ban — kinship)
+```
+
+#### The per-sub checklist
+
+For each sub, walk this checklist once; the log entry records the outcome:
 
 1. Read chi for meaning, yue for register and (if HIGH) potential Rule A override. Compare against Step 3's output.
-2. If eng says something neither chi nor yue supports → **DELETE** the fabrication. **But check reflow first** (the `r` flag in the Step 2 dump fires on this signature; see its explanation there). If chi is thin AND an adjacent sub has empty eng or chi, the eng content is probably reflow casualty, not invention — preserve it, merge with chi via em-dash dialogue-split (STYLE §13). If chi is substantive but eng still disagrees and yue confirms eng, treat as OCR error in chi (REFERENCE §8 Sub 22).
-3. For `y`-flagged yue-solo subs, apply the procedure described with the flag in Step 2: Rule C intelligibility gate + scene-context plausibility. When in doubt, don't invent dialogue from yue alone.
-4. If chi has nuance eng lacks → **REWRITE** to capture it.
-5. If yue HIGH diverges from chi: pass through the intelligibility gate, then apply Rule A (synonyms, yue more vivid → rewrite to yue) or Rule B (different words → chi wins unless eng / prior-FULL-episode / visible chi OCR corroborates yue). See `STYLE.md` §2.
-6. If yue's register is sharper/warmer/more colloquial than the draft → **REWRITE** to match yue's register (Rule A on a register-only difference).
-7. If chi or yue has an address term Step 3 didn't catch → ensure it's **CJK in hybrid**.
-8. If chi or yue has an idiom Step 3 didn't catch → ensure it's **in the hybrid sub**.
-9. **Common-noun CJK sweep** — before finalising, verify none of STYLE §7's "What does NOT get CJK" list (generic wuxia vocab, colloquial-insult compounds, Mandarin 叫化子, descriptive common-noun metaphors) is left as CJK in hybrid. Named techniques (九陰真經, 降龍十八掌, etc.) remain CJK. `lint_overrides.py`'s Check 2 catches many; reviewer judgment is the final arbiter.
-10. If none apply → **leave the sub alone**; the draft is faithful.
-11. Collect corrections into `ep{N}_overrides.tsv` (format below) and apply with `apply_overrides.py`.
+2. If eng says something neither chi nor yue supports → **FAB** (delete). **But check reflow first** (the `r` flag in the Step 2 dump fires on this signature; see its explanation there). If chi is thin AND an adjacent sub has empty eng or chi, the eng content is probably reflow casualty → **REFLOW**. If chi is substantive but eng still disagrees and yue confirms eng, **YUE-B** (OCR-in-chi case).
+3. For `y`-flagged yue-solo subs, apply Rule C intelligibility gate + scene-context plausibility. When in doubt, don't invent dialogue from yue alone → **KEEP** with reason `yue-solo, garbled/implausible`.
+4. If chi has nuance eng lacks → rewrite (log as `CHI` with one-word reason; the override will capture the nuance).
+5. If yue HIGH diverges from chi: Rule C intelligibility first. Then Rule A (synonyms, yue more vivid → **YUE-A**, quote yue) or Rule B (different words → **CHI** by default unless corroboration → **YUE-B**).
+6. If yue's register is sharper/warmer/more colloquial than the draft → **YUE-A** (register-only Rule A; quote yue).
+7. If chi or yue has an address term Step 3 didn't catch → **ADDR**.
+8. If chi or yue has an idiom Step 3 didn't catch → **IDIOM**; apply §10 admission gate in the log entry ("§10 crit N" or "plain-prose → English").
+9. **Common-noun CJK sweep** — STYLE §7's "What does NOT get CJK" list (generic wuxia vocab, colloquial-insult compounds, Mandarin 叫化子, descriptive common-noun metaphors). Flag as `§7` in the log; render English. `lint_overrides.py`'s Check 2 catches many at Step 5.5; reviewer judgment is the final arbiter.
+10. If none apply → **KEEP**; the draft is faithful.
 
-**Triage.** Subs with `auto_keep: true` in `ep{N}_confidence.json` should still be read, but quickly — the heuristic already checked fabrication risk, idiom injection, address-term drops, and length divergence. Concentrate examination time on `auto_keep: false`, where fabrications, meaning flattening, yue-authority overrides, register drift, and idiom injection cluster.
+#### The gate before writing the TSV
 
-**Writing overrides.** Collect into `/home/claude/ep{N}_overrides.tsv`, one per line, tab-separated:
+Before opening `ep{N}_overrides.tsv`, confirm these in-text:
+
+- Every sub has a log entry (check: line count of `ep{N}_step4_log.txt` equals sub count).
+- For every HIGH-yue sub that got YUE-A, the log quotes the yue phrase.
+- For every IDIOM entry, the §10 gate decision is recorded (criterion number, or plain-prose fail).
+- Count of each decision type. Typical healthy distribution for a FULL pass: 20–40% KEEP, 30–50% chi-content rewrites, 5–15% YUE-A, 1–5% IDIOM+ADDR+FAB+OCR+§7. A run with 0 KEEP or 0 YUE-A on a 200+ HIGH-yue episode is a red flag — you're likely not examining carefully.
+
+Now write the TSV. Every TSV line derives from a log line with a non-KEEP decision. A TSV entry with no corresponding log decision is not allowed.
+
+#### Writing overrides
+
+Collect into `/home/claude/ep{N}_overrides.tsv`, one per line, tab-separated:
 
 ```
 <index>\t<English text with \\n for embedded newlines>
@@ -249,9 +318,19 @@ python3 apply_overrides.py <N>
 
 This merges the TSV into `ep{N}_h_all.json`, replacing entries by index. Subs not listed keep whatever Step 3 wrote. **Don't revert to emitting overrides as a Python literal dict inside a patch script** — the pre-v10 pattern cost ~1.3× the context due to dict/quoting overhead.
 
-Examining every sub is what makes FULL quality — not rewriting every sub. A faithful draft left untouched is a correct outcome.
+Examining every sub is what makes FULL quality — not rewriting every sub. A faithful draft left untouched is a correct outcome, and the log records it as **KEEP** with equal legitimacy to an override. The failure modes are: (a) rewrite-heavy sessions that over-edit faithful drafts, and (b) skim-sessions that nominally examine but don't produce the log evidence. The log addresses both — it forces examination to be real, and it records KEEP as real work.
 
-**Exception — preserve Step 3 output when chi and yue are both empty/bare name.** For subs where chi is empty or just a bare name (opening-credits name cards, etc.) and yue offers no additional content, **keep the Step 3 output rather than rewriting.** Manually projecting a speaker from sparse sources caused a name-swap bug in prior sessions. If neither chi nor yue has content beyond a name, don't guess the speaker.
+**Exception — preserve Step 3 output when chi and yue are both empty/bare name.** For subs where chi is empty or just a bare name (opening-credits name cards, etc.) and yue offers no additional content, **keep the Step 3 output rather than rewriting.** Manually projecting a speaker from sparse sources caused a name-swap bug in prior sessions. Log as `KEEP bare name, no content`.
+
+#### Pressure-test: the three questions
+
+Before proceeding to Step 5, answer these in-text. If you can't answer concretely, Step 4 isn't done; go back to the log.
+
+1. Cite three subs where Rule A fired (YUE-A in the log) — give the yue phrase, the chi phrase, and one-phrase reason yue was more vivid.
+2. Cite three subs where you kept Step 3 verbatim (KEEP) — one sentence on why the draft was faithful.
+3. For each CJK-kept idiom in the overrides, name the §10 admission-gate criterion (1/2/3/4) it passes. Any idiom for which you can't name a criterion should not be CJK — rewrite the hybrid entry to English.
+
+Writing "done" to these three without specifics is the bluff the log-first discipline is designed to catch. If you find yourself hand-waving on them, the log wasn't written honestly — fix the log, then re-answer.
 
 ### Step 5 — Add Episode Extras
 
@@ -403,6 +482,9 @@ Upload ALL of these to start a new session — **15 bundle files + 3 per-episode
 
 ### Per-episode inputs (3)
 16. `{N}-eng.csv`, `{N}-chi_tra.csv`, `{N}-yue.json`
+
+### Per-episode work artifacts (produced during processing, not uploaded)
+- `ep{N}_step4_log.txt` — required for FULL. Evidences per-sub examination. Stays in `/home/claude/` during the session; not part of the handoff bundle. If a session ends mid-episode (PARTIAL), the log documents which sub-range was actually examined.
 
 ---
 
