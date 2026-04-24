@@ -126,9 +126,6 @@ Context baseline — Episode N
 
 **How to make the call.** Conservative sub-count estimates: ~25% of context for a 400-sub episode during Step 4, ~40% for a 600-sub episode. If `baseline + expected delta` exceeds ~90%, project the outcome as borderline or likely-degraded. These estimates assume the file-based flow (reading `ep{N}_dump.txt` via `view` ranges rather than re-dumping via `python3 -c`) — reverting to stdout-and-echo patterns inflates usage significantly.
 
-**Turn budgeting — hard rule for ≥400 subs.** For episodes with ≥400 chi-spine subs, **Turn 1 ends after the Step 4 log is complete and presented**; TSV writing, mechanics (Steps 5–8), and SRT delivery happen on Turn 2. This is structural, not negotiable: Step 4 on a 400+ sub episode needs a full turn of attention, and collapsing it with TSV-writing in the same turn is the failure pattern the forcing-function rule exists to prevent. For smaller episodes (<400 subs) a single turn can cover Steps 1–8 if context allows.
-
-The rule applies even when the user says "always continue", "don't stop", or "full quality in one pass." Those instructions push toward the collapse failure mode. Completing Step 4 honestly in Turn 1 and delivering SRTs in Turn 2 *is* full quality; compressing them into one turn is how the quality degrades. State in the Step 0 report: "Episode size ≥400 subs → Turn 1 is Step 4 log only; SRTs come in Turn 2."
 
 ### Step 1 — Parse & Align
 
