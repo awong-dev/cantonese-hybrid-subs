@@ -248,7 +248,7 @@ One line per sub. Every sub gets a line — not just the ones that will become o
   - `FILL` — empty Step 3 output populated from chi
 - `<reason>` — one short phrase. For YUE-A: **quote the yue phrase** that triggered the override (e.g. `yue 大蝦勢 vivid over chi 以大欺小`). For YUE-B: name the corroboration (eng/cross-ep/OCR). For IDIOM: name the §10 criterion or write `plain-prose → English`. For KEEP, a terse note is fine (`Step 3 faithful`, `bare name, no content to examine`).
 
-AUTO-KEEP subs (`•` flag + `auto_keep: true` in confidence.json) can take the shortest form: `<idx> HIGH • KEEP auto-keep faithful`. The seven-gate heuristic has already done real checking — don't perform theatre on these. NEEDS-REVIEW subs must state the Rule A/B/C call explicitly.
+AUTO-KEEP subs (`•` flag + `auto_keep: true` in confidence.json) can take the shortest form: `<idx> HIGH • KEEP auto-keep faithful`. The seven-gate heuristic has already done real checking; sanity check against yue and chibut to not spend too muhc time. NEEDS-REVIEW subs must state the Rule A/B/C call explicitly.
 
 **Batch discipline.** Write the log in batches of ~50 subs, appending as you go. Do not write all 400 lines in one `create_file` call at the end — that lets the log be back-filled from the TSV, defeating the forcing function. The correct pattern is: read dump lines 1–200 → write log entries 1–50 → read 200–400 → write log entries 51–100 → and so on. Each batch is a real examination pass on a bounded range.
 
@@ -487,4 +487,23 @@ Upload ALL of these to start a new session — **15 bundle files + 3 per-episode
 
 ## Quick-Start for New Chat
 
-Upload the 15 bundle files + 3 per-episode sources. Say: *"Process episode N with full source-authority rewriting (FULL standard)"*. Assistant runs Steps 0–9 as specified. ONE EPISODE PER REQUEST for FULL quality. Expect 3+ turns.
+1. Upload the handoff bundle — **4 reference docs + 1 VERSION file + 2 data files + 7 scripts + 1 test file = 15 files** (see [Handoff Files Checklist](#handoff-files-checklist) above) — plus the episode sources `{N}-eng.csv`, `{N}-chi_tra.csv`, `{N}-yue.json`.
+2. Say: *"Process episode N with full source-authority rewriting (FULL standard)"* — i.e. examine every sub against chi and yue per the priority chain in `STYLE.md` §2.
+3. The assistant MUST:
+   - **Report Step 0 context baseline** before doing anything else
+   - Copy `PersonalNamesUpdated.csv` to `/home/claude/`
+   - Place/create all 7 scripts and `extras_baseline.json`
+   - Run `pipeline.py` → `ep{N}_aligned.json` (structural alignment only; dump comes from Step 3)
+   - Run `shared_extras.py` → `ep{N}_extra.json` (baseline only, initially)
+   - Run `auto_override_v2.py` → `ep{N}_h_all.json` + `ep{N}_confidence.json` + `ep{N}_dump.txt` (with per-sub flags)
+   - `view` the dump file in ranges; examine every sub; concentrate effort on subs whose flags column is non-blank
+   - Collect corrections into `ep{N}_overrides.tsv`; run `apply_overrides.py <N>`
+   - Write `ep{N}_extras_add.json` if new CJK terms introduced; re-run `shared_extras.py <N>` to merge
+   - Run `lint_overrides.py <N>` — fix any concat-trap warnings by updating the overlay
+   - Build, CJK-fix, validate (zero CJK in romanised, zero banned terms)
+   - Present output files
+   - **Update and present `SESSION-NOTES.md`** — move episode's row into Completed table (keep rows sorted by episode number ascending — see SESSION-NOTES.md sort rule; row body ≤500 chars target, ≤800 hard cap), add new Watch List items, promote stable items out (see Step 8.5)
+   - **Report Step 9 ending context** (informational)
+4. **ONE EPISODE PER REQUEST for FULL quality.** If there are multiple episodes uploaded, only process one then.
+5. **Follow Narration Discipline.** Run tools silently between the Step 0 and Step 9 reports; surface only actual issues (one line each) and the final `present_files`. Do not produce mid-turn progress recaps, interpretive commentary on tool output, or end-of-episode "candidates to promote" / "watch list" summaries — edits to `SESSION-NOTES.md` are where such findings go.
+6. **Expect each episode to require 3+ turns.** A FULL pass to completion often takes 3+ turns.
