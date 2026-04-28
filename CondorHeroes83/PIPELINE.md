@@ -41,8 +41,8 @@ Before beginning work on any episode, the assistant reports the context state:
 
 FULL is the target quality. PARTIAL and MECHANICAL-ONLY are named failure modes — they exist so a degraded delivery can be honestly labelled. Always aim for FULL; if the realistic outcome is PARTIAL or MECHANICAL-ONLY, say so in the Step 0 report so the user can decide how to proceed.
 
-- **FULL** (target) — Step 4 examination loop completed for every sub **and evidenced in `ep{N}_step4_log.txt`** (see Step 4 below). Overrides written where content or register mismatches; OCR corrections via yue-as-witness; yue-authority overrides applied with quoted yue phrase in the log; idiom injection with §10 gate criterion named; characterisation preserved.
-- **PARTIAL** (failure mode) — Step 4 examined roughly 20–60% of subs before aborting (context ran out, or output-length limit on a large override pass). Names/titles/idioms mechanically correct throughout; unexamined subs retain whatever Step 3 produced. Acknowledge honestly in delivery; flag which sub-range was examined (the log makes this concrete — "log covers subs 1–220").
+- **FULL** (target) — Step 4 examination loop completed for every sub **and evidenced in `ep{N}_step4_log.txt`** (see Step 4 below). V2 yue-register audit completed and evidenced in `ep{N}_v2_review.txt`. Overrides written where content or register mismatches; OCR corrections via yue-as-witness; yue-authority overrides applied with quoted yue phrase in the log; idiom injection with §10 gate criterion named; characterisation preserved.
+- **PARTIAL** (failure mode) — Step 4 examined roughly 20–60% of subs before aborting (context ran out, or output-length limit on a large override pass), OR V1 completed but V2 audit was skipped. Names/titles/idioms mechanically correct throughout; unexamined subs retain whatever Step 3 produced. Acknowledge honestly in delivery; flag which sub-range was examined and whether V2 ran (the log makes this concrete — "log covers subs 1–220, V2 audit not run").
 - **MECHANICAL-ONLY** (failure mode) — Step 4 barely started (<20%) or didn't run. Mechanical CJK substitutions and idiom injections are good, meaning and register not systematically checked. Acknowledge honestly.
 
 ### The forcing-function rule — writing is not examination
@@ -61,7 +61,7 @@ Conversational summaries between tool calls consume ~15–25% of session budget 
 
 ### Required output (keep)
 - **Step 0 context baseline report** before any tool call.
-- **Step 4 log batches and pressure-test answers** as Step 4 proceeds. The log batches are tool calls, not chat narration — don't narrate each batch; the log file is the artifact. The three pressure-test answers at the end of Step 4 are chat text, concrete and concise (one to two lines per answer).
+- **Step 4 log batches and pressure-test answers** as Step 4 proceeds. The log batches are tool calls, not chat narration — don't narrate each batch; the log file is the artifact. The four pressure-test answers at the end of Step 4 (including the V2 audit accountability question) are chat text, concrete and concise (one to two lines per answer).
 - **Step 8.5 SESSION-NOTES update and present** after the three SRTs.
 - **Step 9 ending context report** after the SESSION-NOTES `present_files`.
 - **User-directed questions** for genuine ambiguity (rare in FULL pass).
@@ -220,7 +220,7 @@ python3 auto_override_v2.py <N>
 
 ### Step 4 — Examine Every Sub; Log First, Override Second
 
-Step 4 has two outputs, produced in this order: (1) `ep{N}_step4_log.txt`, written in batches of ~50 subs as you work through the dump; (2) `ep{N}_overrides.tsv`, derived from the log. **The log is mandatory and is written before the TSV.** Writing the TSV first and back-filling the log defeats the purpose — the log exists to make examination visible, which only works if it records what you actually thought while examining.
+Step 4 has three outputs, produced in this order: (1) `ep{N}_step4_log.txt`, written in batches of ~50 subs as you work through the dump (V1 pass); (2) `ep{N}_v2_review.txt`, generated from the V1 log and audited against the dump (V2 pass); (3) `ep{N}_overrides.tsv`, derived from the V1+V2 log decisions. **The log is mandatory and is written before the TSV. V2 audit is mandatory and runs between V1 log and TSV.** Writing the TSV first and back-filling the log defeats the purpose — the log exists to make examination visible, which only works if it records what you actually thought while examining. Skipping V2 produces a TSV that systematically under-counts yue register fires by ~1–2% (see V2 audit subsection below).
 
 Read `ep{N}_h_all.json` (populated with Step 3's CJK substitutions) alongside the chi track, the yue track, and `ep{N}_confidence.json`. Examine EVERY sub against the priority chain (**yue HIGH > chi > eng**) per `STYLE.md` §2.
 
@@ -281,6 +281,52 @@ For each sub, walk this checklist once; the log entry records the outcome:
 9. **Common-noun CJK sweep** — STYLE §7's "What does NOT get CJK" list (generic wuxia vocab, colloquial-insult compounds, Mandarin 叫化子, descriptive common-noun metaphors). Flag as `§7` in the log; render English. `lint_overrides.py`'s Check 2 catches many at Step 5.5; reviewer judgment is the final arbiter.
 10. If none apply → **KEEP**; the draft is faithful.
 
+#### The V2 yue-register audit (REQUIRED before TSV)
+
+The per-sub checklist above is the V1 pass. It is necessary but not sufficient: across Ep37, Ep39, and Ep41, V2 audits found 3+ HIGH-yue register fires that V1 missed in each episode. The failure mode is the same every time — a HIGH-yue sub where chi+eng align cleanly gets logged as `KEEP Step 3 faithful` without explicit yue comparison, and a yue register fire (Cantonese-vivid synonym, contemptuous register, vocative warmth) goes uncaptured. This is not a reviewer-effort problem; it is a structural one. Bare-KEEP rates of ~80% on HIGH-yue are normal in V1 because most HIGH-yue subs really are chi-confirming. The audit is what catches the 1–2% that aren't.
+
+**Promoted to required step v23 after the Ep37+Ep39+Ep41 3-ep confirmation.**
+
+After V1 (per-sub checklist) is complete and before writing the TSV, build a per-sub review block file `ep{N}_v2_review.txt` and audit every HIGH-yue sub that got `KEEP` in V1:
+
+```python
+# Build V2 review file
+import re, json
+with open(f'ep{N}_dump.txt') as f: dump = f.read()
+subs = {}
+for m in re.finditer(r'^(\d+)\|(\w+)\|([^\n]*)\n((?:[ECY] [^\n]*\n)*)', dump, re.M):
+    idx = int(m.group(1)); body = m.group(4)
+    e = c = y = ''
+    for line in body.strip().split('\n'):
+        if line.startswith('E '): e = line[2:]
+        elif line.startswith('C '): c = line[2:]
+        elif line.startswith('Y '): y = line[2:]
+    subs[idx] = {'conf': m.group(2), 'flags': m.group(3).strip(), 'e':e,'c':c,'y':y}
+
+log_decisions = {}
+with open(f'ep{N}_step4_log.txt') as f:
+    for line in f:
+        m = re.match(r'^(\d+)\s+(\w+)\s+(\S?)\s*(KEEP|YUE-A|YUE-B|CHI|REFLOW|IDIOM|ADDR|FAB|OCR|FILL)', line)
+        if m: log_decisions[int(m.group(1))] = m.group(4)
+
+with open(f'ep{N}_h_all.json') as f: h_all = json.load(f)
+
+targets = [idx for idx, info in subs.items()
+           if info['conf'] == 'HIGH'
+           and info['y'] and not info['y'].startswith('[see')
+           and log_decisions.get(idx) == 'KEEP']
+
+with open(f'ep{N}_v2_review.txt', 'w') as f:
+    for idx in sorted(targets):
+        info = subs[idx]
+        f.write(f"--- sub {idx} {info['flags']} ---\n")
+        f.write(f"E: {info['e']}\nC: {info['c']}\nY: {info['y']}\nH: {h_all.get(str(idx), '')}\n\n")
+```
+
+Then read the file in `view` ranges and check each block for: (a) Cantonese register markers in yue (嗰個/畀/喺/嘅/啦/啲/嘞 — full Cantonese delivery), (b) yue using a vivid colloquial synonym where chi has neutral form (yue 衰仔 vs chi 敗家子, yue 兩隻猴子 vs chi 兩個孩子, yue 肥肥白白 vs chi 平平安安, yue 這群乞丐 vs chi 丐幫面前), (c) yue carrying contempt/warmth/sarcasm the chi neutralises. When any of (a)/(b)/(c) fires, change the V1 `KEEP` to `YUE-A` in the log, quote the yue phrase, and add a TSV entry. **Optionally also audit the substantive MEDIUM-yue KEEPs** — Ep41's V2 found sub 197 there. The MEDIUM pass is bounded (typically <80 subs after filtering theme-song and reflow noise) and catches the same class of fires.
+
+Critical: **do not skip the V2 audit because the V1 KEEP rate looks healthy.** A high V1 KEEP rate on HIGH-yue is precisely what triggers the audit, not what excuses it. The Ep41 V1 figure was 0.6% YUE-A on 346 HIGH-yue, which V2 corrected to 1.4% — the V1 number was an undercount, not a register-distribution observation. V1 yue-A rates below 1% on a 200+ HIGH-yue episode should now be read as "V2 audit will likely find 2–4 misses," not as "this episode's arc was unusually formal."
+
 #### The gate before writing the TSV
 
 Before opening `ep{N}_overrides.tsv`, confirm these in-text:
@@ -288,7 +334,8 @@ Before opening `ep{N}_overrides.tsv`, confirm these in-text:
 - Every sub has a log entry (check: line count of `ep{N}_step4_log.txt` equals sub count).
 - For every HIGH-yue sub that got YUE-A, the log quotes the yue phrase.
 - For every IDIOM entry, the §10 gate decision is recorded (criterion number, or plain-prose fail).
-- Count of each decision type. Typical healthy distribution for a FULL pass: 20–40% KEEP, 30–50% chi-content rewrites, 5–15% YUE-A, 1–5% IDIOM+ADDR+FAB+OCR+§7. A run with 0 KEEP or 0 YUE-A on a 200+ HIGH-yue episode is a red flag — you're likely not examining carefully.
+- **V2 audit completed**: `ep{N}_v2_review.txt` exists and every HIGH-yue V1-KEEP block has been read. Any V2-found fires are reflected as YUE-A entries in the log (with yue quote) and as TSV entries.
+- Count of each decision type. Typical healthy distribution for a FULL pass: 20–40% KEEP, 30–50% chi-content rewrites, 5–15% YUE-A, 1–5% IDIOM+ADDR+FAB+OCR+§7. A YUE-A rate below 1% on a 200+ HIGH-yue episode after V2 audit is a red flag — it means either V2 was skipped or V2 itself was thin. **Pre-V2-audit YUE-A rates do not count for this check** — V1 numbers below 1% are normal and expected and are precisely what the V2 audit exists to correct.
 
 Now write the TSV. Every TSV line derives from a log line with a non-KEEP decision. A TSV entry with no corresponding log decision is not allowed.
 
@@ -319,15 +366,16 @@ Examining every sub is what makes FULL quality — not rewriting every sub. A fa
 
 **Exception — preserve Step 3 output when chi and yue are both empty/bare name.** For subs where chi is empty or just a bare name (opening-credits name cards, etc.) and yue offers no additional content, **keep the Step 3 output rather than rewriting.** Manually projecting a speaker from sparse sources caused a name-swap bug in prior sessions. Log as `KEEP bare name, no content`.
 
-#### Pressure-test: the three questions
+#### Pressure-test: the four questions
 
 Before proceeding to Step 5, answer these in-text. If you can't answer concretely, Step 4 isn't done; go back to the log.
 
 1. Cite three subs where Rule A fired (YUE-A in the log) — give the yue phrase, the chi phrase, and one-phrase reason yue was more vivid.
 2. Cite three subs where you kept Step 3 verbatim (KEEP) — one sentence on why the draft was faithful.
 3. For each CJK-kept idiom in the overrides, name the §10 admission-gate criterion (1/2/3/4) it passes. Any idiom for which you can't name a criterion should not be CJK — rewrite the hybrid entry to English.
+4. **V2 audit accountability**: how many HIGH-yue V1-KEEP subs did V2 examine, and how many V2 fires were promoted to YUE-A? If the answer is "0 fires" on a 200+ HIGH-yue episode, re-read a random 10-sub slice of `ep{N}_v2_review.txt` and re-check — three consecutive episodes (Ep37/39/41) found 3+ fires each, so 0 is probably a thin V2 pass, not a clean episode.
 
-Writing "done" to these three without specifics is the bluff the log-first discipline is designed to catch. If you find yourself hand-waving on them, the log wasn't written honestly — fix the log, then re-answer.
+Writing "done" to these four without specifics is the bluff the log-first discipline is designed to catch. If you find yourself hand-waving on them, the log wasn't written honestly — fix the log, then re-answer.
 
 ### Step 5 — Add Episode Extras
 
