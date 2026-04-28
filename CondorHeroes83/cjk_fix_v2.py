@@ -231,6 +231,51 @@ shared_concat_fixes = {
     # compounds that build.py leaves as `<CSV-name>姑娘` where bare surname
     # plus 姑娘 → `<CSV-name>姑Mother`. Jyutping handled; Yale parallels
     # appended below.
+    # v24 — `<surname>+幫主` family confirmed Ep42+Ep43 2-ep (裘the Chief
+    # 9 firings Ep42; 裘the Chief 8x + 洪老the Chief 4x + 洪the Chief 1x
+    # in Ep43). 幫主→the Chief in titles stage converts before extras
+    # stage 5 can match the bare-surname compound. The bare-surname forms
+    # (裘 not in CSV; 洪 in CSV) both fall through.
+    "裘 the Chief": "Chief Kau",                     # 裘幫主 Ep42+43
+    "裘the Chief": "Chief Kau",                      # 裘幫主 (no-space variant)
+    "洪 the Chief": "Chief Hung",                    # 洪幫主 Ep43
+    "洪the Chief": "Chief Hung",                     # 洪幫主 (no-space variant)
+    "洪老 the Chief": "the old Chief Hung",          # 洪老幫主 Ep43
+    "洪老the Chief": "the old Chief Hung",           # 洪老幫主 (no-space variant)
+    "楊 the Chief": "Chief Joeng",                   # 楊幫主 Ep42 (also baseline; belt-and-suspenders)
+    "楊the Chief": "Chief Joeng",
+    # v24 — `<surname>+senior` literal-CJK variant for 裘senior (Ep43;
+    # parallels 裘老senior already at line 213). 裘 (not in CSV bare)
+    # plus 前輩 → senior produces `裘senior`.
+    "裘 senior": "Senior Kau",                       # 裘前輩 Ep43
+    "裘senior": "Senior Kau",
+    # v24 — `<extras-fragment>+和+尚` cross-stage trap (Ep44 sub 346).
+    # 和 sits in extras_baseline as a 大衍數 mnemonic-numeric (和→wo/woh
+    # stage 5); 一燈和尚 is also fully registered in baseline but the
+    # bare-char pass on 和 fires first, leaving 尚 stranded as
+    # `Yat-Dangwoh尚` / `Jat-Dangwo尚`. Until the 大衍數 mnemonic chars
+    # can be made stage-narrower, post-build sed cleans both forms.
+    "Jat-Dangwo尚": "Monk Jat-Dang",                 # 一燈和尚 jy Ep44
+    "Yat-Dangwoh尚": "Monk Yat-Dang",                # 一燈和尚 yl Ep44 (also yale_concat_fixes below)
+    # v24 — `靖哥/哥` split-vocative (Ep44 sub 126/127). 周伯通 calling
+    # out 靖哥哥 gets split across two adjacent subs by chi-spine
+    # boundary; extras converts 靖→Zing/Jing and the second-character 哥
+    # in the next sub falls through. Belt-and-suspenders for a rare
+    # reproducible pattern (depends on yue-dedup landing on a vocative
+    # boundary). Hybrid passes through; this is romanised-only.
+    "Zing哥": "Zing-go",                              # 靖哥 Ep44 jy
+    "\n哥...": "\n-go...",                           # 哥... continuation Ep44
+    # v24 — `<terms-key>+的+<name>` Mandarin-spine genitive trap (Ep44
+    # sub 234). 鐵掌幫 in terms stage 2 → "the Iron Palm Sect"; chi
+    # genitive 的 strands when the compound 鐵掌幫的<name> is split.
+    "Iron Palm Sect的 ": "the Iron Palm Sect's ",   # 鐵掌幫的 Ep44
+    # v24 — `<terms-key>+<suffix>` Ep40 1st `丐幫大會`, post-build sed'd
+    # to "Beggar Sect Assembly". 丐幫 in terms stage 2 → "the Beggars Sect"
+    # converts before extras stage 5 can match the compound, leaving 大會
+    # stranded. Same `<terms-key>+<suffix>` mechanism as 桃花島碧波掌
+    # (Ep36) and 油浸金國 (Ep37). Promoted Ep40+Ep43 2-ep stable.
+    "the Beggars Sect大會": "the Beggar Sect Assembly",  # 丐幫大會 Ep40+43
+    "the Beggar Sect大會": "the Beggar Sect Assembly",   # alt spelling fallback
 }
 
 yale_fixes = {
@@ -284,6 +329,18 @@ yale_concat_fixes = {
     # 岳飛 and 謝/報告the Chief are variant-neutral — already handled.
     "黎senior": "Senior Laih",                        # 黎前輩 Ep27 yl
     "梅Senior Sister": "Senior Sister Muhk",         # 梅師姊 Ep27 yl
+    # v24 — Yale parallels for v24 promotions where Yale spelling differs:
+    "裘 the Chief": "Chief Kauh",                    # 裘幫主 Ep42+43 yl
+    "裘the Chief": "Chief Kauh",
+    "洪 the Chief": "Chief Huhng",                   # 洪幫主 Ep43 yl
+    "洪the Chief": "Chief Huhng",
+    "洪老 the Chief": "the old Chief Huhng",         # 洪老幫主 Ep43 yl
+    "洪老the Chief": "the old Chief Huhng",
+    "楊 the Chief": "Chief Yeuhng",                  # 楊幫主 Ep42 yl
+    "楊the Chief": "Chief Yeuhng",
+    "裘 senior": "Senior Kauh",                      # 裘前輩 Ep43 yl
+    "裘senior": "Senior Kauh",
+    "Jing哥": "Jing-go",                             # 靖哥 Ep44 yl (jy variant in shared)
 }
 
 # Name-variant OCR collapse — runs on ALL THREE variants before variant-specific
@@ -351,6 +408,50 @@ OCR_NAME_COLLAPSE = {
                                                       # (insult "brute"). 會 OCR-corrupts 畜;
                                                       # 牲/牡 are 生 OCR variants. Both forms
                                                       # observed in Ep17.
+    # v23 — Ep39 鄂州 7-variant single-ep batch (chi-OCR spray, all
+    # → 鄂州). Promoted to OCR_NAME_COLLAPSE per Ep39 SESSION-NOTES:
+    "跨州": "鄂州", "開州": "鄂州", "距州": "鄂州",
+    "喇州": "鄂州", "斌州": "鄂州", "貴州": "鄂州",
+    # 鄭州 is its own canonical form (Ep21+Ep40), NOT an 鄂州 OCR variant —
+    # excluded from this collapse.
+    # v23 — Ep30+31+34+38+40+43+44 cumulative 老頑童 long-tail variants
+    # not in the v13 batch above. Added when 2-ep+ confirmed:
+    "老阿姨": "老頑童",                              # Ep30 long-tail
+    "老誠和童": "老頑童",                            # Ep30 4-char drift
+    # v24 — Ep42+43+44 3-ep cluster of 裘千仞 chi-OCR variants
+    # (heavy Whisper homophone + visual-OCR confusion across 裘/求/瑣/
+    # 示/琢/靜/天/堆/炒). Most ASR variants of 裘 (`kau4`) plus visual
+    # variants of 千仞. Ep26 partial set was held; Ep42 brought 6-variant
+    # confirmation; Ep43+44 added more. Now 8+ variants 3-ep stable.
+    "求千仞": "裘千仞", "示千似": "裘千仞", "姑千仍": "裘千仞",
+    "煩千僻": "裘千仞", "瑣千僻": "裘千仞", "天千島": "裘千仞",
+    "裘千島": "裘千仞", "炒千島": "裘千仞", "妙千似": "裘千仞",
+    "求天人": "裘千仞", "靜千似": "裘千仞", "靜千仍": "裘千仞",
+    "瑣千師": "裘千仞", "琢千島": "裘千仞", "裘千似": "裘千仞",
+    "示千島": "裘千仞", "示千倪": "裘千仞", "燭千島": "裘千仞",
+    "表千島": "裘千仞", "求千人": "裘千仞",
+    # v24 — Ep42 chi-OCR 裘幫主 family (chi 表/靜/侯/琢→裘 Whisper-cluster).
+    # The `<surname>+幫主` concat-trap for 裘 above handles the romanised
+    # output; this collapse normalises hybrid before build.
+    "表幫主": "裘幫主", "靜幫主": "裘幫主",
+    "侯幫主": "裘幫主", "琢幫主": "裘幫主",
+    # v24 — Ep44 武穆遺書 box inscription chi-OCR (sub 54):
+    "妄者": "亡者",                                  # 亡者 = "the wicked", Ep44 sub 54
+    # v24 — Ep44 段皇爺/段王爺 yue/chi pair. yue Whisper produces 段王爺
+    # (`wong4` for 皇), chi has canonical 段皇爺. Same homophone class as
+    # the REFERENCE §1 王/黃 cluster but here the resolved direction is
+    # toward 皇 (royal title for 大理's 段智興/南帝/一燈大師 pre-ordination).
+    "段王爺": "段皇爺",                              # Ep44 (Ep45+ confirms class)
+    # v24 — Ep30+31+34+38+40+43+44 7-ep cumulative — long-tail 老頑童
+    # variants from Ep43+44:
+    "老顛童": "老頑童", "老和童": "老頑童",          # Ep43 batch
+    # v24 — Ep1+12+44 3-ep 希彰/希芯/希章→希望 (already handled v17),
+    # plus Ep44 novel chi-OCR additions:
+    "水時": "水蛇",                                  # Ep44 sub 371 (visual 時/蛇)
+    "連果": "連累",                                  # Ep44 sub 232 (visual 果/累)
+    "桌告": "報告",                                  # Ep44 sub 331 (visual 桌/報)
+    # 太說→太蠢 and 章→衝 in 怒髮衝冠 are sub-specific — context-dependent,
+    # not safe to add to global collapse (太說/章 have other valid uses).
 }
 for variant in ["hybrid", "jyutping", "yale"]:
     fp = f"/mnt/user-data/outputs/{ep}-eng-{variant}-v{VERSION}.srt"

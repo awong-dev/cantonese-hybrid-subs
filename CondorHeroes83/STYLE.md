@@ -470,7 +470,7 @@ Usage: epithets appear standalone ("東邪 黃藥師, only has one daughter") an
 - **想逝者之不罪兮, 惜形中之載道** / **天蓋高而無階, 懷此恨其最苦** (Ep28) — 陸乘風's lament for 瑤迦. Format `CJK (English gloss)`. Glosses: "my love runs deep, the dead beyond recall" / "Heaven is high but has no stair; this sorrow cuts deepest".
 - **天長地久, 人生幾何** / **譬如朝露, 去日苦短** (Ep33) — 黃藥師's lament for supposedly-dead 蓉兒 (曹操 短歌行 adaptation). Glosses: "Heaven and Earth endure; how brief a human life" / "like morning dew, the days gone are bitter and short".
 - **林升 題臨安邸** (Ep1 compressed + Ep20 full — two-ep stable) — Southern Song lament over occupied capital. Quatrain, four lines, each `CJK (English gloss)`. Canonical: 山外青山樓外樓 / 西湖歌舞幾時休 / 暖風熏得遊人醉 / 直把杭州作汴州. Glosses: "beyond the green hills, more green hills; beyond the tower, yet another tower" / "when will the song and dance on 西湖 ever cease?" / "the warm breeze lulls the travellers drunk" / "they take 杭州 for 汴州". Ep1 uses compressed two-line form (lines 2+4 as narration backdrop).
-- **滿江紅 quatrain** (Ep1+17+19 three-ep stable) — 岳飛's 靖康恥 quatrain. Format `CJK (English gloss)`, one line per sub. Canonical:
+- **滿江紅 quatrain** (Ep1+17+19+44 four-ep stable) — 岳飛's 靖康恥 quatrain. Format `CJK (English gloss)`, one line per sub. Ep44 reprises lines 1–2 (怒髮衝冠憑欄處 / 蕭蕭雨歇,抬望眼) as the 武穆遺書 box-needle inscription read aloud by 蓉兒/靖. Canonical:
   - 憑欄處, 瀟瀟雨歇 → "I lean on the railing as the rain dies away"
   - 抬望眼, 仰天長嘯, 壯懷激烈 → "I lift my gaze, give a long cry to the sky, my heart fierce with passion"
   - 三十功名塵與土 → "thirty years of glory, all dust and earth"
