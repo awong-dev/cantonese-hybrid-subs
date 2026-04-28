@@ -449,6 +449,9 @@ The rule exists because the admission gate is easy to gesture at and skip. Ep1 �
 - **好心遭雷劈** — "good hearts get struck by lightning". Named 俗語.
 - **皇天不負有心人** — "Heaven never fails the determined". Named 俗語.
 - **忘年之交** — "old friends despite their years". 2-ep stable (Ep12+Ep25). Age-crossing friendship — the specific image English gloss flattens to plain "old friends"; the 忘年 ("disregarding years") is the point. Format: `忘年之交 (old friends despite their years)` on first use; short form on later uses.
+- **踏破鐵鞋無覓處, 得來全不費功夫** — "wear out iron shoes searching in vain; then it falls into your lap with no effort". Classical 俗語 paired-couplet. Each half complete on its own — render each literally per §9 paired-couplet rule. 3-ep stable: Ep12+Ep17 full pair, Ep39 second-half solo (`得來全不費功夫` — 楊康 finding 打狗棒). Half-form shorthand acceptable when scene quotes only one half.
+- **君子報仇, 十年不晚** — "a gentleman's revenge can wait ten years". Classical paired-couplet 俗語. 2-ep stable (Ep8+Ep39). 全真七子 vow over 譚處端's body in Ep39.
+- **女大不中留** — "a grown daughter cannot be kept at home" (parents must let daughters marry; resistance is futile). Classical 俗語 with cultural-weight marriage idiom — fixed form, plain English flattens the inevitability framing. 2-ep stable (Ep30+Ep31). 黃藥師's lament to dead 阿衡 about 蓉兒 leaving.
 
 ### Five Greats (五絕) epithets
 

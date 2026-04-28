@@ -206,6 +206,11 @@ shared_concat_fixes = {
     # eats the compound, stranding Kau-老). Partial prior form KauElder
     # above covered the Ep22-like no-老 form; this is the with-老 variant.
     "Kau老senior": "Elder Kau",                      # 裘老前輩 Ep26
+    # v22 — Ep39 reveals literal-CJK-surname variant of the same class:
+    # 裘 isn't a bare entry in CSV (only 裘千仞 full-name), so when chi
+    # has bare-surname forms (裘老前輩 vs 裘千仞老前輩), 裘 stays CJK
+    # and we get `裘老senior` rather than `Kau老senior`. Confirmed Ep26+Ep39 2-ep.
+    "裘老senior": "Elder Kau",                       # 裘老前輩 Ep39 (literal-CJK 裘)
     # v21 — 岳飛將軍 (Ep26); 岳飛 in CSV converts first leaving 將軍
     # stranded. Novel `<CSV-full-name>+將軍` class.
     "Ngok Fei將軍": "General Ngok Fei",              # 岳飛將軍 Ep26
@@ -274,6 +279,8 @@ yale_concat_fixes = {
     "JeungBig Brother": "Brother Jeung",             # 張大哥 Ep26 yl
     "MaBig Brother": "Brother Ma",                   # 馬大哥 Ep26 yl
     "Kauh老senior": "Elder Kauh",                    # 裘老前輩 Ep26 yl
+    # v22 — Yale parallel for literal-CJK 裘 variant (Ep39):
+    "裘老senior": "Elder Kauh",                      # 裘老前輩 Ep39 yl (literal-CJK 裘)
     # 岳飛 and 謝/報告the Chief are variant-neutral — already handled.
     "黎senior": "Senior Laih",                        # 黎前輩 Ep27 yl
     "梅Senior Sister": "Senior Sister Muhk",         # 梅師姊 Ep27 yl
