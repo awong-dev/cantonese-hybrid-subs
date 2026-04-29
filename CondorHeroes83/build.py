@@ -218,9 +218,15 @@ def convert(text, system):
     for k in sorted(etbl, key=len, reverse=True):
         result = result.replace(k, etbl[k])
     # Fix double articles (possessive/article + 'the' from converted terms)
-    result = re.sub(r'\b(my|your|his|her|our|their)\s+the\s+', r'\1 ', result)
+    # Ep23+Ep28+Ep47 3-ep cumulative: "Your the X" / "The the X" sentence-initial
+    # cases slipped past lowercase-only regexes. re.IGNORECASE catches them while
+    # the lambda on line below preserves sentence-initial capitalisation of the
+    # surviving "the".
+    result = re.sub(r'\b(my|your|his|her|our|their)\s+the\s+',
+                    lambda m: m.group(1) + ' ', result, flags=re.IGNORECASE)
     result = re.sub(r'\b([Aa])\s+the\s+', lambda m: 'the ' if m.group(1)=='a' else 'The ', result)
-    result = re.sub(r'\bthe\s+the\s+', 'the ', result)
+    result = re.sub(r'\b(the)\s+the\s+',
+                    lambda m: m.group(1) + ' ', result, flags=re.IGNORECASE)
     return result
 
 # ============================================================
