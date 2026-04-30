@@ -123,6 +123,27 @@ RULES = [
      'This pattern suggests a surname converted but the trailing Chinese '
      'title didn\'t. Register the full compound (e.g. "楊叔叔 → Uncle Yeung") '
      'or verify the compound is in STYLE.md §6.'),
+    # === v24 promotions from SESSION-NOTES (Watch List cleared) ===
+    # Ep48+50+56+59 4-ep Pinyin-leak class — eng-draft Pinyin proper nouns
+    # auto_override doesn't catch. Promoted to auto_override_v2.py
+    # pinyin_to_chinese dict in v24, but lint check here as belt-and-suspenders.
+    (r'\b(Xiangyang|Linan|Lin\'an|Genghis Khan|Tuolei|Tolui|Zhebie|Jebe|'
+     r'Tiemuzhen|Temujin|Lu Wende|Yang Guo|Yang Kang|Mu Nianci|'
+     r'Guo Xiaotian|Yang Tiexin|Wang Chongyang|Jamukha|Zhamuhe|'
+     r'Yinggu|Botong|Shagu|Mongolian|Mongolians)\b',
+     'Pinyin proper noun in hybrid (Ep48+50+56+59 4-ep Pinyin-leak class)',
+     'Should have been CJK-substituted by auto_override_v2.py. If this fires, '
+     'the v24 pinyin_to_chinese dict is missing a key — add it. '
+     'Renderings: 襄陽/臨安/成吉思汗/拖雷/哲別/鐵木真/呂文德/楊過/楊康/穆念慈/'
+     '郭嘯天/楊鐵心/王重陽/札木合/瑛姑/伯通/傻姑/蒙古.'),
+    # Ep59 single-firing Mongolia軍 cross-substitution leak (蒙古→Mongolia
+    # but suffix 軍 left as CJK). Now in cjk_fix_v2 shared_concat_fixes.
+    (r'Mongolia[\u4e00-\u9fff]+',
+     'Mongolia<CJK> stranded suffix (Ep59 1st firing)',
+     'After 蒙古→Mongolia substitution, suffix character (軍/兵/人/etc) was '
+     'stranded. Register the full compound (e.g. 蒙古軍 → "the Mongolian army") '
+     'in extras_baseline.json. Now handled by cjk_fix_v2.py shared_concat_fixes '
+     'belt-and-suspenders.'),
 ]
 
 def main():

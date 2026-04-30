@@ -276,6 +276,46 @@ shared_concat_fixes = {
     # (Ep36) and 油浸金國 (Ep37). Promoted Ep40+Ep43 2-ep stable.
     "the Beggars Sect大會": "the Beggar Sect Assembly",  # 丐幫大會 Ep40+43
     "the Beggar Sect大會": "the Beggar Sect Assembly",   # alt spelling fallback
+
+    # === v24 promotions from SESSION-NOTES (cleared for v24) ===
+    # Ep45+58 2-ep `段Your Highness` from 段王爺/段皇爺 (王爺→Your Highness eats compound):
+    "段Your Highness": "Lord Dyun",                  # 段王爺 / 段皇爺 cross-stage
+    # Ep45+59 `<一燈>+<suffix>` family (一燈 stage-5 converts before compounds):
+    "Jat-Dang寺": "Jat-Dang Temple",                 # 一燈寺 Ep45 jy
+    "Jat-Dang山": "Mount Jat-Dang",                  # 一燈山 Ep45 jy
+    # Ep45 大理國 (terms-stage 大理→Dali strands 國):
+    "Daai-lei國": "the Kingdom of Daai-lei",         # 大理國 jy
+    # Ep26+49+50 我柯鎮惡 emphatic-self (3-ep stable):
+    "我O Zan-ngok": "I, O Zan-ngok",                 # 我柯鎮惡 jy
+    "我O Jan-ngok": "I, O Jan-ngok",                 # 我柯鎮惡 yl
+    # Ep49 桃花島主 / 一燈大師 / 侍衛大哥 cross-stage class:
+    "桃花島主": "Master of Peach Blossom Island",    # belt-and-suspenders if reaches romanised
+    # Ep58 上官the Chief novel (上官劍南's 幫主 title):
+    "上官the Chief": "Chief Soeng-gun",              # 上官幫主 jy
+    "上官 the Chief": "Chief Soeng-gun",
+    # Ep59 Mongolia軍 stranded (蒙古→Mongolia substitution strands 軍):
+    "Mongolia軍": "Mongolian army",                  # 蒙古軍 cross-substitution leak
+    "蒙古軍": "the Mongolian army",                  # belt-and-suspenders if reaches romanised
+    # Ep52 X's the Y possessive double-article (`Mongolia's the Golden Prince Consort`):
+    "Mongolia's the ": "Mongolia's ",                # 蒙古的金刀駙馬-style; promoted Ep52
+    # Ep27+34+53 公子 missing from build.py titles dict (3-ep cumulative):
+    "公子": "Young Master",                          # belt-and-suspenders for bare 公子
+    # Ep50 弟子 missing from build.py titles dict:
+    "弟子": "disciple",                              # belt-and-suspenders for bare 弟子
+    # Ep20+25+59 各位將士/各位 collective-vocative class:
+    "各位將士": "comrades-in-arms",                  # 各位將士 cross-stage
+    "各位": "comrades",                              # bare 各位 fallback
+    # Ep23+28+47 `Your the X` / `The the X` / `Our the X` case-insensitive
+    # double-article — handled by build.py regex update v24 (re.IGNORECASE).
+    # Belt-and-suspenders here:
+    "The the ": "The ",
+    "Your the ": "Your ",
+    "His the ": "His ",
+    "Her the ": "Her ",
+    "Our the ": "Our ",
+    "Their the ": "Their ",
+    # Ep52 bare 金 stranded after 金國→Jin pre-conversion:
+    "成吉思汗 marched south against 金": "成吉思汗 marched south against Jin",
 }
 
 yale_fixes = {
@@ -341,6 +381,14 @@ yale_concat_fixes = {
     "裘 senior": "Senior Kauh",                      # 裘前輩 Ep43 yl
     "裘senior": "Senior Kauh",
     "Jing哥": "Jing-go",                             # 靖哥 Ep44 yl (jy variant in shared)
+
+    # === v24 yale parallels for v24 SESSION-NOTES promotions ===
+    # `<一燈>+<suffix>` family yl (Yat-Dang vs jy Jat-Dang):
+    "Yat-Dang寺": "Yat-Dang Temple",                 # 一燈寺 Ep45 yl
+    "Yat-Dang山": "Mount Yat-Dang",                  # 一燈山 Ep45 yl
+    # 大理國 yl (Daaih-leih vs jy Daai-lei):
+    "Daaih-leih國": "the Kingdom of Daaih-leih",     # 大理國 yl
+    # 上官 yl is same as jy spelling (Sēung-gun ~ Soeng-gun phonologically) — covered shared.
 }
 
 # Name-variant OCR collapse — runs on ALL THREE variants before variant-specific
@@ -452,6 +500,82 @@ OCR_NAME_COLLAPSE = {
     "桌告": "報告",                                  # Ep44 sub 331 (visual 桌/報)
     # 太說→太蠢 and 章→衝 in 怒髮衝冠 are sub-specific — context-dependent,
     # not safe to add to global collapse (太說/章 have other valid uses).
+
+    # ============================================================
+    # v24 promotions from SESSION-NOTES (Ep45+ cumulative).
+    # Watch list cleared; patterns 2+ep stable enter here.
+    # ============================================================
+    # Ep45 4-variant 希望 chi-OCR batch (Ep1+12+44+45 5-ep cumulative;
+    # 希彰/希芯/希章 already from v17, v24 adds 希刻/希剖/希劑):
+    "希刻": "希望", "希剖": "希望", "希劑": "希望",
+    "希鹿": "希望",                                  # Ep50 6-ep cumulative
+    # Ep44+45 連果→連累 (visual 果/累; promoted v24 per SESSION-NOTES Ep48):
+    "連果": "連累",                                  # already noted Ep44; Ep45 reaffirmed
+    # Ep46 single-firing chi-OCRs flagged for 2nd-firing — promoted on
+    # SESSION-NOTES note "watch for 2nd-firing on any 段皇爺 / 一燈大師
+    # / classical-court reprise":
+    "璜": "瑛",                                      # 阿璜→阿瑛 Ep46 sub 159 (visual)
+                                                      # Standalone safe — 璜 only used in this context here.
+    # Ep49 dish-name and OCR cluster:
+    "嘉慶": "嘉興",                                  # Ep9+Ep49 cross-ep (yue Rule B)
+    "煙雨台": "煙雨樓",                              # Ep49 (Rule B)
+    # Ep49+ 老頑童 long-tail variants:
+    "老侈童": "老頑童", "老項童": "老頑童",
+    "老顏童": "老頑童", "老戎童": "老頑童",
+    # Ep51 OCR (single-firing watch promoted):
+    "梁子仍": "梁子翁", "梁子有翁": "梁子翁",        # Ep49 sub-variants
+    # Ep54 chi-OCR: 卉赤→朮赤 (Whisper homophone 卉/朮 zeot):
+    "卉赤": "朮赤",                                  # Ep54+56 promoted v24
+    "高悶台": "窩闊台",                              # Ep54 visual OCR
+    "摩啟示": "摩訶未",                              # Ep54 visual OCR
+    # Ep55 chi-OCR:
+    "完顏洪鰲": "完顏洪烈",                          # Ep1+55 visual close
+    "葵古": "蒙古",                                  # Ep55 visual close
+    # Ep56 chi-OCRs:
+    "草古人": "蒙古人",                              # Ep56 visual close
+    "路下": "跪下",                                  # Ep17+33+40+56 4-ep cumulative
+    # Ep57 chi-OCR:
+    "禁兵": "金兵",                                  # Ep57+59 2-ep (yue禁/chi金 homophone)
+    # Ep59 novel chi-OCRs:
+    "誤陽城": "襄陽城",                              # Ep59 sub 3 (visual)
+    "莫古": "蒙古",                                  # Ep59 sub 228 (visual)
+    "划古": "蒙古",                                  # Ep59 4-firing cluster (visual)
+    "划古兵": "蒙古兵", "划古人": "蒙古人",
+    "珍伙百味": "珍饈百味",                          # Ep59 sub 64 (visual)
+    "丐坊": "丐幫",                                  # Ep59 yue-ASR
+    "量有此理": "豈有此理",                          # already v13; reaffirmed Ep21+26+27+59
+    "同有此理": "豈有此理",                          # Ep30+59 cumulative
+    "其兒": "蓉兒",                                  # already v13; reaffirmed 13-ep
+    "蒜兒": "蓉兒",                                  # Ep30+ batch reaffirmed
+    "鞭兒": "蓉兒",                                  # already v13; reaffirmed 13-ep
+    # Ep39 久未見→久不見 single-firing promotion (held v23):
+    "久中": "久未見",                                # Ep39 (visual 中/未見)
+    # Ep40+ chi-OCR: 綠玉杖 (visual 杖/權):
+    "綠玉權": "綠玉杖",                              # Ep40 novel
+    # Ep40 起幫→丐幫 (visual close):
+    "起幫": "丐幫", "瑟幫": "丐幫",                  # Ep21+40
+    # Ep30 蛤蟆功 yue-ASR cluster:
+    "題蝦虹": "蛤蟆", "蝦時功": "蛤蟆功",
+    "蝦虹功": "蛤蟆功", "題蝦虹功": "蛤蟆功",
+    # Ep30 杭龍/韓→降龍:
+    "杭龍": "降龍", "韓龍": "降龍",
+    # Ep25 嘉慶 already covered above.
+    # Ep17+33+40 路下→跪下 already covered above.
+    # Ep26 OCR-cluster Whisper (held v23, promoted v24):
+    "堆千島": "裘千仞", "求千似": "裘千仞",
+    "琢千島": "裘千仞", "炒千師": "裘千仞",
+    "求千人": "裘千仞",
+    # Ep26 陸乘風 long-tail (held):
+    "陸成峰": "陸乘風",
+    # Ep26 cluster 寒龍十八掌, 呈將軍, 北瑟:
+    "寒龍十八掌": "降龍十八掌",                      # Ep26 (visual 寒/降)
+    "呈將軍": "岳將軍",                              # Ep26 (visual 呈/岳)
+    "北瑟": "北丐",                                  # Ep26 (visual 瑟/丐)
+    "東斜西道": "東邪西毒",                          # Ep26 (visual 斜/邪 道/毒)
+    # Ep17+19+38+40+42+43+46 6-ep 會生/會牲/會牡→畜生 (already v17 partial):
+    "會生": "畜生",                                  # 6-ep cumulative
+    # Ep21+ 老叫化子 →render English ("beggar") not collapse — STYLE §18 ban
+    # not appropriate for OCR_NAME_COLLAPSE; handled at hybrid level.
 }
 for variant in ["hybrid", "jyutping", "yale"]:
     fp = f"/mnt/user-data/outputs/{ep}-eng-{variant}-v{VERSION}.srt"

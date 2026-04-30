@@ -40,7 +40,43 @@ pinyin_to_chinese = {
     'Nianci': '念慈', 'Huazheng': '華箏',
     'Guanying': '冠英', 'Yaojia': '瑤迦',
     'Tuolei': '拖雷', 'Tolui': '拖雷',
-    'Qigong': '七公',
+    # v24 — Ep57 bug: 'Qigong' bare key wrong-fires on 氣功 (unrelated
+    # Mandarin word for "qi practice"). Removed; 'Hong Qigong' full-name
+    # form above suffices for the actual character reference.
+    # === v24 promotions from SESSION-NOTES ===
+    # Ep48 Pinyin-leak class (Ep48+50+56+59 4-ep cumulative — promoted v24).
+    # eng draft uses Pinyin for proper nouns; auto_override didn't catch.
+    # Ep59 had 65 leaked subs; SESSION-NOTES called for promotion.
+    'Yinggu': '瑛姑', 'Yingu': '瑛姑',
+    'Botong': '伯通',
+    'Shagu': '傻姑',
+    'Yuebin': '岳賓',
+    'Linan': '臨安',
+    "Lin'an": '臨安',
+    'Xiangyang': '襄陽',
+    'Genghis Khan': '成吉思汗',
+    'Tiemuzhen': '鐵木真', 'Temujin': '鐵木真',
+    'Lu Wende': '呂文德',
+    'Yang Guo': '楊過',
+    'Zhamuhe': '札木合', 'Jamukha': '札木合',
+    'Mongolian': '蒙古',
+    'Mongolians': '蒙古人',
+    'Mu Yi': '木易',
+    'Guo Xiaotian': '郭嘯天',
+    'Yang Tiexin': '楊鐵心',
+    'Wang Chongyang': '王重陽',
+    'Liu Chuxuan': '劉處玄',
+    'Tan Chuduan': '譚處端',
+    'Shang Guan Jiannan': '上官劍南',
+    'Shangguan Jiannan': '上官劍南',
+    'Shu-chi': '朮赤', 'Jochi': '朮赤',
+    'Chagatai': '察合台',
+    'Ogedei': '窩闊台', 'Ogodei': '窩闊台',
+    'Bo\'orchu': '博爾朮',
+    'Mukhali': '木華黎',
+    'Yang Guo': '楊過',
+    'Hua Zheng': '華箏',
+    'Zhebie': '哲別', 'Jebe': '哲別',
 }
 
 # ============================================================
@@ -48,7 +84,11 @@ pinyin_to_chinese = {
 # ============================================================
 eng_to_cjk = {
     # Titles — longest first to avoid partial matches
-    'Grand Teacher': '祖師爺',
+    # v24 — Ep48+51 2-ep promotion. The chi consistently uses 師公 (傻姑's
+    # term for 黃藥師, her grandmaster) — 'Grand Teacher' was previously
+    # mapped to 祖師爺 which produced 22 wrong-fires in Ep51. SESSION-NOTES
+    # called this "high-priority fix" for v24.
+    'Grand Teacher': '師公',
     'Old Heretic Huang': '黃老邪', 'Old Heretic': '黃老邪',
     'Prince Consort': '駙馬爺',
     'Young Prince': '小王爺',

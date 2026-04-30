@@ -199,6 +199,29 @@ Canonical renderings for recurring name/nickname forms. Personal names live in `
 | 孫不二 | 孫不二 | Syun Bat-ji | Syun Bat-ji |
 | 顏烈 | 顏烈 | Ngaan Lit | Ngaahn Liht |
 | 小靖 | 小靖 | Siu-Zing | Siu-Jing |
+| 段王爺 | 段王爺 | Lord Dyun | Lord Dyun |
+| 段皇爺 | 段皇爺 | Lord Dyun | Lord Dyun |
+| 一燈兄 | 一燈兄 | Brother Jat-Dang | Brother Yat-Dang |
+| 洪七兄 | 洪七兄 | Brother Hung Cat | Brother Huhng Chat |
+| 七公師父 | 七公師父 | Master Seven Elder | Master Seven Elder |
+| 周兄 | 周兄 | Brother Zau-hing | Brother Jau-hing |
+| 藥兄 | 藥兄 | Brother Joek-hing | Brother Yeuhk-hing |
+| 周先生 | 周先生 | Mister Zau | Mister Jau |
+| 妙手書生 | 妙手書生 | the Magic-Hand Scholar | the Magic-Hand Scholar |
+| 黑風雙煞 | 黑風雙煞 | the Black Wind Pair | the Black Wind Pair |
+| 黃夫人 | 黃夫人 | Madam Wong | Madam Wòhng |
+| 五怪 | 五怪 | the Five Freaks | the Five Freaks |
+| 七怪 | 七怪 | the Seven Freaks | the Seven Freaks |
+| 阿瑛 | 阿瑛 | Aa-Jing | Aa-Ying |
+| 瑛妹 | 瑛妹 | Jing-mui | Ying-muih |
+| 老蛤蟆 | 老蛤蟆 | Old Toad | Old Toad |
+| 黃世伯 | 黃世伯 | Elder Wong | Elder Wòhng |
+| 阿蓉 | 阿蓉 | Aa-Jung | Aa-Yùhng |
+| 超風 (bare) | 超風 | Ciu-fung | Chīu-fung |
+| 楊過 | 楊過 | Yeung Gwo | Yeuhng Gwo |
+| 朮赤 | 朮赤 | Seot-cek | Jeut-chek |
+| 察合台 | 察合台 | Caat-hap-toi | Chaat-hap-toih |
+| 王重陽 | 王重陽 | Wong Cung-joeng | Wong Chuhng-yeuhng |
 
 Notes: **駙馬爺** — 蓉兒 uses sarcastically toward 郭靖. **晚輩/後輩** — humble self-ref / peer ref when addressing 前輩. **女魔頭** — 梅超風's own self-description. **顏烈** — 完顏洪烈's cover alias (Ep1/Ep2); 顏大爺 fuller form (Ep5 蒙古). **小靖** — young-child diminutive (Ep3 蒙古 widow scenes). Distinct from vocative **阿靖**.
 
@@ -241,6 +264,31 @@ Title/address conversions in romanised (hybrid keeps CJK):
 | 道爺 | Taoist (self-form — CJK in hybrid) |
 | 貧道 | this poor Taoist (humble — CJK in hybrid) |
 | 道士 | Taoist (vocation — English in hybrid too) |
+| 大師父 | First Master |
+| 公子 | Young Master |
+| 弟子 | disciple |
+| 將軍 | General |
+| 安撫使 | the pacification commissioner |
+| 大人 | my Lord |
+| 大嬸 | Madam |
+| 師太 | Priestess |
+| 老衲 | this old monk (Buddhist self-form — CJK in hybrid) |
+| 貧僧 | this poor monk (Buddhist self-form — CJK in hybrid) |
+| 老僧 | this old monk (Buddhist — CJK in hybrid) |
+| 信女 | this devoted woman (Buddhist female devotee — CJK in hybrid) |
+| 賤妾 | this humble concubine (classical female humble self-form — CJK in hybrid) |
+| 朕 | I (sovereign self-form — CJK in hybrid) |
+| 皇上 | Your Majesty |
+| 皇爺 | the Imperial Father |
+| 皇妃 | the royal concubine |
+| 貴妃 | Imperial Concubine |
+| 夫人 | my dear / Madam (court-classical voice — CJK in hybrid) |
+| 賢姪 | worthy nephew |
+| 尊夫人 | your honoured wife |
+| 六王爺 / 三王爺 | Sixth/Third Prince |
+| 大太子 / 四皇子 | First/Fourth Prince |
+| 趙王爺 | Prince of Ziu / Jiu |
+| 皇太子 | Crown Prince |
 
 ---
 
@@ -258,16 +306,16 @@ All character names from `PersonalNamesUpdated.csv`.
 父王 · 阿爹 · 爹 · 娘親 · 靖哥哥 · 蓉兒 · 靖兒 · 康兒 · 阿靖 · 阿康 · 週大哥 · 黃島主 · 藥師兄 · 歐陽世兄 · etc.
 
 ### Places
-桃花島 · 桃花陣 · 白駝山 · 歸雲莊 · 牛家村 · 蒙古 · 臨安 · 大理 · 長白山 · 江南 · 岳王廟 · 翠紅樓 · 獅子林 · 山神廟 · 望江樓 · 清溪別院 · etc.
+桃花島 · 桃花陣 · 白駝山 · 歸雲莊 · 牛家村 · 蒙古 · 臨安 · 大理 · 大理國 · 長白山 · 江南 · 岳王廟 · 翠紅樓 · 獅子林 · 山神廟 · 望江樓 · 清溪別院 · 影月庵 · 一燈寺 · 一燈山 · 襄陽 · 襄陽城 · 大梁 · 潼關 · 煙雨樓 · 華山 · 鐵槍廟 · 燕京 · 法華寺 · 福來客棧 · 天福客棧 · 迎翠居 · 悅賓客棧 · 飛箱樓 · 西湖 · 杭州 · 汴州 · 岳州 · 鄂州 · 鄭州 · etc.
 
 ### Sects
-全真教 · 丐幫 · 鐵掌幫 · 梅花五毒 · etc.
+全真教 · 全真派 · 全真七子 · 全真六子 · 丐幫 · 鐵掌幫 · 梅花五毒 · etc.
 
 ### Dynasties / countries
-大宋 · 宋 · 金 · 金國 · 蒙古
+大宋 · 宋 · 宋國 · 金 · 金國 · 蒙古 · 大金國
 
 ### Terms
-九陰真經 · 武穆遺書 · 降龍十八掌 · 蛤蟆功 · 左右互搏 · 空明拳 · 九陰白骨爪 · 打狗棒法 · 易筋鍛骨篇 · etc.
+九陰真經 · 武穆遺書 · 降龍十八掌 · 蛤蟆功 · 左右互搏 · 空明拳 · 九陰白骨爪 · 打狗棒法 · 易筋鍛骨篇 · 九陰神功 · 一陽指 · 鐵掌功 · 碧海潮生曲 · 神龍擺尾 · etc.
 
 Named techniques and canonical texts stay CJK. **Generic wuxia vocabulary — 武功 · 武林 · 江湖 · 內力 · 內功 · 輕功 · 功力 — stays English** (see below).
 
@@ -452,6 +500,31 @@ The rule exists because the admission gate is easy to gesture at and skip. Ep1 �
 - **踏破鐵鞋無覓處, 得來全不費功夫** — "wear out iron shoes searching in vain; then it falls into your lap with no effort". Classical 俗語 paired-couplet. Each half complete on its own — render each literally per §9 paired-couplet rule. 3-ep stable: Ep12+Ep17 full pair, Ep39 second-half solo (`得來全不費功夫` — 楊康 finding 打狗棒). Half-form shorthand acceptable when scene quotes only one half.
 - **君子報仇, 十年不晚** — "a gentleman's revenge can wait ten years". Classical paired-couplet 俗語. 2-ep stable (Ep8+Ep39). 全真七子 vow over 譚處端's body in Ep39.
 - **女大不中留** — "a grown daughter cannot be kept at home" (parents must let daughters marry; resistance is futile). Classical 俗語 with cultural-weight marriage idiom — fixed form, plain English flattens the inevitability framing. 2-ep stable (Ep30+Ep31). 黃藥師's lament to dead 阿衡 about 蓉兒 leaving.
+- **愛屋及烏** — "loving the house and the crow on it" (when fond of someone, you become fond of all that is theirs). 4-char fixed compound from 尚書. 2-ep stable (Ep17+Ep48). Crow/house imagery is the point — plain "love me love my dog" loses the parental-affection register where this idiom typically fires (蓉兒 explaining 黃藥師's hidden helpfulness toward 郭靖 because of his daughter).
+- **一代宗師** — "a master of the age" / "the great master of his generation". Fixed 四字 wuxia-world compound; 4-ep stable (Ep32+33+42+58). The 一代 ("of an entire generation") frame carries authority English plain "great master" misses.
+- **苦海無邊, 回頭是岸** — "the sea of suffering is boundless; turn back and the shore is there" (Buddhist exhortation). Paired-couplet 俗語. 2-ep stable (Ep58+Ep59 firing: 一燈大師 to 歐陽峰). Each half is complete on its own; render literally per §9.
+- **虛則實之, 實則虛之** — "treat the void as solid; treat the solid as void". Paired classical military maxim from 孫子兵法 虛實篇. 2-ep stable (Ep44+Ep55 — 蓉兒 cave-trap reading + 郭靖 雪峰頂 reunion). The 虛/實 inversion is the point — plain "feint and counter-feint" loses the philosophical parallelism.
+- **攻無不勝, 戰無不克** — "no city you cannot take; no battle you cannot win". Paired-couplet 俗語 of Mongol-eulogy register. 3-ep stable (Ep4+Ep54+Ep55). 成吉思汗-court formal-praise context. Plain English carries the imagery; CJK preserves the exact 4-char-pair Mongol-court rhetorical cadence.
+
+### 兵法 / military maxims (Ep54+ 蒙古-war arc)
+
+Fixed 兵法 maxims with classical-text provenance. Format: `CJK (English gloss)`. Romanised: English only.
+
+- **軍令如山** — "a military order is as a mountain". 4-char fixed compound (military hierarchy register). 3-ep stable (Ep54+Ep56+Ep57+Ep59). Plain "obey the command" carries it but loses the 山 (immovable-mountain) imagery; cultural-weight in Mongol-court context.
+- **學武之道, 水能載舟,水亦能覆舟** — "the way of learning martial arts: water can bear a boat, water can also overturn it". Classical paired-couplet from 荀子. Single-firing Ep57 — 丘道長's mercy-lecture to 成吉思汗. §10 crit 2 (荀子 source). Format `CJK (English gloss)` per couplet half.
+
+### 九陰真經 quotations (Ep29+ 周伯通 slap-memorise)
+- **天之道, 損有餘而補不足** — "Heaven's way: take from the surplus and replenish the lack" (道德經 77). 2-ep stable (Ep29+Ep30 paired-couplet form: 天之道, 損有餘而補不足 / 是故虛勝實, 不足勝有餘).
+- **氣有陰陽, 勢有盛衰, 陰不與陽交, 陽不與陰合, 相剋而不調** — 九陰真經 Yin-Yang quotation. 3-ep stable (Ep30+Ep33+Ep55). Format `CJK (English gloss)` per couplet line: "qi has yin and yang; momentum has waxing and waning; if yin will not meet yang, if yang will not bind with yin, they clash without harmony."
+- Related meditation-text fragments (任督二脈, 氣聚丹田, 百會, 大椎, 足少陽/足少陰, 十二經筋) — render per meditation/qi subsection.
+
+### 樂府 elegiac verse (Ep44+47+48 promoted v24)
+
+- **四張機 quatrain** (Ep44+47+48 3-ep stable) — Song-dynasty 樂府 elegiac 詞 (anonymous; tradition akin to 摸魚兒). 瑛姑's invocation; 蓉兒 reprises fragments. Format `CJK (English gloss)` per couplet line:
+  - 鴛鴦織就欲雙飛 → "the mandarin ducks woven into the tapestry, longing to fly as a pair"
+  - 可憐未老頭先白 → "pitiable — heads turn white before the years are spent"
+  - 春波碧草, 曉寒深處 → "spring waves on emerald grass, in the deep chill of dawn"
+  - 相對浴紅衣 → "facing each other, bathed in red robes"
 
 ### Five Greats (五絕) epithets
 
@@ -487,9 +560,7 @@ Usage: epithets appear standalone ("東邪 黃藥師, only has one daughter") an
   - Ep25: 斜倚薰籠坐到明 → "she leans on her incense pillow till dawn"
   Note: Ep25 sub 233–236 has 蓉兒 parodying 淚濕羅巾 as 淚濕羅布 ("tears dampen the laundry" — 巾/布 pun). Keep the parody CJK-preserved; 郭靖 corrects her 羅布 → 羅巾.
 
-### 九陰真經 quotations (Ep29+ 周伯通 slap-memorise)
-- **天之道, 損有餘而補不足** — "Heaven's way: take from the surplus and replenish the lack" (道德經 77).
-- Related meditation-text fragments (任督二脈, 氣聚丹田, 百會, 大椎, 足少陽/足少陰, 十二經筋) — render per meditation/qi subsection.
+### 九陰真經 quotations subsection (cross-referenced above) — see catalogue entries.
 
 ### 內功 / 內力 / 內傷 family
 - **內力** — "internal strength"

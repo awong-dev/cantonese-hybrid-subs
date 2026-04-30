@@ -78,6 +78,13 @@ idioms = {
     '男歡女愛，天公地道': 'love between a man and a woman is perfectly natural',
     '幫人幫到底，送佛送到西': 'help a person to the end, escort the Buddha all the way west',
     '人之將死其言也善': 'when a man is dying, his words are kind',
+    # v24 — Ep22 paired-couplet 不怕一萬,只怕萬一 promoted from Watch List.
+    # Each half is in extras_baseline; without this catch, full couplet
+    # converted half-by-half produces "better safe than sorry, better safe
+    # than sorry" duplicate. Promoted on single-firing per SESSION-NOTES
+    # cross-stage trap entry.
+    '不怕一萬，只怕萬一': 'better safe than sorry',
+    '不怕一萬,只怕萬一': 'better safe than sorry',  # half-width comma fallback
 }
 
 # Common terms
@@ -124,6 +131,19 @@ titles_jy = {
     # (Bare 康 is handled in extras because it's a substring of 楊康.)
     '爹': 'Father', '娘': 'Mother', '哥哥': 'Brother',
     '王子': 'the Prince', '公主': 'the Princess',
+    # === v24 promotions from SESSION-NOTES (Ep27+34+50+53 cumulative) ===
+    # 公子 (Ep27+34+53 3-ep) — STYLE §7 address-CJK in hybrid; romanised "Young Master"
+    '公子': 'Young Master',
+    # 弟子 (Ep50 1st promoted; STYLE §7 address-CJK; romanised "disciple")
+    '弟子': 'disciple',
+    # 將軍 (Ep54+59 2-ep) — military title
+    '將軍': 'General',
+    # 大師父 (Ep5+Ep6+Ep49+Ep50+Ep57 5-ep stable) — "First Master"
+    '大師父': 'First Master',
+    # Ep52+ 金 bare (after 金國→Jin) — placed AFTER 金國 lookup which is in terms,
+    # so this is for any standalone 金 reference. NOTE: longest-first within
+    # dict means 金國 (in terms stage) wins; here we only catch standalone 金.
+    '金': 'Jin',
 }
 titles_yl = dict(titles_jy)  # Start with copy, override differences
 titles_yl.update({
@@ -227,6 +247,11 @@ def convert(text, system):
     result = re.sub(r'\b([Aa])\s+the\s+', lambda m: 'the ' if m.group(1)=='a' else 'The ', result)
     result = re.sub(r'\b(the)\s+the\s+',
                     lambda m: m.group(1) + ' ', result, flags=re.IGNORECASE)
+    # v24 — Ep52 `<Name>'s the <X>` possessive double-article cross-stage trap
+    # (e.g. `Mongolia's the Golden Prince Consort`). Genitive 's + "the" + Y
+    # collapses to genitive 's + Y. Promoted on single-firing per SESSION-NOTES
+    # entry "single-firing watch — promote to build.py article-fix regex v24".
+    result = re.sub(r"\b(\w+)'s\s+the\s+", lambda m: m.group(1) + "'s ", result)
     return result
 
 # ============================================================
